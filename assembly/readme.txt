@@ -1,0 +1,1 @@
+Until I can work out getting valid interop files, this module will only work with Windows PowerShell. I'll leave these folders here for now.

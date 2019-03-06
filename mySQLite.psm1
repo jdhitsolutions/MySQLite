@@ -16,6 +16,7 @@ Function New-mySQLiteDB {
     Param(
         [Parameter(Mandatory, HelpMessage = "Enter the path to the SQLite database file.")]
         [ValidateNotNullOrEmpty()]
+        [alias("database")]
         [string]$Path,
         [switch]$Force,
         [Parameter(HelpMessage = "Enter a comment to be inserted into the database's metadata table")]
@@ -94,11 +95,11 @@ Function New-mySQLiteDB {
 
 Function New-mySQLiteDBTable {
     [cmdletbinding(SupportsShouldProcess)]
-    [alias("New-Table")]
+    [alias("New-DBTable")]
     [outputtype("None")]
     Param(
         [Parameter(Mandatory, HelpMessage = "Enter the path to the SQLite database file.", ValueFromPipelineByPropertyName)]
-        [Alias("fullname")]
+        [Alias("fullname","database")]
         [ValidateNotNullOrEmpty()]
         [string]$Path,
         [Parameter(Mandatory, HelpMessage = "Enter the name of the new table. Table names are technically case-sensitive.")]
@@ -200,11 +201,11 @@ Function Invoke-mySQLiteQuery {
     [alias("iq")]
     [outputtype("None", "PSCustomObject")]
     Param(
-        [Parameter(Mandatory, HelpMessage = "Enter the path to the SQLite database file.", ValueFromPipelineByPropertyName)]
-        [Alias("fullname")]
+        [Parameter(Position = 0,Mandatory, HelpMessage = "Enter the path to the SQLite database file.")]
+        [Alias("fullname","database")]
         [ValidateNotNullOrEmpty()]
         [string]$Path,
-        [Parameter(Mandatory, HelpMessage = "Enter a SQL query string")]
+        [Parameter(Position = 1,Mandatory, HelpMessage = "Enter a SQL query string")]
         [string]$Query
     )
     Begin {
