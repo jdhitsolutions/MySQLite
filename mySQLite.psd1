@@ -9,7 +9,7 @@
     RootModule             = 'mySQLite.psm1'
 
     # Version number of this module.
-    ModuleVersion          = '0.1.1'
+    ModuleVersion          = '0.2.0'
 
     # Supported PSEditions
 # Until I can work out Interop dll issues, make this Windows PowerShell Only
@@ -67,7 +67,7 @@
     # NestedModules = @()
 
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-    FunctionsToExport      = @('Invoke-mySQLiteQuery', 'New-mySQLiteDB', 'New-mySQLiteDBTable')
+    FunctionsToExport      = @('Invoke-mySQLiteQuery', 'New-mySQLiteDB', 'New-mySQLiteDBTable','Export-mySQLiteDB','Get-mySqliteTable')
 
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
     CmdletsToExport        = @()
@@ -76,7 +76,7 @@
     # VariablesToExport = '*'
 
     # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
-    AliasesToExport        = @('New-DB','New-DBTable','iq')
+    AliasesToExport        = @('New-DB','ndb','New-DBTable','ndbt','iq','todb','gtb','Get-DBTable','Export-DB')
 
     # DSC resources to export from this module
     # DscResourcesToExport = @()
