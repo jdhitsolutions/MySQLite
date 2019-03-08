@@ -9,7 +9,7 @@
     RootModule             = 'mySQLite.psm1'
 
     # Version number of this module.
-    ModuleVersion          = '0.2.5'
+    ModuleVersion          = '0.3.0'
 
     # Supported PSEditions
 # Until I can work out Interop dll issues, make this Windows PowerShell Only
