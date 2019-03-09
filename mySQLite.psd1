@@ -12,7 +12,7 @@
     ModuleVersion          = '0.3.0'
 
     # Supported PSEditions
-# Until I can work out Interop dll issues, make this Windows PowerShell Only
+    # Until I can work out Interop dll issues, make this Windows PowerShell Only
     CompatiblePSEditions   = @("Desktop")
 
     # ID used to uniquely identify this module
@@ -99,7 +99,7 @@
             LicenseUri = 'https://github.com/jdhitsolutions/MySQLite/blob/master/License.txt'
 
             # A URL to the main website for this project.
-            # ProjectUri = 'https://github.com/jdhitsolutions/MySQLite'
+            ProjectUri = 'https://github.com/jdhitsolutions/MySQLite'
 
             # A URL to an icon representing this module.
             # IconUri = ''
