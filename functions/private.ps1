@@ -11,6 +11,7 @@ Function resolvedb {
         Path   = $path
         Exists = Test-Path -path $path
     }
+    Write-Verbose "ResolveDB Resolved to $Path"
 }
 Function opendb {
     [cmdletbinding()]
@@ -22,6 +23,7 @@ Function opendb {
     $connection.Open()
     $connection
 }
+
 
 Function closedb {
 [cmdletbinding()]
@@ -55,8 +57,12 @@ Function buildquery {
         $names = $InputObject.psobject.Properties.name -join ","
 
         $inputobject.psobject.Properties | ForEach-Object -Begin { $arr = @()} -process {
-            if ($_.TypeNameofValue -match "String|Int\d{2}|Double|Boolean|Datetime|long") {
+            if ($_.TypeNameofValue -match "String|Int\d{2}|Double|Datetime|long") {
                 $arr += @(, $_.Value)
+            }
+            elseif ($_.TypeNameofValue -match "Boolean") {
+                #turn Boolean into an INT
+                $arr += @(,($_.value -as [int]))
             }
             else {
                 #only create an entry if there is a value
@@ -86,6 +92,7 @@ Function buildquery {
     } #end
 
 } #close buildquery
+
 
 Function frombytes {
     [cmdletbinding()]

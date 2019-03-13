@@ -1,5 +1,23 @@
 # Changelog for MySQLite
 
+## v0.4.0
+
++ Renamed `Convert-MySQLiteDB` to `ConvertFrom-MySQLiteDB` (Issue #2)
++ Modified `ConvertTo-MySQLiteDB` to create property maps for each type (Issue #5)
++ Added `-PropertyMap` parameter to `ConvertFrom-MySQLiteDB` (Issue #6)
++ Modified `Get-MySQLiteDBTable` to include table details (Issue #7)
++ Modified `ConvertTo-MySQLiteDB` to let user specify a typename (Issue #8)
++ Added `Get-MySQLiteDB` and its alias `Get-DB`
++ Modified `Invoke-MySQLiteQuery` to better support `PRAGMA` queries
++ Modified `Get-MySQLiteDBTable` to include database source
++ Added `mySQLiteTableDetail.format.ps1xml` formatting file
++ Added `mySQLiteDB.format.ps1xml` formatting file
++ Modified `New-MySQLiteDBTable` to use existing connection and keep alive
++ Modified `ConvertTo-MySQLiteDB` to use existing connection
++ Changed alias `Export-DB` to `ConvertFrom-DB`
++ Added `Open-MySQLiteDB` and `Close-MySQLiteDB` (Issue #10)
++ added help documentation (Issue #4)
+
 ## v0.3.0
 
 + Modified `Get-MySqliteDBTable` to accept pipeline input by property name

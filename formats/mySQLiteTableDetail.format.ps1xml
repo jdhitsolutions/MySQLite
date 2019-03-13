@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+format type data generated 03/12/2019 17:49:34
+by BOVINE320\Jeff
+-->
+<Configuration>
+  <ViewDefinitions>
+    <View>
+      <!--Created 03/12/2019 17:49:34 by BOVINE320\Jeff-->
+      <Name>default</Name>
+      <ViewSelectedBy>
+        <TypeName>mySQLiteTableDetail</TypeName>
+      </ViewSelectedBy>
+      <GroupBy>
+        <Scriptblock>"{0} Table:{1}" -f $_.source,$_.table</Scriptblock>
+        <Label>Database</Label>
+      </GroupBy>
+      <TableControl>
+        <!--Delete the AutoSize node if you want to use the defined widths.-->
+        <AutoSize />
+        <TableHeaders>
+          <TableColumnHeader>
+            <Label>ColumnIndex</Label>
+            <Width>14</Width>
+            <Alignment>left</Alignment>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>ColumnName</Label>
+            <Width>13</Width>
+            <Alignment>left</Alignment>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>ColumnType</Label>
+            <Width>13</Width>
+            <Alignment>left</Alignment>
+          </TableColumnHeader>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <!--
+            By default the entries use property names, but you can replace them with scriptblocks.
+            <Scriptblock>$_.foo /1mb -as [int]</Scriptblock>
+-->
+              <TableColumnItem>
+                <PropertyName>ColumnIndex</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>ColumnName</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>ColumnType</PropertyName>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+  </ViewDefinitions>
+</Configuration>

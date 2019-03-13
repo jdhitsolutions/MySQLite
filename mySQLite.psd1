@@ -6,10 +6,10 @@
 @{
 
     # Script module or binary module file associated with this manifest.
-    RootModule             = 'mySQLite.psm1'
+    RootModule             = 'MySQLite.psm1'
 
     # Version number of this module.
-    ModuleVersion          = '0.3.0'
+    ModuleVersion          = '0.4.0'
 
     # Supported PSEditions
     # Until I can work out Interop dll issues, make this Windows PowerShell Only
@@ -61,13 +61,26 @@
     # TypesToProcess = @()
 
     # Format files (.ps1xml) to be loaded when importing this module
-    # FormatsToProcess = @()
+    FormatsToProcess       = @(
+    'formats\mySQLiteDB.format.ps1xml',
+    'formats\mySQLiteTableDetail.format.ps1xml'
+    )
 
     # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
     # NestedModules = @()
 
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-    FunctionsToExport      = @('Invoke-mySQLiteQuery', 'New-mySQLiteDB', 'New-mySQLiteDBTable','ConvertTo-mySQLiteDB','Get-mySqliteTable','Convert-MySQLiteDB')
+    FunctionsToExport      = @(
+        'Invoke-MySQLiteQuery',
+        'New-MySQLiteDB',
+        'New-MySQLiteDBTable',
+        'ConvertTo-MySQLiteDB',
+        'Get-MySQLiteTable',
+        'ConvertFrom-MySQLiteDB',
+        'Get-MySQLiteDB',
+        'Open-MySQLiteDB',
+        'Close-MySQLiteDB'
+        )
 
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
     CmdletsToExport        = @()
@@ -76,7 +89,21 @@
     # VariablesToExport = '*'
 
     # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
-    AliasesToExport        = @('New-DB','ndb','New-DBTable','ndbt','iq','todb','gtb','Get-DBTable','ConvertTo-DB','Export-DB')
+    AliasesToExport        = @(
+        'New-DB',
+        'ndb',
+        'New-DBTable',
+        'ndbt',
+        'iq',
+        'todb',
+        'gtb',
+        'Get-DBTable',
+        'ConvertTo-DB',
+        'ConvertFrom-DB',
+        'Get-DB',
+        'Open-DB',
+        'Close-DB'
+        )
 
     # DSC resources to export from this module
     # DscResourcesToExport = @()
