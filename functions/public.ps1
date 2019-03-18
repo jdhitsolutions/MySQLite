@@ -1,77 +1,9 @@
 
 #region public functions
 
-Function Open-MySQLiteDB {
-    [cmdletbinding(SupportsShouldProcess)]
-    [alias("Open-DB")]
-    [OutputType("System.Data.SQLite.SQLiteConnection")]
-
-    Param(
-        [Parameter(Mandatory)]
-        [alias("database")]
-        [string]$Path
-    )
-    Begin {
-        Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Starting $($myinvocation.mycommand)"
-
-    } #begin
-
-    Process {
-        $db = resolvedb $Path
-        if ($db.exists) {
-            if ($pscmdlet.shouldprocess($db.path)) {
-                Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Opening connection to $Path "
-                opendb $db.path
-            }
-        }
-
-    } #process
-
-    End {
-        Write-Verbose "[$((Get-Date).TimeofDay) END    ] Ending $($myinvocation.mycommand)"
-
-    } #end
-
-} #close Open-MySQLiteDB
-
-Function Close-MySQLiteDB {
-    [cmdletbinding(SupportsShouldProcess)]
-    [alias("Close-DB")]
-    [OutputType("None", "System.Data.SQLite.SQLiteConnection")]
-
-    Param(
-        [Parameter(Mandatory, HelpMessage = "Enter a connection object", ValueFromPipeline)]
-        [System.Data.SQLite.SQLiteConnection]$Connection,
-        [switch]$Passthru
-    )
-    Begin {
-        Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Starting $($myinvocation.mycommand)"
-
-    } #begin
-
-    Process {
-        Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Closing connection to $($connection.DataSource)"
-        if ($pscmdlet.ShouldProcess($Connection.DataSource)) {
-            $connection.close()
-            if ($passthru) {
-                $connection
-            }
-
-            $connection.Dispose()
-        }
-
-    } #process
-
-    End {
-        Write-Verbose "[$((Get-Date).TimeofDay) END    ] Ending $($myinvocation.mycommand)"
-
-    } #end
-
-} #close Close-MySQLiteDB
-
 Function ConvertFrom-MySQLiteDB {
-    [cmdletbinding(DefaultParameterSetName = "table")]
-    [alias('ConvertFrom-DB')]
+    [cmdletbinding()]
+    [alias('Export-DB')]
     [outputtype("Object")]
     Param(
         [Parameter(Position = 0, Mandatory, HelpMessage = "Enter the path to the SQLite database file.", ValueFromPipelineByPropertyName)]
@@ -81,20 +13,11 @@ Function ConvertFrom-MySQLiteDB {
         [Parameter(Mandatory, HelpMessage = "Enter the name of the table with data to import")]
         [ValidateNotNullOrEmpty()]
         [string]$TableName,
-        [Parameter(Mandatory, HelpMessage = "Enter the name of the property map table", ParameterSetName = "table")]
-        [ValidateNotNullOrEmpty()]
-        [string]$PropertyTable,
-        [Parameter(Mandatory, HelpMessage = "Enter an optional hashtable of property names and types.", ParameterSetName = "hash")]
-        [hashtable]$PropertyMap,
-        [Parameter(HelpMessage = "Enter a typename to insert", ParameterSetName = "hash")]
-        [Parameter(ParameterSetName = "table")]
-        [string]$TypeName,
-        [Parameter(HelpMessage = "Write raw objects to the pipeline.", ParameterSetName = "raw")]
-        [switch]$RawObject
+        [Parameter(HelpMessage = "Enter an optional hashtable of property names and types.d")]
+        [hashtable]$PropertyMap
     )
     Begin {
         Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Starting $($myinvocation.mycommand)"
-
     } #begin
 
     Process {
@@ -107,63 +30,19 @@ Function ConvertFrom-MySQLiteDB {
             Throw "Failed to find database file $($file.path)"
         }
         #verify table exists
-        Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Verifying table $tablename"
-        $tables = Get-MySQLiteTable -connection $connection -KeepAlive
+        $tables = Get-mySQLiteTable -connection $connection -KeepAlive
         if ($tables.name -contains $tablename) {
             $query = "Select * from $tablename"
             Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Importing from table $Tablename"
-            Try {
-                $raw = Invoke-MySQLiteQuery -connection $connection -Query $query -As object -KeepAlive -ErrorAction stop
-            }
-            Catch {
-                Write-Warning $_.exception.message
-                closedb $connection
-                Throw $_
-                #bail out
-                return
-            }
+            $raw = Invoke-mySQLiteQuery -connection $connection -Query $query -As object -KeepAlive
             Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Found $($raw.count) items"
 
-            <#
-                find a mapping table using this priority list
-                1. PropertyMap parameter
-                2. A table called PropertyMap_tablename
-
-                if nothing found then write a default custom object
-            #>
-            switch ($pscmdlet.ParameterSetName) {
-                "hash" {
-                    Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] User specified property map"
-                    $map = $PropertyMap
-                    If ($TypeName) {
-                        $oTypename = $TypeName
-                    }
-                }
-                "table" {
-                    Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Getting property map from $PropertyTable"
-                    $map = Invoke-MySQLiteQuery -Connection $connection -Query "Select * from $propertytable" -KeepAlive -as Hashtable
-                    if ($typename) {
-                        $oTypename = $TypeName
-                    }
-                    elseif ($PropertyTable -match "_") {
-                        #get the typename from the property table name
-                        $oTypename = $PropertyTable.split("_", 2)[1].replace("_", ".")
-                    }
-
-                }
-                "raw" {
-                    Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Writing raw objects to the pipeline"
-                    $raw
-                }
-            }
-
-            if ($map) {
+            #use propertymap table if it exists
+            if ($tables.name -contains "PropertyMap") {
+                Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Getting property map"
+                $map = Invoke-mySQLiteQuery -Connection $connection -Query "Select * from propertymap" -KeepAlive -as Hashtable
                 foreach ($item in $raw) {
                     $tmpHash = [ordered]@{}
-                    if ($oTypename) {
-                        Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Inserting typename $oTypename"
-                        $tmpHash.Add("PSTypename", $oTypename)
-                    }
                     foreach ($key in $map.keys) {
                         Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] ...$key"
                         $name = $key
@@ -176,27 +55,28 @@ Function ConvertFrom-MySQLiteDB {
                         }
                         $value = $v -as $($($map[$key] -as [type]))
                         $tmpHash.Add($name, $value)
-                    } #foreach key
+                    }
                     New-Object -typename PSObject -property $tmpHash
-                } #foreach item
-            } #if $map
-        } #if table found
+                }
+            }
+            else {
+                Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Writing raw objects to the pipeline"
+                $raw
+            }
+        }
         else {
             Write-Warning "Failed to find a table called $Tablename in $($file.path)"
         }
-
     } #process
 
     End {
-        Write-Verbose "[$((Get-Date).TimeofDay) END    ] Closing database connection"
-        closedb -connection $connection
+        closedb $connection
         Write-Verbose "[$((Get-Date).TimeofDay) END    ] Ending $($myinvocation.mycommand)"
-
     } #end
 
 } #close ConvertFrom-MySQLiteDB
 
-Function Get-MySQLiteTable {
+Function Get-mySQLiteTable {
     [cmdletbinding(DefaultParameterSetName = "file")]
     [Alias("gtb", "Get-DBTable")]
     [outputtype("PSCustomObject")]
@@ -238,20 +118,18 @@ Function Get-MySQLiteTable {
             $iqParams.Add("KeepAlive", $KeepAlive)
             #parse out the path from the connection
             $source = $connection.ConnectionString.split("=", 2)[1].split(";")[0]
-
         }
-        $tablenames = Invoke-MySQLiteQuery @iqParams
+        $tablenames = Invoke-mySQLiteQuery @iqParams
         if ($tablenames) {
-
             if ($Detail) {
                 Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Getting table details"
                 foreach ($item in $Tablenames.name) {
                     $iqParams.query = "PRAGMA table_info($item)"
                     Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] $($iqparams.query)"
-                    $details = Invoke-MySQLiteQuery @iqParams
+                    $details = Invoke-mySQLiteQuery @iqParams
                     foreach ($tbl in $details) {
                         [pscustomobject]@{
-                            PSTypename  = "MySQLiteTableDetail"
+                            PSTypename  = "mySQLiteTableDetail"
                             Source      = $Source
                             Table       = $item
                             ColumnIndex = $tbl.cid
@@ -266,7 +144,6 @@ Function Get-MySQLiteTable {
                     Source = $source
                     Name   = $Tablenames.name
                 }
-
             }
         }
         else {
@@ -282,9 +159,9 @@ Function Get-MySQLiteTable {
         Write-Verbose "[$((Get-Date).TimeofDay) END    ] Ending $($myinvocation.mycommand)"
     } #end
 
-} #close Get-MySQLiteTable
+} #close Get-mySQLiteTable
 
-Function ConvertTo-MySQLiteDB {
+Function ConvertTo-mySQLiteDB {
     [cmdletbinding(SupportsShouldProcess)]
     [alias("todb", 'Convert-DB')]
     [outputtype("None")]
@@ -298,18 +175,15 @@ Function ConvertTo-MySQLiteDB {
         [Parameter(Mandatory, HelpMessage = "Enter the name of the new table. Table names are technically case-sensitive.")]
         [ValidateNotNullOrEmpty()]
         [string]$TableName,
-        [Parameter(HelpMessage = "Enter a typename for your converted objects. If you don't specify one, it will be auto-detected.")]
-        [ValidatePattern("^\w+$")]
-        [string]$TypeName,
-        [switch]$Append,
-        [switch]$Force
+        [switch]$Append
     )
     Begin {
         Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Starting $($myinvocation.mycommand)"
-        $file = resolvedb -Path $path
+
         if ($Append) {
+            $file = resolvedb -Path $path
             if ($file.exists) {
-                $connection = opendb -Path $file.path
+                $db = opendb -Path $file.path
             }
             else {
                 Throw "Failed to find database file $($file.path)"
@@ -317,23 +191,14 @@ Function ConvertTo-MySQLiteDB {
         }
         else {
             $newParams = @{
-                Path        = $file.path
-                Force       = $Force
-                Passthru    = $True
-                ErrorAction = "Stop"
+                Path     = $executioncontext.sessionstate.path.GetUnresolvedProviderPathFromPSPath($path)
+                Force    = $True
+                Passthru = $True
             }
             Try {
                 if ($PSCmdlet.ShouldProcess($Path, "Create Database")) {
-                    Try {
-                        $db = New-MySQLiteDB @newParams
-                    }
-                    Catch {
-                        Throw $_
-                        #bail out
-                        return
-                    }
+                    $db = New-mySQLiteDB @newParams
                     Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Created database at $($db.fullname)"
-                    $connection = opendb $db.fullname
                 }
             }
             Catch {
@@ -344,55 +209,26 @@ Function ConvertTo-MySQLiteDB {
     } #begin
 
     Process {
-        $iqParams = @{
-            Connection = $Connection
-            KeepAlive  = $True
-            Query      = $null
-        }
-
         foreach ($object in $Inputobject) {
-
             if ($TableExists) {
                 Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Adding object to the table"
-                $iqParams.query = buildquery -InputObject $object -Tablename $TableName
+                $query = buildquery -InputObject $object -Tablename $TableName
                 if ($pscmdlet.ShouldProcess("object", "Add to table $Tablename")) {
-                    Invoke-MySQLiteQuery @iqParams
+                    Invoke-mySQLiteQuery -Path $Path -Query $query
                 }
             }
             else {
                 # http://www.sqlitetutorial.net/sqlite-data-types/
-                # https://www.sqlite.org/datatype3.html
                 #convert types as necessary. Table types can be Text, Int, Real or Blob
+                Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Creating property map table"
                 if ($PSCmdlet.ShouldProcess("PropertyMap", "Create Table")) {
-                    $object.psobject.properties |
-                        foreach-object -begin {
-                        $prop = [ordered]@{}
-                    } -process {
-                        $prop.Add($_.Name, "Text")
-                    }
-
-                    if ($Typename) {
-                        $name = "propertymap_{0}" -f ($typename.tolower())
-                    }
-                    else {
-                        $name = "propertymap_{0}" -f ($object.psobject.typenames[0].replace(".", "_"))
-                    }
-                    Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Creating property map table $name"
-                    $prop | Out-String | Write-Verbose
-                    $newTblParams = @{
-                        Connection       = $Connection
-                        KeepAlive        = $True
-                        TableName        = $Name
-                        ColumnProperties = $prop
-                    }
-                    New-MySQLiteDBTable @newTblParams
+                    New-mySQLiteDBTable -Path $path -TableName PropertyMap -ColumnNames $object.psobject.properties.name
                 }
-
                 $names = $object.psobject.properties.name -join ","
                 $values = $object.psobject.properties.TypeNameofValue -join "','"
-                $iqParams.query = "Insert Into $Name ($names) values ('$values')"
+                $query = "Insert Into PropertyMap ($names) values ('$values')"
                 if ($PSCmdlet.ShouldProcess($query, "Run query")) {
-                    Invoke-MySQLiteQuery @iqParams
+                    Invoke-mySQLiteQuery -Path $Path -Query $query
                 }
 
                 Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Creating property hashtable"
@@ -406,27 +242,24 @@ Function ConvertTo-MySQLiteDB {
                         "^System.Double$" {$sqltype = "Real"}
                         "^System.DateTime" {$sqltype = "Text"}
                         "^System.String$" {$sqltype = "Text"}
-                        "^System.Boolean$" {$sqltype = "Int"}
+                        "^System.Boolean$" {$sqltype = "Text"}
                         default {
                             $sqltype = "Blob"
                         }
                     } #switch
                     $thash.Add($prop.Name, $sqltype)
                 } #foreach prop
-
                 Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Creating table: $Tablename"
                 if ($pscmdlet.ShouldProcess($tablename, "Create table")) {
-                    $newTblParams.ColumnProperties = $thash
-                    $newtblParams.tablename = $Tablename
-                    New-MySQLiteDBTable @newtblParams
+                    New-mySQLiteDBTable -Path $path -TableName $TableName -columnProperties $thash
                 }
 
                 Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Inserting the first object into the table"
                 #insert the first object into the new table
-                $iqParams.query = buildquery -InputObject $object -Tablename $TableName
+                $query = buildquery -InputObject $object -Tablename $TableName
 
                 if ($pscmdlet.ShouldProcess("object", "Insert first object")) {
-                    Invoke-MySQLiteQuery @iqParams
+                    Invoke-mySQLiteQuery -Path $Path -Query $query
                 }
                 $TableExists = $True
             }
@@ -434,15 +267,12 @@ Function ConvertTo-MySQLiteDB {
     } #process
 
     End {
-        if ($connection.State -eq "open") {
-            closedb -connection $connection
-        }
         Write-Verbose "[$((Get-Date).TimeofDay) END    ] Ending $($myinvocation.mycommand)"
     } #end
 
-} #close Convert-MySQLiteDB
+} #close Convert-mySQLiteDB
 
-Function New-MySQLiteDB {
+Function New-mySQLiteDB {
     [cmdletbinding(SupportsShouldProcess)]
     [alias("New-DB", "ndb")]
     [outputtype("None", "System.IO.Fileinfo")]
@@ -465,7 +295,6 @@ Function New-MySQLiteDB {
 
         If (($db.exists) -AND (-not $Force)) {
             Write-Warning "The database file $path exists. Use -Force to overwrite the file."
-            throw "The database file $path exists."
         }
         else {
             If (($db.exists) -AND $Force) {
@@ -524,66 +353,41 @@ Function New-MySQLiteDB {
 
     } #end
 
-} #new-MySQLitedb
+} #new-mysqlitedb
 
-Function New-MySQLiteDBTable {
-    [cmdletbinding(SupportsShouldProcess, DefaultParameterSetName = "filetyped")]
+Function New-mySQLiteDBTable {
+    [cmdletbinding(SupportsShouldProcess, DefaultParameterSetName = "typed")]
     [alias("New-DBTable", "ndbt")]
     [outputtype("None")]
     Param(
-        [Parameter(Position = 0, Mandatory, HelpMessage = "Enter the path to the SQLite database file.", ValueFromPipelineByPropertyName, ParameterSetName = "filetyped")]
-        [Parameter(ParameterSetName = "filenamed")]
+        [Parameter(Position = 0, Mandatory, HelpMessage = "Enter the path to the SQLite database file.", ValueFromPipelineByPropertyName)]
         [Alias("fullname", "database")]
         [ValidateNotNullOrEmpty()]
         [string]$Path,
-
-        [Parameter(HelpMessage = "Specify an existing open database connection.", ParameterSetName = "cnxtyped")]
-        [Parameter(ParameterSetName = "cnxnamed")]
-        [ValidateNotNullOrEmpty()]
-        [System.Data.SQLite.SQLiteConnection]$Connection,
-
         [Parameter(Mandatory, HelpMessage = "Enter the name of the new table. Table names are technically case-sensitive.")]
         [ValidateNotNullOrEmpty()]
         [string]$TableName,
-
-        [parameter( HelpMessage = "Enter an ordered hashtable of column definitions", ParameterSetName = "filetyped")]
-        [Parameter(ParameterSetName = "cnxtyped")]
-        [ValidateNotNullOrEmpty()]
+        [parameter(Mandatory, HelpMessage = "Enter an ordered hashtable of column definitions", ParameterSetName = "typed")]
         [System.Collections.Specialized.OrderedDictionary]$ColumnProperties,
-
-        [parameter( HelpMessage = "Enter an array of column names.", ParameterSetName = "cnxnamed")]
-        [Parameter(ParameterSetName = "filenamed")]
-        [ValidateNotNullOrEmpty()]
+        [parameter(Mandatory, HelpMessage = "Enter an array of column names.", ParameterSetName = "untyped")]
         [string[]]$ColumnNames,
-
         [Parameter(HelpMessage = "Overwrite an existing table. This could result in data loss.")]
-        [switch]$Force,
-
-        [Parameter(HelpMessage = "Keep an existing connection open.", ParameterSetName = "cnxtyped")]
-        [Parameter(ParameterSetName = "cnxnamed")]
-        [switch]$KeepAlive
+        [switch]$Force
     )
 
     Begin {
         Write-Verbose "[$((Get-Date).TimeofDay) BEGIN] Starting $($myinvocation.mycommand)"
     } #begin
     Process {
+        $db = resolvedb -path $Path
 
-        if ($Path) {
-
-            $db = resolvedb -path $Path
-
-            If ($db.exists) {
-                $connection = opendb $db.path
-            }
-            else {
-                Write-Warning "Cannot find the database file $($db.path)."
-            }
-            Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Processing database: $($db.Path)"
+        If ($db.exists) {
+            $connection = opendb $db.path
         }
         else {
-            Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Using an existing connection"
+            Write-Warning "Cannot find the database file $($db.path)."
         }
+        Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Processing database: $($db.Path)"
         if ($connection.state -eq 'Open' -OR $PSBoundparameters.ContainsKey("WhatIf")) {
 
             $cmd = $connection.CreateCommand()
@@ -619,7 +423,7 @@ Function New-MySQLiteDBTable {
                 Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Adding Table: $Tablename"
                 [string]$query = "CREATE TABLE $tablename "
 
-                if ($pscmdlet.ParameterSetName -match 'typed') {
+                if ($pscmdlet.ParameterSetName -eq 'typed') {
                     $keys = $ColumnProperties.Keys
                     $primary = $keys | Select-Object -first 1`
                     $primaryType = $ColumnProperties.item($Primary)
@@ -640,7 +444,6 @@ Function New-MySQLiteDBTable {
 
                 $cmd = $connection.CreateCommand()
                 $cmd.CommandText = $query
-                Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] $query"
                 if ($pscmdlet.ShouldProcess($query)) {
                     [void]$cmd.ExecuteNonQuery()
                 }
@@ -651,18 +454,19 @@ Function New-MySQLiteDBTable {
         }
     } #process
     End {
-        if ($connection.state -eq 'Open' -AND (-Not $KeepAlive)) {
+        if ($connection.state -eq 'Open') {
             Write-Verbose "[$((Get-Date).TimeofDay) END    ] Closing database connection"
-            closedb -connection $connection -cmd $cmd
+            $connection.close()
+            $connection.Dispose()
         }
         Write-Verbose "[$((Get-Date).TimeofDay) END    ] Ending $($myinvocation.mycommand)"
     } #end
-} #new-MySQLitedbtable
+} #new-mysqlitedbtable
 
-Function Invoke-MySQLiteQuery {
+Function Invoke-mySQLiteQuery {
     [cmdletbinding(SupportsShouldProcess, DefaultParameterSetName = "file")]
     [alias("iq")]
-    [outputtype("None", "PSCustomObject", "System.Data.Datatable", "Hashtable")]
+    [outputtype("None", "PSCustomObject", "System.Data.Datatable")]
     Param(
         [Parameter(Position = 0, Mandatory, HelpMessage = "Enter the path to the SQLite database file.", ParameterSetName = "file", ValueFromPipelineByPropertyName)]
         [Alias("fullname", "database")]
@@ -680,7 +484,6 @@ Function Invoke-MySQLiteQuery {
     )
     Begin {
         Write-Verbose "[$((Get-Date).TimeofDay) BEGIN] Starting $($myinvocation.mycommand)"
-
     } #begin
     Process {
         if ($pscmdlet.ParameterSetName -eq 'file') {
@@ -769,13 +572,13 @@ Function Invoke-MySQLiteQuery {
         }
         Write-Verbose "[$((Get-Date).TimeofDay) END    ] Ending $($myinvocation.mycommand)"
     } #end
-} #close invoke-MySQLitequery
+} #close invoke-mysqlitequery
 
 
 Function Get-MySQLiteDB {
     [cmdletbinding()]
     [alias('Get-DB')]
-    [OutputType('MySQLiteDB')]
+    [OutputType('mySQLiteDB')]
     Param(
         [Parameter(Position = 0, Mandatory, HelpMessage = "Enter the path to the SQLite database file.", ValueFromPipelineByPropertyName)]
         [Alias("fullname", "database")]
@@ -784,7 +587,6 @@ Function Get-MySQLiteDB {
     )
     Begin {
         Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Starting $($myinvocation.mycommand)"
-
     } #begin
 
     Process {
@@ -797,15 +599,15 @@ Function Get-MySQLiteDB {
 
             $connection = opendb -Path $file.path
 
-            $tables = Get-MySQLiteTable -Connection $connection -KeepAlive | Select-Object -ExpandProperty Name
+            $tables = Get-mySQLiteTable -Connection $connection -KeepAlive | Select-Object -ExpandProperty Name
             Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Found $($tables.count) Tables"
 
-            $pgsize = (Invoke-MySQLiteQuery -connection $connection -query "PRAGMA page_size" -KeepAlive ).page_size
-            $pgcount = (Invoke-MySQLiteQuery -connection $connection -query "PRAGMA page_count" -KeepAlive ).page_count
-            $encoding = (Invoke-MySQLiteQuery -connection $connection -query "PRAGMA encoding" -KeepAlive).encoding
+            $pgsize = (Invoke-mySQLiteQuery -connection $connection -query "PRAGMA page_size" -KeepAlive ).page_size
+            $pgcount = (Invoke-mySQLiteQuery -connection $connection -query "PRAGMA page_count" -KeepAlive ).page_count
+            $encoding = (Invoke-mySQLiteQuery -connection $connection -query "PRAGMA encoding" -KeepAlive).encoding
 
             [pscustomobject]@{
-                PSTypename    = "MySQLiteDB"
+                PSTypename    = "mySQLiteDB"
                 DatabaseName  = $connection.Database
                 Tables        = $tables
                 PageSize      = $pgsize
@@ -828,8 +630,7 @@ Function Get-MySQLiteDB {
 
     End {
         if ($connection.open) {
-            Write-Verbose "[$((Get-Date).TimeofDay) END    ] Closing database connection"
-            closedb -connection $connection
+            closedb $connection
         }
         Write-Verbose "[$((Get-Date).TimeofDay) END    ] Ending $($myinvocation.mycommand)"
     } #end
