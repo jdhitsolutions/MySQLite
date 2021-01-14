@@ -2,7 +2,7 @@
 
 ## v0.5.0
 
-+ Fixed assembly loading problems.
++ Fixed assembly loading problems thanks to insights from @TobiasPSP.
 + Modified functions to accept database connection from the pipeline by value.
 + Fixed Verbose message strings.
 + Help updates.
