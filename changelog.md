@@ -1,5 +1,13 @@
 # Changelog for MySQLite
 
+## v0.5.0
+
++ Fixed assembly loading problems.
++ Modified functions to accept database connection from the pipeline by value.
++ Fixed Verbose message strings.
++ Help updates.
++ Updated `README.md`
+
 ## v0.4.0
 
 + Renamed `Convert-MySQLiteDB` to `ConvertFrom-MySQLiteDB` (Issue #2)

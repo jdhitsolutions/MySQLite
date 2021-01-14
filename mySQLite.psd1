@@ -9,10 +9,9 @@
     RootModule             = 'MySQLite.psm1'
 
     # Version number of this module.
-    ModuleVersion          = '0.4.0'
+    ModuleVersion          = '0.4.1'
 
     # Supported PSEditions
-    # Until I can work out Interop dll issues, make this Windows PowerShell Only
     CompatiblePSEditions   = @("Desktop")
 
     # ID used to uniquely identify this module
@@ -25,7 +24,7 @@
     CompanyName            = 'JDH Information Technology Solutions, Inc.'
 
     # Copyright statement for this module
-    Copyright              = '(c) 2019 JDH Information Technology Solutions, Inc.'
+    Copyright              = '(c) 2019-2021 JDH Information Technology Solutions, Inc.'
 
     # Description of the functionality provided by this module
     Description            = 'A set of PowerShell commands for working with SQLite database files'

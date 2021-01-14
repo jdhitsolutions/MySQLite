@@ -1,6 +1,6 @@
 # MySQLite
 
-A set of PowerShell functions for working with SQLite database files. This module will only work on 64bit Windows platforms at this time. The goal of the module is to integrate the use of SQLite databases into daily PowerShell work or module development where a lightweight database would be beneficial.
+A set of PowerShell functions for working with SQLite database files. This module will only work on 64bit Windows platforms at this time. It should load and work in both Windows PowerShell and PowerShell 7. The goal of the module is to integrate the use of SQLite databases into daily PowerShell work or module development where a lightweight database would be beneficial.
 
 ## Commands
 
@@ -14,7 +14,7 @@ A set of PowerShell functions for working with SQLite database files. This modul
 
 ## Converting PowerShell
 
-The primary benefit of this module is storing results of a PowerShell expression or script into a SQLite database file and later retrieving back into PowerShell as the original objects, or as close as possible.
+The primary benefit of this module is storing results of a PowerShell expression or script into a SQLite database file and later retrieving it back into PowerShell as the original objects, or as close as possible.
 
 For example, you might have code like this that creates a dataset.
 
@@ -30,13 +30,13 @@ Select-Object @{Name="Computername";Expression={$_.CSName}},
 Using `ConvertTo-MySQLiteDB` you can easily dump this into a database file.
 
 ```powershell
-PS C:\> $data | ConvertTo-MySQLiteDB -Path c:\work\Inventory.db -TableName OS -TypeName myOS -force
+$data | ConvertTo-MySQLiteDB -Path c:\work\Inventory.db -TableName OS -TypeName myOS -force
 ```
 
 This process will create a table called propertymap_myOS which contains a mapping of properties to types.
 
 ```powershell
-PS C:\> Invoke-MySQLiteQuery -Path C:\work\Inventory.db "Select * from propertymap_myos" -as Hashtable
+PS C:\> Invoke-MySQLiteQuery -Path C:\work\Inventory.db -query "Select * from propertymap_myos" -as Hashtable
 
 Name                           Value
 ----                           -----
@@ -50,24 +50,29 @@ IsServer                       System.Boolean
 You can always query the data.
 
 ```powershell
-PS C:\> Invoke-MySQLiteQuery C:\work\Inventory.db "Select * from os where IsServer = 1"
+PS C:\> Invoke-MySQLiteQuery "Select * from os where IsServer = 1" -path C:\work\Inventory.db
 
+
+Computername : SRV2                                                                                                             OS           : Microsoft Windows Server 2016 Standard Evaluation
+InstallDate  : 10/26/2020 6:56:32 PM
+Version      : 10.0.14393
+IsServer     : 1
 
 Computername : SRV1
 OS           : Microsoft Windows Server 2016 Standard Evaluation
-InstallDate  : 12/26/2018 11:07:25 AM
+InstallDate  : 10/26/2020 6:56:33 PM
 Version      : 10.0.14393
+IsServer     : 1
+
+Computername : SRV4
+OS           : Microsoft Windows Server 2019 Standard
+InstallDate  : 1/17/2019 8:32:37 AM
+Version      : 10.0.17763
 IsServer     : 1
 
 Computername : DOM1
 OS           : Microsoft Windows Server 2016 Standard Evaluation
-InstallDate  : 12/26/2018 10:58:31 AM
-Version      : 10.0.14393
-IsServer     : 1
-
-Computername : SRV2
-OS           : Microsoft Windows Server 2016 Standard Evaluation
-InstallDate  : 12/26/2018 11:08:07 AM
+InstallDate  : 10/26/2020 6:47:42 PM
 Version      : 10.0.14393
 IsServer     : 1
 ```
@@ -78,41 +83,24 @@ Or dump it back out to PowerShell in its original format.
 PS C:\> ConvertFrom-MySQLiteDB -Path C:\work\Inventory.db -TableName OS -PropertyTable propertymap_myos
 
 
-Computername : BOVINE320
-OS           : Microsoft Windows 10 Pro
-InstallDate  : 12/17/2018 9:18:37 AM
-Version      : 10.0.17763
-IsServer     : False
+Computername : SRV2
+OS           : Microsoft Windows Server 2016 Standard Evaluation
+InstallDate  : 10/26/2020 6:56:32 PM
+Version      : 10.0.14393
+IsServer     : True
 
 Computername : SRV1
 OS           : Microsoft Windows Server 2016 Standard Evaluation
-InstallDate  : 12/26/2018 11:07:25 AM
-Version      : 10.0.14393
-IsServer     : True
-
-Computername : DOM1
-OS           : Microsoft Windows Server 2016 Standard Evaluation
-InstallDate  : 12/26/2018 10:58:31 AM
-Version      : 10.0.14393
-IsServer     : True
-
-Computername : SRV2
-OS           : Microsoft Windows Server 2016 Standard Evaluation
-InstallDate  : 12/26/2018 11:08:07 AM
+InstallDate  : 10/26/2020 6:56:33 PM
 Version      : 10.0.14393
 IsServer     : True
 
 Computername : WIN10
 OS           : Microsoft Windows 10 Enterprise Evaluation
-InstallDate  : 12/26/2018 11:08:11 AM
-Version      : 10.0.15063
+InstallDate  : 10/26/2020 6:56:25 PM
+Version      : 10.0.18363
 IsServer     : False
-
-Computername : THINKP1
-OS           : Microsoft Windows 10 Pro
-InstallDate  : 1/21/2019 2:14:47 PM
-Version      : 10.0.17763
-IsServer     : False
+...
 ```
 
-_Last updated 13 March, 2019_
+_Last updated 2021-01-14 18:13:07Z_

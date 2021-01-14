@@ -1,6 +1,6 @@
 ---
 external help file: MySQLite-help.xml
-Module Name: MySQLite
+Module Name: mySQLite
 online version:
 schema: 2.0.0
 ---
@@ -66,7 +66,6 @@ PS C:\> Invoke-MySQLiteQuery c:\work\vm2.db -Query "select * from Metadata"
 Author         Created             Computername Comment
 ------         -------             ------------ -------
 BOVINE320\Jeff 3/8/2019 2:59:05 PM BOVINE320    for Hyper-V monitoring
-
 ```
 
 Update a table column and then query the results
@@ -118,7 +117,7 @@ Aliases:
 Required: False
 Position: 0
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
@@ -188,8 +187,7 @@ Accept wildcard characters: False
 
 ### CommonParameters
 
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

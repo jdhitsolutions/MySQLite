@@ -1,5 +1,5 @@
 ---
-external help file: mySQLite-help.xml
+external help file: MySQLite-help.xml
 Module Name: mySQLite
 online version:
 schema: 2.0.0
@@ -35,55 +35,35 @@ ConvertFrom-MySQLiteDB [-Path] <String> -TableName <String> [-RawObject] [<Commo
 
 ## DESCRIPTION
 
-This command is intended primarily to dump or convert a table from a SQLite database file into PowerShell. It is assumed you create the table using ConvertTo-MySQLiteDB but this should work for most tables. To get the best results you will want to specify a mapping table of keys and datatypes. If you used ConvertTo-MySQLiteDB, it will create a corresponding property map table that you can use. Otherwise you can use a hashtable. If you want to let SQLite do its best, you can use the -RawObject parameter.
+This command is intended primarily to dump or convert a table from a SQLite database file into PowerShell. It is assumed you create the table using ConvertTo-MySQLiteDB but this should work for most tables. To get the best results you will want to specify a mapping table of keys and datatypes. If you used ConvertTo-MySQLiteDB, it will create a corresponding property map table that you can use. Otherwise, you can use a hashtable. If you want to let SQLite do its best, you can use the -RawObject parameter.
 
 ## EXAMPLES
 
 ### Example 1
 
 ```powershell
+PS C:\> ConvertFrom-MySQLiteDB -Path C:\work\Inventory.db -TableName OS -PropertyTable propertymap_myos
 
-PS C:\> PS C:\> ConvertFrom-MySQLiteDB -Path C:\work\Inventory.db -TableName OS -PropertyTable propertymap_myos
-
-
-Computername : SRV1
-OS           : Microsoft Windows Server 2016 Standard
-InstallDate  : 12/26/2018 11:07:25 AM
-Version      : 10.0.14393
-IsServer     : True
-
-Computername : DOM1
-OS           : Microsoft Windows Server 2016 Standard
-InstallDate  : 12/26/2018 10:58:31 AM
-Version      : 10.0.14393
-IsServer     : True
 
 Computername : SRV2
-OS           : Microsoft Windows Server 2016 Standard
-InstallDate  : 12/26/2018 11:08:07 AM
+OS           : Microsoft Windows Server 2016 Standard Evaluation
+InstallDate  : 10/26/2020 6:56:32 PM
 Version      : 10.0.14393
 IsServer     : True
 
-Computername : WIN10
-OS           : Microsoft Windows 10 Enterprise
-InstallDate  : 12/26/2018 11:08:11 AM
-Version      : 10.0.15063
-IsServer     : False
-
-Computername : THINKP1
-OS           : Microsoft Windows 10 Pro
-InstallDate  : 1/21/2019 2:14:47 PM
-Version      : 10.0.17763
-IsServer     : False
-
+Computername : SRV1
+OS           : Microsoft Windows Server 2016 Standard Evaluation
+InstallDate  : 10/26/2020 6:56:33 PM
+Version      : 10.0.14393
+IsServer     : True
+...
 ```
 
-Dump a table that was originally created using ConvertTo-MySQLiteDB. The resulting objects will have a typename of myOS which is derived from the property map table name. As an alternative you can specify a different type name.
+Dump a table created using ConvertTo-MySQLiteDB. The resulting objects will have a type name of myOS which is derived from the property map table name which was also created by ConvertTo-MySQLiteDB. As an alternative, you can specify a different type name.
 
 ### Example 2
 
 ```powershell
-
 PS C:\> ConvertFrom-MySQLiteDB -Path C:\work\test.db -TableName proc -PropertyMap @{Name="string";Date="datetime";id="int";virtualmemorysize = "int";workingset="int"} | Get-Member
 
 
@@ -96,7 +76,7 @@ Equals            Method       bool Equals(System.Object obj)
 GetHashCode       Method       int GetHashCode()
 GetType           Method       type GetType()
 ToString          Method       string ToString()
-Date              NoteProperty datetime Date=3/13/2019 2:52:14 PM
+Date              NoteProperty datetime Date=3/13/2020 2:52:14 PM
 id                NoteProperty int id=17276
 Name              NoteProperty string Name=ApplicationFrameHost
 virtualmemorysize NoteProperty int virtualmemorysize=295845888
@@ -141,7 +121,7 @@ Accept wildcard characters: False
 
 ### -PropertyTable
 
-Enter the name of the property map table
+Enter the name of the property map table that is part of the database.
 
 ```yaml
 Type: String
@@ -189,7 +169,6 @@ Accept wildcard characters: False
 
 ### -TypeName
 
-
 ```yaml
 Type: String
 Parameter Sets: table, hash
@@ -204,8 +183,7 @@ Accept wildcard characters: False
 
 ### CommonParameters
 
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
@@ -213,7 +191,9 @@ For more information, see about_CommonParameters (http://go.microsoft.com/fwlink
 
 ## OUTPUTS
 
-### Object
+### System.Object
+
+### Hashtable
 
 ## NOTES
 

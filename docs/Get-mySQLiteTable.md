@@ -1,6 +1,6 @@
 ---
 external help file: MySQLite-help.xml
-Module Name: MySQLite
+Module Name: mySQLite
 online version:
 schema: 2.0.0
 ---
@@ -34,7 +34,6 @@ Use this command to discover table names and layout in a SQLite database file.
 ### Example 1
 
 ```powershell
-
 PS C:\> Get-MySQLiteTable -Path c:\work\vm2.db
 
 Source         Name
@@ -47,7 +46,6 @@ Basic information about available tables.
 ### Example 2
 
 ```powershell
-
 PS C:\> Get-MySQLiteTable -Path c:\work\vm2.db -Detail
 
    Database C:\work\vm2.db Table:Metadata
@@ -115,7 +113,7 @@ Aliases:
 Required: False
 Position: 0
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
@@ -168,9 +166,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

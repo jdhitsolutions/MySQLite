@@ -1,6 +1,6 @@
 ---
 external help file: MySQLite-help.xml
-Module Name: MySQLite
+Module Name: mySQLite
 online version:
 schema: 2.0.0
 ---
@@ -30,7 +30,7 @@ PS C:\> Get-MySQLiteDB -Path C:\work\test.db
 
 Path            FileName Size  Modified             Tables
 ----            -------- ----  --------             ------
-C:\work\test.db test.db  33792 3/13/2019 3:22:00 PM {Metadata, PropertyMap, Domain, Data...}
+C:\work\test.db test.db  33792 3/13/2020 3:22:00 PM {Metadata, PropertyMap, Domain, Data...}
 ```
 
 Get information for a single database.
@@ -95,8 +95,7 @@ Accept wildcard characters: False
 
 ### CommonParameters
 
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
