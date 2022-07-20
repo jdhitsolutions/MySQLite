@@ -9,13 +9,12 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Convert or dump PowerShell objects into a SQLite database
+Convert or dump PowerShell objects into a SQLite database.
 
 ## SYNTAX
 
 ```yaml
-ConvertTo-MySQLiteDB -Inputobject <Object[]> [-Path] <String> -TableName <String> [-TypeName <String>]
- [-Append] [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
+ConvertTo-MySQLiteDB -Inputobject <Object[]> [-Path] <String> -TableName <String> [-TypeName <String>] [-Append] [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -39,57 +38,11 @@ PS C:\> $data | ConvertTo-MySQLiteDB -Path c:\work\Inventory.db -TableName OS -T
 
 Convert the results of a PowerShell expression into a SQLite database file using a table called OS and a custom type name of myOS. This process will also create a table called propertymap_myOS with mappings for property names and the original type.
 
+The first property name will be used as the first table column and the primary index so the values from your command need to be unique.
+
 The database can be queried using Invoke-MYSQLiteQuery or dumped out using ConvertFrom-MySQLiteDB.
 
 ## PARAMETERS
-
-### -Append
-
-Append a new table to an existing SQLite database file. This does NOT append data to an existing table.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Confirm
-
-Prompts you for confirmation before running the cmdlet.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: cf
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Force
-
-Overwrite the existing file.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
 
 ### -InputObject
 
@@ -118,6 +71,38 @@ Aliases: database
 
 Required: True
 Position: 0
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Append
+
+Append a new table to an existing SQLite database file. This does NOT append data to an existing table.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Force
+
+Overwrite the existing file.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -163,6 +148,22 @@ Shows what would happen if the cmdlet runs. The cmdlet is not run.
 Type: SwitchParameter
 Parameter Sets: (All)
 Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
 
 Required: False
 Position: Named

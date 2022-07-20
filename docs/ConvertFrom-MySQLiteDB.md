@@ -16,15 +16,13 @@ Convert a table from a SQLite database.
 ### table (Default)
 
 ```yaml
-ConvertFrom-MySQLiteDB [-Path] <String> -TableName <String> -PropertyTable <String> [-TypeName <String>]
- [<CommonParameters>]
+ConvertFrom-MySQLiteDB [-Path] <String> -TableName <String> -PropertyTable <String> [-TypeName <String>] [<CommonParameters>]
 ```
 
 ### hash
 
 ```yaml
-ConvertFrom-MySQLiteDB [-Path] <String> -TableName <String> -PropertyMap <Hashtable> [-TypeName <String>]
- [<CommonParameters>]
+ConvertFrom-MySQLiteDB [-Path] <String> -TableName <String> -PropertyMap <Hashtable> [-TypeName <String>] [<CommonParameters>]
 ```
 
 ### raw

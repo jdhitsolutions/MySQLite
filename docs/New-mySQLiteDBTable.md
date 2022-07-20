@@ -14,29 +14,26 @@ schema: 2.0.0
 ### filetyped (Default)
 
 ```yaml
-New-MySQLiteDBTable -Path <String> -TableName <String> [-ColumnProperties <OrderedDictionary>] [-Force]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+New-MySQLiteDBTable -Path <String> -TableName <String> [-ColumnProperties <OrderedDictionary>] [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### filenamed
 
 ```yaml
-New-MySQLiteDBTable [-Path <String>] -TableName <String> [-ColumnNames <String[]>] [-Force] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+New-MySQLiteDBTable [-Path <String>] -TableName <String> [-ColumnNames <String[]>] [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### cnxnamed
 
 ```yaml
-New-MySQLiteDBTable [-Connection <SQLiteConnection>] -TableName <String> [-ColumnNames <String[]>] [-Force]
- [-KeepAlive] [-WhatIf] [-Confirm] [<CommonParameters>]
+New-MySQLiteDBTable [-Connection <SQLiteConnection>] -TableName <String> [-ColumnNames <String[]>] [-Force] [-KeepAlive] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### cnxtyped
 
 ```yaml
 New-MySQLiteDBTable [-Connection <SQLiteConnection>] -TableName <String>
- [-ColumnProperties <OrderedDictionary>] [-Force] [-KeepAlive] [-WhatIf] [-Confirm] [<CommonParameters>]
+[-ColumnProperties <OrderedDictionary>] [-Force] [-KeepAlive] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

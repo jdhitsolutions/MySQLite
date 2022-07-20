@@ -2,6 +2,168 @@
 <helpItems schema="maml" xmlns="http://msh">
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
+      <command:name>Close-MySQLiteDB</command:name>
+      <command:verb>Close</command:verb>
+      <command:noun>MySQLiteDB</command:noun>
+      <maml:description>
+        <maml:para>Close a SQLite database file.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>If you are creating your own solutions using the MySQLite module, you might need to open and close the database file. If you use Invoke-MySQLite to insert or update data, that command will handle opening and closing the file.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Close-MySQLiteDB</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="0" aliases="none">
+          <maml:name>Connection</maml:name>
+          <maml:description>
+            <maml:para>Enter a connection object.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">SQLiteConnection</command:parameterValue>
+          <dev:type>
+            <maml:name>SQLiteConnection</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Passthru</maml:name>
+          <maml:description>
+            <maml:para></maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+          <maml:name>WhatIf</maml:name>
+          <maml:description>
+            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+        <maml:name>Confirm</maml:name>
+        <maml:description>
+          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="0" aliases="none">
+        <maml:name>Connection</maml:name>
+        <maml:description>
+          <maml:para>Enter a connection object.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">SQLiteConnection</command:parameterValue>
+        <dev:type>
+          <maml:name>SQLiteConnection</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Passthru</maml:name>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+        <maml:name>WhatIf</maml:name>
+        <maml:description>
+          <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>System.Data.SQLite.SQLiteConnection</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>System.Data.SQLite.SQLiteConnection</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell-resources/</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; $connection = Open-MySQLiteDB -Path C:\work\test2.db
+PS C:\&gt; Close-mySQLiteDB $connection</dev:code>
+        <dev:remarks>
+          <maml:para>After opening the connection and making any changes, you should close the connection.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Open-MySQLiteDB</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
       <command:name>ConvertFrom-MySQLiteDB</command:name>
       <command:verb>ConvertFrom</command:verb>
       <command:noun>MySQLiteDB</command:noun>
@@ -320,7 +482,7 @@ workingset        NoteProperty int workingset=11640832</dev:code>
       <command:verb>ConvertTo</command:verb>
       <command:noun>MySQLiteDB</command:noun>
       <maml:description>
-        <maml:para>Convert or dump PowerShell objects into a SQLite database</maml:para>
+        <maml:para>Convert or dump PowerShell objects into a SQLite database.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -344,21 +506,22 @@ workingset        NoteProperty int workingset=11640832</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none">
+          <maml:name>InputObject</maml:name>
+          <maml:description>
+            <maml:para>What object do you want to create? Typically this will be the result of a PowerShell expression or command. It is recommended that you be selective.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Object[]</command:parameterValue>
+          <dev:type>
+            <maml:name>Object[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Append</maml:name>
           <maml:description>
             <maml:para>Append a new table to an existing SQLite database file. This does NOT append data to an existing table.</maml:para>
-          </maml:description>
-          <dev:type>
-            <maml:name>SwitchParameter</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>False</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
-          <maml:name>Confirm</maml:name>
-          <maml:description>
-            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -376,18 +539,6 @@ workingset        NoteProperty int workingset=11640832</dev:code>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>False</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none">
-          <maml:name>InputObject</maml:name>
-          <maml:description>
-            <maml:para>What object do you want to create? Typically this will be the result of a PowerShell expression or command. It is recommended that you be selective.</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">Object[]</command:parameterValue>
-          <dev:type>
-            <maml:name>Object[]</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>TableName</maml:name>
@@ -424,45 +575,20 @@ workingset        NoteProperty int workingset=11640832</dev:code>
           </dev:type>
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>Append</maml:name>
-        <maml:description>
-          <maml:para>Append a new table to an existing SQLite database file. This does NOT append data to an existing table.</maml:para>
-        </maml:description>
-        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
-        <dev:type>
-          <maml:name>SwitchParameter</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>False</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
-        <maml:name>Confirm</maml:name>
-        <maml:description>
-          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
-        </maml:description>
-        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
-        <dev:type>
-          <maml:name>SwitchParameter</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>False</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>Force</maml:name>
-        <maml:description>
-          <maml:para>Overwrite the existing file.</maml:para>
-        </maml:description>
-        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
-        <dev:type>
-          <maml:name>SwitchParameter</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>False</dev:defaultValue>
-      </command:parameter>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none">
         <maml:name>InputObject</maml:name>
         <maml:description>
@@ -486,6 +612,30 @@ workingset        NoteProperty int workingset=11640832</dev:code>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Append</maml:name>
+        <maml:description>
+          <maml:para>Append a new table to an existing SQLite database file. This does NOT append data to an existing table.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Force</maml:name>
+        <maml:description>
+          <maml:para>Overwrite the existing file.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>TableName</maml:name>
@@ -515,6 +665,18 @@ workingset        NoteProperty int workingset=11640832</dev:code>
         <maml:name>WhatIf</maml:name>
         <maml:description>
           <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+        <maml:name>Confirm</maml:name>
+        <maml:description>
+          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
         </maml:description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
@@ -556,6 +718,7 @@ workingset        NoteProperty int workingset=11640832</dev:code>
 PS C:\&gt; $data | ConvertTo-MySQLiteDB -Path c:\work\Inventory.db -TableName OS -TypeName myOS -force</dev:code>
         <dev:remarks>
           <maml:para>Convert the results of a PowerShell expression into a SQLite database file using a table called OS and a custom type name of myOS. This process will also create a table called propertymap_myOS with mappings for property names and the original type.</maml:para>
+          <maml:para>The first property name will be used as the first table column and the primary index so the values from your command need to be unique.</maml:para>
           <maml:para>The database can be queried using Invoke-MYSQLiteQuery or dumped out using ConvertFrom-MySQLiteDB.</maml:para>
         </dev:remarks>
       </command:example>
@@ -934,7 +1097,7 @@ ColumnIndex ColumnName ColumnType
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Use this command to run a SQL query against a SQLite database. You can use this command to get data from a table, insert data into a table or modify data. If you are running a SELECT query, which normally returns something, you have an option as to how you would like the results to be formatted.</maml:para>
+      <maml:para>Use this command to run a SQL query against a SQLite database. You can use this command to get data from a table,insert data into a table or modify data. If you are running a SELECT query, which normally returns something, you have an option as to how you would like the results to be formatted.</maml:para>
       <maml:para>You will normally use the Path parameter. In scripts, you are more likely to use an existing connection.</maml:para>
       <maml:para>See https://sqlite.org/lang.html and http://www.sqlitetutorial.net/ for additional help.</maml:para>
     </maml:description>
@@ -1228,11 +1391,11 @@ PS C:\&gt; Invoke-MySQLiteQuery -Path c:\work\test.db -Query "Select * from proc
 
    ID Name               Workingset VirtualMemorySize Date
    -- ----               ---------- ----------------- ----
- 3112 Memory Compression 1340776448        1484521472 03/13/2019 14:52:14
- 5684 powershell         1198268416       -2013696000 03/13/2019 14:52:14
-12232 firefox             370966528       -1868365824 03/13/2019 14:52:14
-15536 thunderbird         347189248        1131708416 03/13/2019 14:52:14
-15788 Code                323653632        1997750272 03/13/2019 14:52:14</dev:code>
+ 3112 Memory Compression 1340776448        1484521472 03/13/2022 14:52:14
+ 5684 powershell         1198268416       -2013696000 03/13/2022 14:52:14
+12232 firefox             370966528       -1868365824 03/13/2022 14:52:14
+15536 thunderbird         347189248        1131708416 03/13/2022 14:52:14
+15788 Code                323653632        1997750272 03/13/2022 14:52:14</dev:code>
         <dev:remarks>
           <maml:para>The first command creates a data set. The second command inserts into a table in the SQLite database file. The last command queries for data in the proc table sorting on the WorkingSet property in descending order. Note that you could have retrieved all data from the table and piped to Where-Object to perform the filtering, but that would not be as efficient.</maml:para>
         </dev:remarks>
@@ -1244,7 +1407,7 @@ PS C:\&gt; Invoke-MySQLiteQuery c:\work\vm2.db -Query "select * from Metadata"
 
 Author         Created             Computername Comment
 ------         -------             ------------ -------
-BOVINE320\Jeff 3/8/2019 2:59:05 PM BOVINE320    for Hyper-V monitoring</dev:code>
+BOVINE320\Jeff 3/8/2022 2:59:05 PM BOVINE320    for Hyper-V monitoring</dev:code>
         <dev:remarks>
           <maml:para>Update a table column and then query the results</maml:para>
         </dev:remarks>
@@ -1453,12 +1616,12 @@ BOVINE320\Jeff 3/8/2019 2:59:05 PM BOVINE320    for Hyper-V monitoring</dev:code
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>-------------------------- Example 3 --------------------------</maml:title>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
         <dev:code>PS C:\&gt; New-MySQLiteDB c:\work\test2.db -Comment "This is for scripting stuff" -passthru -force | Invoke-MySQLiteQuery -query "Select * from metadata"
 
-Author         Created               Computername Comment
-------         -------               ------------ -------
-BOVINE320\Jeff 3/13/2019 12:54:59 PM BOVINE320    This is for scripting stuff</dev:code>
+Author          Created               Computername Comment
+------          -------               ------------ -------
+THINKX1-JH\Jeff 7/20/2022 12:34:39 PM THINKX1-JH   This is for scripting stuff</dev:code>
         <dev:remarks>
           <maml:para>Create a new database file in C:\Work and add a comment. Overwrite the file if it already exists and write the</maml:para>
         </dev:remarks>
@@ -1970,6 +2133,165 @@ cid name              type
       </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>Get-MySQLiteTable</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Open-MySQLiteDB</command:name>
+      <command:verb>Open</command:verb>
+      <command:noun>MySQLiteDB</command:noun>
+      <maml:description>
+        <maml:para>Open a SQLite database file.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>If you are creating your own solutions using the MySQLite module, you might need to open and close the database file. If you use Invoke-MySQLite to insert or update data, that command will handle opening and closing the file.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Open-MySQLiteDB</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="database">
+          <maml:name>Path</maml:name>
+          <maml:description>
+            <maml:para>The path to the SQLite database file.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+          <maml:name>WhatIf</maml:name>
+          <maml:description>
+            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+        <maml:name>Confirm</maml:name>
+        <maml:description>
+          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="database">
+        <maml:name>Path</maml:name>
+        <maml:description>
+          <maml:para>The path to the SQLite database file.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+        <maml:name>WhatIf</maml:name>
+        <maml:description>
+          <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>System.Data.SQLite.SQLiteConnection</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell-resources/</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; $connection = Open-MySQLiteDB -Path C:\work\test2.db
+PS C:\&gt; $connection
+
+PoolCount         : 0
+ConnectionString  : Data Source=C:\work\test2.db;Version=3
+DataSource        : test2
+FileName          : C:\work\test2.db
+Database          : main
+DefaultTimeout    : 30
+BusyTimeout       : 0
+WaitTimeout       : 30000
+PrepareRetries    : 3
+ProgressOps       : 0
+ParseViaFramework : False
+Flags             : Default
+DefaultDbType     :
+DefaultTypeName   :
+VfsName           :
+OwnHandle         : True
+ServerVersion     : 3.28.0
+LastInsertRowId   : 0
+Changes           : 0
+AutoCommit        : True
+MemoryUsed        : 133912
+MemoryHighwater   : 312684
+State             : Open
+ConnectionTimeout : 15
+CanCreateBatch    : False
+Site              :
+Container         :</dev:code>
+        <dev:remarks>
+          <maml:para>You can use the open connection object with commands in the mySQLite module that have a connection parameter.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Close-MySQLiteDB</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>

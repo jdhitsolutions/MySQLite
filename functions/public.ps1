@@ -282,7 +282,7 @@ Function Get-MySQLiteTable {
 
 Function ConvertTo-MySQLiteDB {
     [cmdletbinding(SupportsShouldProcess)]
-    [alias("todb", 'Convert-DB')]
+    [alias("todb", 'ConvertTo-DB')]
     [outputtype("None")]
     Param(
         [Parameter(Mandatory, ValueFromPipeline, HelpMessage = "What object do you want to create")]

@@ -14,8 +14,7 @@ Create a new SQLite database file
 ## SYNTAX
 
 ```yaml
-New-MySQLiteDB [-Path] <String> [-Force] [-Comment <String>] [-Passthru] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+New-MySQLiteDB [-Path] <String> [-Force] [-Comment <String>] [-Passthru] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -32,14 +31,14 @@ PS C:\> New-MySQLiteDB c:\work\test.db
 
 Create a new database file in C:\Work.
 
-### Example 3
+### Example 2
 
 ```powershell
 PS C:\> New-MySQLiteDB c:\work\test2.db -Comment "This is for scripting stuff" -passthru -force | Invoke-MySQLiteQuery -query "Select * from metadata"
 
-Author         Created               Computername Comment
-------         -------               ------------ -------
-BOVINE320\Jeff 3/13/2019 12:54:59 PM BOVINE320    This is for scripting stuff
+Author          Created               Computername Comment
+------          -------               ------------ -------
+THINKX1-JH\Jeff 7/20/2022 12:34:39 PM THINKX1-JH   This is for scripting stuff
 ```
 
 Create a new database file in C:\Work and add a comment. Overwrite the file if it already exists and write the

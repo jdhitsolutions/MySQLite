@@ -1,5 +1,9 @@
 # Changelog for MySQLite
 
+## v0.6.0
+
++ Fixed `ConvertTo-DB` alias.
+
 ## v0.5.0
 
 + Fixed assembly loading problems thanks to insights from @TobiasPSP.
