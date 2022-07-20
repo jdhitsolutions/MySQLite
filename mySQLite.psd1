@@ -48,9 +48,7 @@
         'Close-DB'
     )
     PrivateData            = @{
-
         PSData = @{
-
             Tags       = @('sqlite', 'database')
             LicenseUri = 'https://github.com/jdhitsolutions/MySQLite/blob/master/License.txt'
             ProjectUri = 'https://github.com/jdhitsolutions/MySQLite'

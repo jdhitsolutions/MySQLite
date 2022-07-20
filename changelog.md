@@ -3,6 +3,9 @@
 ## v0.6.0
 
 + Fixed `ConvertTo-DB` alias.
++ Updated `README.md`.
++ Updated help documentation.
++ Published to the PowerShell Gallery
 
 ## v0.5.0
 
