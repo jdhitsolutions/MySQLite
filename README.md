@@ -2,13 +2,13 @@
 
 [![PSGallery Version](https://img.shields.io/powershellgallery/v/MySQLite.png?style=for-the-badge&label=PowerShell%20Gallery)](https://www.powershellgallery.com/packages/MySQLite/) [![PSGallery Downloads](https://img.shields.io/powershellgallery/dt/MySQLite.png?style=for-the-badge&label=Downloads)](https://www.powershellgallery.com/packages/MySQLite/)
 
-A set of PowerShell functions for working with SQLite database files. This module will only work on 64bit Windows platforms at this time. It should load and work in both Windows PowerShell and PowerShell 7. The goal of the module is to integrate the use of SQLite databases into daily PowerShell work or module development where a lightweight database would be beneficial.
+A set of PowerShell functions for working with SQLite database files. The goal of the module is to integrate the use of SQLite databases into daily PowerShell work or module development where a lightweight database would be beneficial. You might use this module as a library in your PowerShell projects.
 
 ## Installation
 
 This module should work on 64-bit versions of Windows PowerShell and PowerShell 7 running on a Windows platform. __The module is not supported on non-Windows platforms.__
 
-You can install it from the PowerShell Gallery.
+You can install this module from the PowerShell Gallery.
 
 ```powershell
 Install-Module -name MySQLite -repository PSGallery
@@ -19,12 +19,12 @@ Install-Module -name MySQLite -repository PSGallery
 + [ConvertFrom-MySQLiteDB](docs/ConvertFrom-MySQLiteDB.md)
 + [ConvertTo-MySQLiteDB](docs/ConvertTo-MySQLiteDB.md)
 + [Get-MySQLiteDB](docs/Get-MySQLiteDB.md)
-+ [Get-mySQLiteTable](docs/Get-mySQLiteTable.md)
++ [Get-mySQLiteTable](docs/Get-MySQLiteTable.md)
 + [Invoke-MySQLiteQuery](docs/Invoke-MySQLiteQuery.md)
 + [New-MySQLiteDB](docs/New-MySQLiteDB.md)
 + [New-MySQLiteDBTable](docs/New-MySQLiteDBTable.md)
 
-## Converting PowerShell
+## Converting PowerShell Output
 
 The primary benefit of this module is storing results of a PowerShell expression or script into a SQLite database file and later retrieving it back into PowerShell as the original objects, or as close as possible.
 

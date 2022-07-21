@@ -4,21 +4,21 @@ Function resolvedb {
     [cmdletbinding()]
     Param([string]$Path)
 
-    Write-Verbose "ResolveDB Resolving $path"
+    Write-Verbose "[$((Get-Date).TimeOfDay)] ResolveDB Resolving $path"
     #resolve or convert path into a full filesystem path
     $path = $executioncontext.sessionstate.path.GetUnresolvedProviderPathFromPSPath($path)
     [pscustomobject]@{
         Path   = $path
         Exists = Test-Path -Path $path
     }
-    Write-Verbose "ResolveDB Resolved to $Path"
+    Write-Verbose "[$((Get-Date).TimeOfDay)] ResolveDB Resolved to $Path"
 }
 Function opendb {
     [cmdletbinding()]
     Param([string]$Path)
 
     $ConnectionString = "Data Source=$Path;Version=3"
-    Write-Verbose "OpenDB Using connection string: $ConnectionString"
+    Write-Verbose "[$((Get-Date).TimeOfDay)] OpenDB Using connection string: $ConnectionString"
     $connection = New-Object System.Data.SQLite.SQLiteConnection -ArgumentList $ConnectionString
     $connection.Open()
     $connection
@@ -32,7 +32,7 @@ Function closedb {
         [System.Data.SQLite.SQLiteCommand]$cmd
     )
     if ($connection.state -eq 'Open') {
-        Write-Verbose "CloseDB Closing database connection"
+        Write-Verbose "[$((Get-Date).TimeOfDay)] CloseDB Closing database connection"
         if ($cmd) {
             $cmd.Dispose()
         }
@@ -49,7 +49,7 @@ Function buildquery {
         [string]$Tablename
     )
     Begin {
-        Write-Verbose "Starting $($myinvocation.mycommand)"
+        Write-Verbose "[$((Get-Date).TimeOfDay)] Starting $($myinvocation.mycommand)"
 
     } #begin
 
@@ -66,8 +66,8 @@ Function buildquery {
             }
             else {
                 #only create an entry if there is a value
-                if ($_.value -ne $null) {
-                    Write-Verbose "Creating cliXML for a blob"
+                if ($null -ne $_.value) {
+                    Write-Verbose "[$((Get-Date).TimeOfDay)] Creating cliXML for a blob"
                     #create a temporary cliXML file
                     $out = [system.io.path]::GetTempFileName()
                     $_.value | Export-Clixml -Path $out -Encoding UTF8
@@ -87,7 +87,7 @@ Function buildquery {
     } #process
 
     End {
-        Write-Verbose "Ending $($myinvocation.mycommand)"
+        Write-Verbose "[$((Get-Date).TimeOfDay)] Ending $($myinvocation.mycommand)"
 
     } #end
 
@@ -97,12 +97,17 @@ Function frombytes {
     [cmdletbinding()]
     Param([byte[]]$Bytes)
 
-    Write-Verbose "Converting from bytes to object"
-    $tmpFile = [system.io.path]::GetTempFileName()
-    [text.encoding]::UTF8.getstring($bytes) | Out-File -FilePath $tmpfile -Encoding utf8
-    Import-Clixml -Path $tmpFile
-    if (Test-Path $tmpfile) {
-        Remove-Item $tmpFile
+    #only process if there are bytes
+    # Issue #3 7/20/2022 JDH
+    if ($bytes.count -gt 0) {
+        Write-Verbose "[$((Get-Date).TimeOfDay)] Converting from bytes to object"
+        $tmpFile = [system.io.path]::GetTempFileName()
+        [text.encoding]::UTF8.getstring($bytes) | Out-File -FilePath $tmpfile -Encoding utf8
+        Import-Clixml -Path $tmpFile
+        if (Test-Path $tmpfile) {
+            Remove-Item $tmpFile
+        }
     }
+
 }
 #endregion

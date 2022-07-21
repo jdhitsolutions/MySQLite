@@ -157,6 +157,10 @@ PS C:\&gt; Close-mySQLiteDB $connection</dev:code>
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://bit.ly/3aRRJNd</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
         <maml:linkText>Open-MySQLiteDB</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>
@@ -471,6 +475,10 @@ workingset        NoteProperty int workingset=11640832</dev:code>
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://bit.ly/3OBHDxT</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
         <maml:linkText>ConvertTo-MySQLiteDB</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>
@@ -725,6 +733,10 @@ PS C:\&gt; $data | ConvertTo-MySQLiteDB -Path c:\work\Inventory.db -TableName OS
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://bit.ly/3cuuBoq</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
         <maml:linkText>ConvertFrom-MySQLiteDB</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>
@@ -850,6 +862,10 @@ SQLiteVersion : 3.8.8.3</dev:code>
       </command:example>
     </command:examples>
     <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://bit.ly/3PHa8ed</maml:uri>
+      </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>New-MySQLiteDB</maml:linkText>
         <maml:uri></maml:uri>
@@ -1081,6 +1097,10 @@ ColumnIndex ColumnName ColumnType
       </command:example>
     </command:examples>
     <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://bit.ly/3PpKHxY</maml:uri>
+      </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>New-MySQLiteDBTable</maml:linkText>
         <maml:uri></maml:uri>
@@ -1413,7 +1433,12 @@ BOVINE320\Jeff 3/8/2022 2:59:05 PM BOVINE320    for Hyper-V monitoring</dev:code
         </dev:remarks>
       </command:example>
     </command:examples>
-    <command:relatedLinks />
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://bit.ly/3B6YcOW</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
@@ -1623,11 +1648,15 @@ Author          Created               Computername Comment
 ------          -------               ------------ -------
 THINKX1-JH\Jeff 7/20/2022 12:34:39 PM THINKX1-JH   This is for scripting stuff</dev:code>
         <dev:remarks>
-          <maml:para>Create a new database file in C:\Work and add a comment. Overwrite the file if it already exists and write the</maml:para>
+          <maml:para>Create a new database file in C:\Work and add a comment. Overwrite the file if it already exists and send the result to Invoke-MySQLiteQuery to display metadata information.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
     <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://bit.ly/3aR8NCO</maml:uri>
+      </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>Get-MySQLiteDB</maml:linkText>
         <maml:uri></maml:uri>
@@ -1650,7 +1679,7 @@ THINKX1-JH\Jeff 7/20/2022 12:34:39 PM THINKX1-JH   This is for scripting stuff</
     <maml:description>
       <maml:para>This command will create a new table in a SQLite database file. You need to specify a table name. When you define the table you also need to specify the column names. You can do this with an array of names, in which case the column values will not be treated as any particular type. When you insert data into the table SQLite will automatically determine a type.</maml:para>
       <maml:para>Or you can use an ordered hashtable of column names and types. The first key will be set as the Primary key.</maml:para>
-      <maml:para>Normally you will specify a path but in scripted projects, you may have an existing connection and wish to re-use it to avoid file I/O overhead.</maml:para>
+      <maml:para>Normally you will specify a path but in scripted projects, you may have an existing connection and wish to re-use it to avoid file I/O overhead. In any event, the database must already have been created.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -2128,6 +2157,10 @@ cid name              type
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://bit.ly/3aZEwBP</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
         <maml:linkText>New-MySQLiteDB</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>
@@ -2290,6 +2323,10 @@ Container         :</dev:code>
       </command:example>
     </command:examples>
     <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://bit.ly/3PEe13G</maml:uri>
+      </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>Close-MySQLiteDB</maml:linkText>
         <maml:uri></maml:uri>

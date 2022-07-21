@@ -1,7 +1,7 @@
----
+﻿---
 external help file: MySQLite-help.xml
 Module Name: mySQLite
-online version:
+online version: https://bit.ly/3aR8NCO
 schema: 2.0.0
 ---
 
@@ -41,7 +41,7 @@ Author          Created               Computername Comment
 THINKX1-JH\Jeff 7/20/2022 12:34:39 PM THINKX1-JH   This is for scripting stuff
 ```
 
-Create a new database file in C:\Work and add a comment. Overwrite the file if it already exists and write the
+Create a new database file in C:\Work and add a comment. Overwrite the file if it already exists and send the result to Invoke-MySQLiteQuery to display metadata information.
 
 ## PARAMETERS
 

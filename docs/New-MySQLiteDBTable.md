@@ -1,7 +1,7 @@
----
+﻿---
 external help file: MySQLite-help.xml
 Module Name: mySQLite
-online version:
+online version: https://bit.ly/3aZEwBP
 schema: 2.0.0
 ---
 
@@ -42,7 +42,7 @@ This command will create a new table in a SQLite database file. You need to spec
 
 Or you can use an ordered hashtable of column names and types. The first key will be set as the Primary key.
 
-Normally you will specify a path but in scripted projects, you may have an existing connection and wish to re-use it to avoid file I/O overhead.
+Normally you will specify a path but in scripted projects, you may have an existing connection and wish to re-use it to avoid file I/O overhead. In any event, the database must already have been created.
 
 ## EXAMPLES
 

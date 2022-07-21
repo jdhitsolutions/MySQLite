@@ -5,13 +5,13 @@
 @{
 
     RootModule             = 'MySQLite.psm1'
-    ModuleVersion          = '0.6.0'
+    ModuleVersion          = '0.7.0'
     CompatiblePSEditions   = @("Desktop","Core")
     GUID                   = '49ac2120-f30e-4244-ac8b-4d18fa9ae9aa'
     Author                 = 'Jeff Hicks'
     CompanyName            = 'JDH Information Technology Solutions, Inc.'
     Copyright              = '(c) 2019-2022 JDH Information Technology Solutions, Inc.'
-    Description            = 'A set of PowerShell commands for working with SQLite database files. This is a simple alternative to installing any version of SQL Server on your desktop.'
+    Description            = 'A set of PowerShell commands for working with SQLite database files. This is a simple alternative to installing any version of SQL Server on your desktop. Note that this module will only work on Windows platforms.'
     PowerShellVersion      = '5.1'
     DotNetFrameworkVersion = '4.6'
     ProcessorArchitecture  = 'AMD64'

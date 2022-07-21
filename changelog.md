@@ -1,5 +1,14 @@
 # Changelog for MySQLite
 
+## 0.7.0
+
++ Moved public functions to individual files.
++ Updated verbose output in private functions.
++ Updated commands to better handle null property values. [Issue #3](https://github.com/jdhitsolutions/MySQLite/issues/3)
++ Added online help links.
++ Updated module manifest.
++ Updated `README.md`.
+
 ## v0.6.0
 
 + Fixed `ConvertTo-DB` alias.
