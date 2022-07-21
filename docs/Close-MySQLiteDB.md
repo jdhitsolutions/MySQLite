@@ -1,4 +1,4 @@
-﻿---
+---
 external help file: MySQLite-help.xml
 Module Name: mySQLite
 online version: https://bit.ly/3aRRJNd
