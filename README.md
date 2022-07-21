@@ -19,7 +19,7 @@ Install-Module -name MySQLite -repository PSGallery
 + [ConvertFrom-MySQLiteDB](docs/ConvertFrom-MySQLiteDB.md)
 + [ConvertTo-MySQLiteDB](docs/ConvertTo-MySQLiteDB.md)
 + [Get-MySQLiteDB](docs/Get-MySQLiteDB.md)
-+ [Get-mySQLiteTable](docs/Get-MySQLiteTable.md)
++ [Get-MySQLiteTable](docs/Get-MySQLiteTable.md)
 + [Invoke-MySQLiteQuery](docs/Invoke-MySQLiteQuery.md)
 + [New-MySQLiteDB](docs/New-MySQLiteDB.md)
 + [New-MySQLiteDBTable](docs/New-MySQLiteDBTable.md)
