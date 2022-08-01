@@ -1,5 +1,9 @@
 # Changelog for MySQLite
 
+## 0.9.1
+
++ Updated `Get-MySQLiteDB` get target information when using symbolic links.
+
 ## 0.9.0
 
 + Added missing online help links
