@@ -1,7 +1,7 @@
 ---
 external help file: MySQLite-help.xml
 Module Name: mySQLite
-online version:
+online version: https://bit.ly/3cZCXER
 schema: 2.0.0
 ---
 

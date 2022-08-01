@@ -922,6 +922,10 @@ PS C:\&gt; $data | ConvertTo-MySQLiteDB -Path c:\work\Inventory.db -TableName OS
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://bit.ly/3PQzsPD</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
         <maml:linkText>Import-MySQLiteDB</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>
@@ -1498,6 +1502,10 @@ ColumnIndex ColumnName ColumnType
       </command:example>
     </command:examples>
     <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://bit.ly/3cZCXER</maml:uri>
+      </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>Export-MySQLiteDB</maml:linkText>
         <maml:uri></maml:uri>

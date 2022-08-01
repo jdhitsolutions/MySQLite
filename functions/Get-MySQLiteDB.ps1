@@ -29,6 +29,13 @@ Function Get-MySQLiteDB {
             $pgcount = (Invoke-MySQLiteQuery -connection $connection -query "PRAGMA page_count" -KeepAlive ).page_count
             $encoding = (Invoke-MySQLiteQuery -connection $connection -query "PRAGMA encoding" -KeepAlive).encoding
 
+            #Get file size, even if using a reparse point
+            if ($thisdb.Attributes -match "reparsepoint") {
+                $size = (Get-Item -path $thisdb.Target).length
+            }
+            else {
+                $size = $thisdb.length
+            }
             [pscustomobject]@{
                 PSTypename    = "MySQLiteDB"
                 DatabaseName  = $connection.Database
@@ -38,7 +45,7 @@ Function Get-MySQLiteDB {
                 Encoding      = $encoding
                 FileName      = $thisdb.name
                 Path          = $File.path
-                Size          = $thisdb.length
+                Size          = $size
                 Created       = $thisdb.Creationtime
                 Modified      = $thisdb.LastWriteTime
                 Age           = (Get-Date) - $thisdb.LastWriteTime
@@ -48,7 +55,6 @@ Function Get-MySQLiteDB {
         else {
             Write-Warning "Cannot find the database file $path."
         }
-
     } #process
 
     End {

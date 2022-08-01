@@ -1,5 +1,10 @@
 # Changelog for MySQLite
 
+## 0.9.0
+
++ Added missing online help links
++ Updated `Get-MySQLiteDB` to handle symbolic links.
+
 ## 0.8.0
 
 + Updated `README.md`.
