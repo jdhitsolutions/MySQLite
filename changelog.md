@@ -1,5 +1,9 @@
 # Changelog for MySQLite
 
+## 0.9.2
+
++ Fixed typo `Get-MySQLiteDB` that was causing an error getting the database file creation time.
+
 ## 0.9.1
 
 + Updated `Get-MySQLiteDB` get target information when using symbolic links.

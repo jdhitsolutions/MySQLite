@@ -6,7 +6,7 @@ Function Get-MySQLiteDB {
         [Parameter(Position = 0, Mandatory, HelpMessage = "Enter the path to the SQLite database file.", ValueFromPipelineByPropertyName)]
         [Alias("fullname", "database")]
         [ValidateNotNullOrEmpty()]
-        [ValidateScript({Test-Path $_})]
+        [ValidateScript({ Test-Path $_ })]
         [string]$Path
     )
     Begin {
@@ -40,7 +40,7 @@ Function Get-MySQLiteDB {
             }
             else {
                 $size = $thisdb.length
-                $creation -= $thisdb.CreationTime
+                $creation = $thisdb.CreationTime
                 $lastwrite = $thisdb.LastWriteTime
             }
             [pscustomobject]@{
