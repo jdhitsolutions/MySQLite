@@ -5,7 +5,7 @@
 @{
 
     RootModule             = 'MySQLite.psm1'
-    ModuleVersion          = '0.7.0'
+    ModuleVersion          = '0.8.0'
     CompatiblePSEditions   = @("Desktop","Core")
     GUID                   = '49ac2120-f30e-4244-ac8b-4d18fa9ae9aa'
     Author                 = 'Jeff Hicks'
@@ -28,7 +28,9 @@
         'ConvertFrom-MySQLiteDB',
         'Get-MySQLiteDB',
         'Open-MySQLiteDB',
-        'Close-MySQLiteDB'
+        'Close-MySQLiteDB',
+        'Export-MySQLiteDB',
+        'Import-MySQLiteDB'
     )
     CmdletsToExport        = @()
     # VariablesToExport = '*'

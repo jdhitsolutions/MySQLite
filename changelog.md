@@ -1,5 +1,11 @@
 # Changelog for MySQLite
 
+## 0.8.0
+
++ Updated `README.md`.
++ Added functions `Export-MySQLiteDB` and `Import-MySQLiteDB`.
++ Minor code clean up.
+
 ## 0.7.0
 
 + Moved public functions to individual files.

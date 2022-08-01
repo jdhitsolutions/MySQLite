@@ -4,6 +4,10 @@
 
 A set of PowerShell functions for working with SQLite database files. The goal of the module is to integrate the use of SQLite databases into daily PowerShell work or module development where a lightweight database would be beneficial. You might use this module as a library in your PowerShell projects.
 
+## Background
+
+I started work on this module years ago and had it almost complete except for managing the assembly to provide the .NET interface. After letting the project remain idle, I happened across a [similar module by Tobias Weltner](https://github.com/TobiasPSP/ReallySimpleDatabase). He had a brilliant technique to manage the .NET assembly which I freely "borrowed." With this missing piece, I dusted off my module, polished it, and published to the PowerShell Gallery.
+
 ## Installation
 
 This module should work on 64-bit versions of Windows PowerShell and PowerShell 7 running on a Windows platform. __The module is not supported on non-Windows platforms.__
@@ -23,6 +27,8 @@ Install-Module -name MySQLite -repository PSGallery
 + [Invoke-MySQLiteQuery](docs/Invoke-MySQLiteQuery.md)
 + [New-MySQLiteDB](docs/New-MySQLiteDB.md)
 + [New-MySQLiteDBTable](docs/New-MySQLiteDBTable.md)
++ [Export-MySQLiteDB](docs/Export-MySQLiteDB.md)
++ [Import-MySQLiteDB](docs/Import-MySQLiteDB.md)
 
 ## Converting PowerShell Output
 
@@ -148,3 +154,7 @@ IsServer     : False
 ```
 
 The remaining commands can be used to create SQLite files on a more granular basis.
+
+## Learn More
+
+If you want to learn more about SQLite databases, take a look at <https://www.sqlite.org/index.html> and <http://www.sqlitetutorial.net/>.

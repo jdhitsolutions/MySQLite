@@ -19,11 +19,10 @@ Function Invoke-MySQLiteQuery {
     )
     Begin {
         Write-Verbose "[$((Get-Date).TimeOfDay)] $($myinvocation.mycommand)"
-
     } #begin
     Process {
         if ($pscmdlet.ParameterSetName -eq 'file') {
-            Write-Verbose "[$((Get-Date).TimeOfDay)] $path"
+            Write-Verbose "[$((Get-Date).TimeOfDay)] Using file $path"
             $file = resolvedb -path $path
 
             If ($file.exists) {
@@ -39,55 +38,55 @@ Function Invoke-MySQLiteQuery {
         }
 
         Write-Verbose "[$((Get-Date).TimeOfDay)] Invoke query '$query'"
-        if ($connection.state -eq 'Open' -OR $PSBoundparameters.ContainsKey("WhatIf")) {
+        if ($connection.state -eq 'Open') {
 
             $cmd = $connection.CreateCommand()
             $cmd.CommandText = $query
 
-            if ($pscmdlet.ShouldProcess($query)) {
-                #determine what method to invoke based on the query
-                Switch -regex ($query) {
-                    "^([Ss]elect (\w+|\*)|(@@\w+ AS))|([Pp]ragma \w+)" {
-                        #   "^Select (\w+|\*)|(@@\w+ AS)" {
-                        if ($As -eq "datatable") {
-                            Write-Verbose "[$((Get-Date).TimeOfDay)] Datatable output"
-                            $ds = New-Object System.Data.DataSet
-                            $da = New-Object System.Data.SQLite.SQLiteDataAdapter($cmd)
-                            [void]$da.fill($ds)
-                            $ds.Tables
-                        }
-                        else {
-                            Write-Verbose "[$((Get-Date).TimeOfDay)] ExecuteReader"
-                            $reader = $cmd.executereader()
-                            #convert datarows to a custom object
-                            while ($reader.read()) {
-
-                                $h = [ordered]@{}
-                                for ($i = 0; $i -lt $reader.FieldCount; $i++) {
-                                    $col = $reader.getname($i)
-
-                                    $h.add($col, $reader.getvalue($i))
-                                } #for
-
-                                if ($as -eq "hashtable") {
-                                    $h
-                                }
-                                else {
-                                    New-Object -TypeName psobject -Property $h
-                                }
-
-                            } #while
-
-                            $reader.close()
-                        }
-                        Break
+            #determine what method to invoke based on the query
+            Switch -regex ($query) {
+                "^([Ss]elect (\w+|\*)|(@@\w+ AS))|([Pp]ragma \w+)" {
+                    #   "^Select (\w+|\*)|(@@\w+ AS)" {
+                    if ($As -eq "datatable") {
+                        Write-Verbose "[$((Get-Date).TimeOfDay)] Datatable output"
+                        $ds = New-Object System.Data.DataSet
+                        $da = New-Object System.Data.SQLite.SQLiteDataAdapter($cmd)
+                        [void]$da.fill($ds)
+                        $ds.Tables
                     }
-                    "@@" {
-                        Write-Verbose "[$((Get-Date).TimeOfDay)] ExecuteScalar"
-                        [void]$cmd.ExecuteScalar()
-                        Break
+                    else {
+                        Write-Verbose "[$((Get-Date).TimeOfDay)] ExecuteReader"
+                        $reader = $cmd.executereader()
+                        #convert datarows to a custom object
+                        while ($reader.read()) {
+
+                            $h = [ordered]@{}
+                            for ($i = 0; $i -lt $reader.FieldCount; $i++) {
+                                $col = $reader.getname($i)
+
+                                $h.add($col, $reader.getvalue($i))
+                            } #for
+
+                            if ($as -eq "hashtable") {
+                                $h
+                            }
+                            else {
+                                New-Object -TypeName psobject -Property $h
+                            }
+
+                        } #while
+
+                        $reader.close()
                     }
-                    Default {
+                    Break
+                }
+                "@@" {
+                    Write-Verbose "[$((Get-Date).TimeOfDay)] ExecuteScalar"
+                    [void]$cmd.ExecuteScalar()
+                    Break
+                }
+                Default {
+                    if ($pscmdlet.ShouldProcess($query)) {
                         Write-Verbose "[$((Get-Date).TimeOfDay)] ExecuteNonQuery"
                         #modify query to use Transactions
                         $Revised = "BEGIN TRANSACTION;$($cmd.CommandText);COMMIT;"
@@ -96,12 +95,12 @@ Function Invoke-MySQLiteQuery {
                         [void]$cmd.ExecuteNonQuery()
                         Break
                     }
-                } #switch
-            } #if Whatif
+                } #Whatif
+            } #switch
         }
     } #process
     End {
-        #if the connection was passed as a parameter, do not close it. The generating command is responsible
+        #if the connection was passed as a parameter, do not close it. The generating command is responsible for managing the connection.
         if ( (($connection.state -eq 'Open') -AND ($pscmdlet.ParameterSetName -eq 'file')) -OR (($connection.state -eq 'Open') -AND (-Not $KeepAlive)) ) {
             Write-Verbose "[$((Get-Date).TimeOfDay)] Closing database connection"
             closedb -connection $connection -cmd $cmd
