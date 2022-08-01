@@ -4,8 +4,8 @@
 
 @{
 
-    RootModule             = 'MySQLite.psm1'
-    ModuleVersion          = '0.9.0'
+    RootModule             = 'mySQLite.psm1'
+    ModuleVersion          = '0.9.1'
     CompatiblePSEditions   = @("Desktop","Core")
     GUID                   = '49ac2120-f30e-4244-ac8b-4d18fa9ae9aa'
     Author                 = 'Jeff Hicks'
