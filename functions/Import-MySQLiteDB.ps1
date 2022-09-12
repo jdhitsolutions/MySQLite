@@ -49,13 +49,13 @@ Function Import-MySQLiteDB {
 
             $data.psobject.properties | ForEach-Object {
                 $table = $_.name
-                Write-Host "defining $table" -fore green
-                Write-Host "processing $($_.value.count) items" -fore green
+                Write-Verbose "defining $table"
+                Write-Verbose "processing $($_.value.count) items"
                 $props = $_.value[0].psobject.properties.name
                 New-MySQLiteDBTable -Connection $conn -TableName $_.name -ColumnNames $props -Force -KeepAlive
                 $_.value | ForEach-Object {
                     $q = buildquery -InputObject $_ -TableName $table
-                    Write-Host $q -ForegroundColor green
+                    Write-Verbose $q
                     Invoke-MySQLiteQuery -Query $q -Connection $conn -KeepAlive
                 } #foreach value
             } #foreach data object property

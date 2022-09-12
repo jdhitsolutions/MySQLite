@@ -35,6 +35,8 @@ ConvertFrom-MySQLiteDB [-Path] <String> -TableName <String> [-RawObject] [<Commo
 
 This command is intended primarily to dump or convert a table from a SQLite database file into PowerShell. It is assumed you create the table using ConvertTo-MySQLiteDB but this should work for most tables. To get the best results you will want to specify a mapping table of keys and datatypes. If you used ConvertTo-MySQLiteDB, it will create a corresponding property map table that you can use. Otherwise, you can use a hashtable. If you want to let SQLite do its best, you can use the -RawObject parameter.
 
+NOTE: Storing objects in a database requires serializing nested objects. This is accomplished by converting objects to cliXML and storing that information as an array of bytes in the database. To convert back, the data must be converted to the original clixml string, saved to a temporary file, and then re-imported with `Import-Clixml`. This process is not guaranteed to be 100% error free. The converted object property should be the deserialized version of the original property.
+
 ## EXAMPLES
 
 ### Example 1
@@ -200,3 +202,5 @@ Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell
 ## RELATED LINKS
 
 [ConvertTo-MySQLiteDB](ConvertTo-MySQLiteDB.md)
+
+[Convert-MySQLiteByteArray](Convert-MySQLiteByteArray.md)

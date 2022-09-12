@@ -50,7 +50,84 @@ Function buildquery {
     )
     Begin {
         Write-Verbose "[$((Get-Date).TimeOfDay)] Starting $($myinvocation.mycommand)"
+    } #begin
 
+    Process {
+        #9/9/2022 Need to insert property names with a dash in []
+        #this should fix Issue #14 JDH
+        $list = [System.Collections.Generic.list[string]]::new()
+        foreach ($n in $InputObject.psobject.properties.name) {
+            if ($n -match "^\S+\-\S+$") {
+             #   write-host "REPLACE DASHED $n" -ForegroundColor RED
+                $n =   "[{0}]" -f $matches[0]
+            }
+           # Write-host "ADDING $n" -ForegroundColor CYAN
+            $list.add($n)
+        }
+        $names = $list -join ","
+        #$names = $InputObject.psobject.Properties.name -join ","
+
+        $inputobject.psobject.Properties | ForEach-Object -Begin {
+            $arr = [System.Collections.Generic.list[string]]::new()
+        } -Process {
+            if ($_.TypeNameofValue -match "String|Int\d{2}|Double|Datetime|Long") {
+                #9/12/2022 need to escape values that might have single quote
+                $v = $_.Value -replace "'","''"
+                $arr.Add(@(, $v))
+            }
+            elseif ($_.TypeNameofValue -match "Boolean") {
+                #turn Boolean into an INT
+                $arr.Add(@(, ($_.value -as [int])))
+            }
+            else {
+                #only create an entry if there is a value
+                if ($null -ne $_.value) {
+                    Write-Verbose "[$((Get-Date).TimeOfDay)] Creating cliXML for a blob"
+                    #create a temporary cliXML file
+                    $out = [system.io.path]::GetTempFileName()
+                    #9/11/2022 This is a potential problem.
+                    # https://stackoverflow.com/questions/27761453/how-to-properly-escape-single-quotes-in-sqlite-insert-statement-ios
+                    $_.value | Export-Clixml -Path $out -Encoding UTF8 #-Depth 1
+                    #for testing
+                    # Copy-Item -path $out -Destination d:\temp\out.xml
+                    $in = (Get-Content -Path $out -Encoding UTF8 -ReadCount 0 -Raw) -replace "'","''"
+                    $arr.Add(@(, "$($in)"))
+                    Remove-Item -Path $out
+                }
+                else {
+                    $arr.Add("")
+                }
+            }
+        }
+        $values = $arr -join "','"
+      #   If ($names.split(".").count -eq ($values -split "','").count) {
+             "Insert Into $Tablename ($names) values ('$values')"
+             #$global:q= "Insert Into $Tablename ($names) values ('$values')"
+             #$global:n = $names
+             #$global:v = $values
+       #  }
+        # else {
+        #    Write-Warning "There is a mismatch between the number of column headings ($($names.split(".").count)) and values ($(($values -split "','").count))"
+        # }
+    } #process
+
+    End {
+        Write-Verbose "[$((Get-Date).TimeOfDay)] Ending $($myinvocation.mycommand)"
+
+    } #end
+
+} #close buildquery
+
+Function OLD-buildquery {
+    [cmdletbinding()]
+    Param(
+        [parameter(Mandatory)]
+        [object]$InputObject,
+        [parameter(Mandatory)]
+        [string]$Tablename
+    )
+    Begin {
+        Write-Verbose "[$((Get-Date).TimeOfDay)] Starting $($myinvocation.mycommand)"
     } #begin
 
     Process {
@@ -92,7 +169,6 @@ Function buildquery {
     } #end
 
 } #close buildquery
-
 Function frombytes {
     [cmdletbinding()]
     Param([byte[]]$Bytes)
@@ -108,6 +184,5 @@ Function frombytes {
             Remove-Item $tmpFile
         }
     }
-
 }
 #endregion

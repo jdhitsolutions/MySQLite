@@ -44,8 +44,8 @@ Function New-MySQLiteDB {
     } #begin
     Process {
         Write-Verbose "[$((Get-Date).TimeOfDay)] $($db.Path)"
+        Write-Verbose "[$((Get-Date).TimeOfDay)] Adding Metadata table"
         if ($connection.state -eq 'Open' -OR $PSBoundparameters.ContainsKey("WhatIf")) {
-            Write-Verbose "[$((Get-Date).TimeOfDay)] Adding Metadata table"
 
             [string]$query = "CREATE TABLE Metadata (Author TEXT,Created TEXT,Computername TEXT,Comment TEXT);"
 
@@ -57,7 +57,7 @@ Function New-MySQLiteDB {
 
             $query = "Insert Into Metadata (Author,Created,Computername,Comment) Values ('$($meta.author)','$($meta.created)','$($meta.computer)','$($meta.comment)')"
 
-            Write-Verbose "[$((Get-Date).TimeOfDay)] Execute non-query $query"
+            Write-Verbose "[$((Get-Date).TimeOfDay)] Execute non-query: $query"
             if ($pscmdlet.ShouldProcess($query)) {
                 $cmd.CommandText = $query
                 [void]$cmd.ExecuteNonQuery()

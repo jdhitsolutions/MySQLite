@@ -30,6 +30,9 @@ Function New-MySQLiteDBTable {
         [ValidateNotNullOrEmpty()]
         [string[]]$ColumnNames,
 
+        [Parameter(HelpMessage = "Specify the column name to use as the primary key or index. Otherwise, the first detected property will be used.")]
+        [string]$Primary,
+
         [Parameter(HelpMessage = "Overwrite an existing table. This could result in data loss.")]
         [switch]$Force,
 
@@ -42,7 +45,6 @@ Function New-MySQLiteDBTable {
         Write-Verbose "[$((Get-Date).TimeOfDay)] $($myinvocation.mycommand)"
     } #begin
     Process {
-
         if ($Path) {
 
             $db = resolvedb -path $Path
@@ -95,14 +97,24 @@ Function New-MySQLiteDBTable {
 
                 if ($pscmdlet.ParameterSetName -match 'typed') {
                     $keys = $ColumnProperties.Keys
-                    $primary = $keys | Select-Object -First 1`
+                    #9/9/2022 Need to let the user specify the primary key
+                    #property. Issue #13 JDH
+                    if (-Not ($PSBoundparameters.ContainsKey("Primary"))) {
+                        $primary = $keys | Select-Object -First 1`
+                        $cols = $keys | Select-Object -Skip 1
+
+                    } else {
+                        Write-Verbose "[$((Get-Date).TimeOfDay)] Removing $primary from column set"
+                        $cols = $keys | Where-Object {$_ -ne $primary}
+                    }
+
                     $primaryType = $ColumnProperties.item($Primary)
-                    $cols = $keys | Select-Object -Skip 1
-                    Write-Verbose "[$((Get-Date).TimeOfDay)] $primary $PrimaryType>"
+
+                    Write-Verbose "[$((Get-Date).TimeOfDay)] Primary key = $primary $PrimaryType"
                     $query += "($Primary $PrimaryType PRIMARY KEY"
                     foreach ($col in $cols) {
                         $colType = $ColumnProperties.item($col)
-                        Write-Verbose "[$((Get-Date).TimeOfDay)] $col $($coltype)>"
+                        Write-Verbose "[$((Get-Date).TimeOfDay)] $col $($coltype)"
                         $query += ",$col $coltype"
                     }
                     $query += ");"

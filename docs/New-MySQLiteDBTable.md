@@ -1,5 +1,5 @@
 ---
-external help file: MySQLite-help.xml
+external help file: mySQLite-help.xml
 Module Name: mySQLite
 online version: https://bit.ly/3aZEwBP
 schema: 2.0.0
@@ -14,33 +14,34 @@ schema: 2.0.0
 ### filetyped (Default)
 
 ```yaml
-New-MySQLiteDBTable -Path <String> -TableName <String> [-ColumnProperties <OrderedDictionary>] [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
+New-MySQLiteDBTable -Path <String> -TableName <String> [-ColumnProperties <OrderedDictionary>] [-Primary <String>] [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### filenamed
 
 ```yaml
-New-MySQLiteDBTable [-Path <String>] -TableName <String> [-ColumnNames <String[]>] [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
+New-MySQLiteDBTable [-Path <String>] -TableName <String> [-ColumnNames <String[]>] [-Primary <String>] [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### cnxnamed
 
 ```yaml
-New-MySQLiteDBTable [-Connection <SQLiteConnection>] -TableName <String> [-ColumnNames <String[]>] [-Force] [-KeepAlive] [-WhatIf] [-Confirm] [<CommonParameters>]
+New-MySQLiteDBTable [-Connection <SQLiteConnection>] -TableName <String> [-ColumnNames <String[]>] [-Primary <String>] [-Force] [-KeepAlive] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### cnxtyped
 
 ```yaml
 New-MySQLiteDBTable [-Connection <SQLiteConnection>] -TableName <String>
-[-ColumnProperties <OrderedDictionary>] [-Force] [-KeepAlive] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-ColumnProperties <OrderedDictionary>] [-Primary <String>] [-Force] [-KeepAlive] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
 This command will create a new table in a SQLite database file. You need to specify a table name. When you define the table you also need to specify the column names. You can do this with an array of names, in which case the column values will not be treated as any particular type. When you insert data into the table SQLite will automatically determine a type.
 
-Or you can use an ordered hashtable of column names and types. The first key will be set as the Primary key.
+Or you can use an ordered hashtable of column names and types. The first key will be set as the Primary key unless you specify one.
 
 Normally you will specify a path but in scripted projects, you may have an existing connection and wish to re-use it to avoid file I/O overhead. In any event, the database must already have been created.
 
@@ -220,6 +221,22 @@ Shows what would happen if the cmdlet runs. The cmdlet is not run.
 Type: SwitchParameter
 Parameter Sets: (All)
 Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Primary
+
+Specify the column name to use as the primary key or index. Otherwise, the first detected property will be used.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
 
 Required: False
 Position: Named

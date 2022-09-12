@@ -20,8 +20,9 @@ Install-Module -name MySQLite -repository PSGallery
 
 ## Commands
 
-+ [ConvertFrom-MySQLiteDB](docs/ConvertFrom-MySQLiteDB.md)
 + [ConvertTo-MySQLiteDB](docs/ConvertTo-MySQLiteDB.md)
++ [ConvertFrom-MySQLiteDB](docs/ConvertFrom-MySQLiteDB.md)
++ [Convert-MySQLiteByteArray](docs/Convert-MySQLiteByteArray.md)
 + [Get-MySQLiteDB](docs/Get-MySQLiteDB.md)
 + [Get-MySQLiteTable](docs/Get-MySQLiteTable.md)
 + [Invoke-MySQLiteQuery](docs/Invoke-MySQLiteQuery.md)
@@ -152,6 +153,28 @@ Version      : 10.0.22622
 IsServer     : False
 ...
 ```
+
+You also use `Invoke-MySQLiteQuery`.
+
+```powershell
+PS C:\> Invoke-MySQLiteQuery -path D:\temp\sales2.db -Query "Select name,sid,samaccountname,members from grp"
+
+Name  SID                  SamAccountName Members
+----  ---                  -------------- -------
+Sales {60, 79, 98, 106...} Sales          {60, 79, 98, 106...}
+```
+
+Nested objects will be stored as byte arrays representing a stored clixml file. You can restore these properties on a granular basis using `Convert-MySQLiteByteArray`.
+
+```powershell
+PS C:\> Invoke-MySQLiteQuery -path D:\temp\sales2.db -Query "Select name,sid,samaccountname,members from grp" | Select Name,SamAccountname,@{N="SID";E={Convert-MySQLiteByteArray $_.sid}},@{Nane="Members";Expression={Convert-MySQLiteByteArray $_.Members}}
+
+Name  SamAccountName SID                                          Members
+----  -------------- ---                                          -------
+Sales Sales          S-1-5-21-3554402041-35902484-4286231435-1147 {CN=SamanthaS,OU=Sales,DC=Company,DC=Pri, CN=Sonya...
+```
+
+> :warning: Storing objects in a database requires serializing nested objects. This is accomplished by converting objects to cliXML and storing that information as an array of bytes in the database. To convert back, the data must be converted to the original clixml string, saved to a temporary file, and then re-imported with `Import-Clixml`. This process is not guaranteed to be 100% error free. The converted object property should be the deserialized version of the original property.
 
 The remaining commands can be used to create SQLite files on a more granular basis.
 

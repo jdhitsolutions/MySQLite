@@ -63,7 +63,7 @@ Function ConvertFrom-MySQLiteDB {
             $query = "Select * from $tablename"
             Write-Verbose "[$((Get-Date).TimeOfDay)] Found $Tablename"
             Try {
-                $raw = Invoke-MySQLiteQuery -Connection $connection -Query $query -As object -KeepAlive -ErrorAction stop
+                [array]$raw = Invoke-MySQLiteQuery -Connection $connection -Query $query -As object -KeepAlive -ErrorAction stop
             }
             Catch {
                 Write-Warning $_.exception.message
@@ -72,7 +72,7 @@ Function ConvertFrom-MySQLiteDB {
                 #bail out
                 return
             }
-            Write-Verbose "[$((Get-Date).TimeOfDay)] Found $($raw.count) items"
+            Write-Verbose "[$((Get-Date).TimeOfDay)] Found $($raw.count) item(s)"
 
             <#
                 find a mapping table using this priority list
@@ -90,8 +90,8 @@ Function ConvertFrom-MySQLiteDB {
                     }
                 }
                 "table" {
-                    Write-Verbose "[$((Get-Date).TimeOfDay)] $PropertyTable"
-                    $map = Invoke-MySQLiteQuery -Connection $connection -Query "Select * from $propertytable"-KeepAlive -As Hashtable
+                    Write-Verbose "[$((Get-Date).TimeOfDay)] Using property table $PropertyTable"
+                    $map = Invoke-MySQLiteQuery -Connection $connection -Query "Select * from $propertytable" -KeepAlive -As Hashtable
                     if ($typename) {
                         $oTypename = $TypeName
                     }
@@ -99,7 +99,6 @@ Function ConvertFrom-MySQLiteDB {
                         #get the typename from the property table name
                         $oTypename = $PropertyTable.split("_", 2)[1].replace("_", ".")
                     }
-
                 }
                 "raw" {
                     Write-Verbose "[$((Get-Date).TimeOfDay)] Writing raw objects to the pipeline"
@@ -108,27 +107,39 @@ Function ConvertFrom-MySQLiteDB {
             }
 
             if ($map) {
+                #$global:m = $map
+                #$global:raw = $raw
                 foreach ($item in $raw) {
+                   # $global:it =$item
                     $tmpHash = [ordered]@{}
-                    if ($oTypename) {
-                        Write-Verbose "[$((Get-Date).TimeOfDay)] Adding typename $oTypename"
-                        $tmpHash.Add("PSTypename", $oTypename)
-                    }
+
                     foreach ($key in $map.keys) {
-                        Write-Verbose "[$((Get-Date).TimeOfDay)] Adding key $key"
+                        Write-Verbose "[$((Get-Date).TimeOfDay)] Adding key $key [$($item.$key.gettype().name)]"
+                        Write-Verbose "[$((Get-Date).TimeOfDay)] Using type $($map[$key])"
                         $name = $key
-                        #if value of the raw object is byte[], assume it is an exported clixml file
-                        if ($item.$key.gettype().name -eq 'Byte[]') {
-                            $v = frombytes $item.$key
+                        if ($null -eq $item.$key) {
+                            Write-Verbose "[$((Get-Date).TimeOfDay)] $name is null"
+                            $value = $null
+                        }
+                        elseif ($item.$key.gettype().name -eq 'Byte[]') {
+                            #if value of the raw object is byte[], assume it is an exported clixml file
+                            #the imported cliXML should have the correct type information
+                            $value = frombytes $item.$key
                         }
                         else {
                             $v = $item.$key
+                            $value = $v -as $($($map[$key] -as [type]))
                         }
-                        Write-Verbose "[$((Get-Date).TimeOfDay)] Using type $($map[$key])"
-                        $value = $v -as $($($map[$key] -as [type]))
                         $tmpHash.Add($name, $value)
                     } #foreach key
-                    New-Object -TypeName PSObject -Property $tmpHash
+
+                    $no = New-Object -TypeName PSObject -Property $tmpHash
+                    #9/12/2022 Insert the typename directly - JDH
+                    if ($oTypename) {
+                        Write-Verbose "[$((Get-Date).TimeOfDay)] Adding typename $oTypename"
+                        $no.psobject.TypeNames.Insert(0,$oTypename)
+                    }
+                    $no
                 } #foreach item
             } #if $map
         } #if table found

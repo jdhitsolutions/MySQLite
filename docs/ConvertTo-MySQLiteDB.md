@@ -1,5 +1,5 @@
 ---
-external help file: MySQLite-help.xml
+external help file: mySQLite-help.xml
 Module Name: mySQLite
 online version: https://bit.ly/3cuuBoq
 schema: 2.0.0
@@ -14,7 +14,7 @@ Convert or dump PowerShell objects into a SQLite database.
 ## SYNTAX
 
 ```yaml
-ConvertTo-MySQLiteDB -Inputobject <Object[]> [-Path] <String> -TableName <String> [-TypeName <String>] [-Append] [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
+ConvertTo-MySQLiteDB -Inputobject <Object[]> [-Path] <String> -TableName <String> [-Primary <String>] [-TypeName <String>] [-Append] [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -26,6 +26,8 @@ This command was designed with the assumption that you would create a single dat
 Nested objects or more complex properties will be converted to cliXML and stored in the database as byte array or blob.
 
 This command will not overwrite an existing file unless you use -Force.
+
+For best results, you should select only the properties you need as some properties may not serialize very well.
 
 ## EXAMPLES
 
@@ -42,23 +44,17 @@ The first property name will be used as the first table column and the primary i
 
 The database can be queried using Invoke-MYSQLiteQuery or dumped out using ConvertFrom-MySQLiteDB.
 
-## PARAMETERS
+NOTE: Storing objects in a database requires serializing nested objects. This is accomplished by converting objects to cliXML and storing that information as an array of bytes in the database. To convert back, the data must be converted to the original clixml string, saved to a temporary file, and then re-imported with `Import-Clixml`. This process is not guaranteed to be 100% error free. The converted object property should be the deserialized version of the original property.
 
-### -InputObject
+### Example 2
 
-What object do you want to create? Typically this will be the result of a PowerShell expression or command. It is recommended that you be selective.
-
-```yaml
-Type: Object[]
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: True (ByValue)
-Accept wildcard characters: False
+```powershell
+PS C:\>  Get-Process  | Where-Object {$_.name -notmatch "^(system|idle)$"} | Select * | ConvertTo-MySQLiteDB -Path d:\temp\allproc.db -TableName Process -TypeName myProcess -Primary ID
 ```
+
+Create a database from local process information. This example is specifying the primary key. You need to have one unique property to use as the primary key for the database. If you see a constraint error, you most likely need to set a primary key.
+
+## PARAMETERS
 
 ### -Path
 
@@ -164,6 +160,38 @@ Prompts you for confirmation before running the cmdlet.
 Type: SwitchParameter
 Parameter Sets: (All)
 Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Inputobject
+
+What object do you want to create? Typically this will be the result of a PowerShell expression or command. It is recommended that you be selective.
+
+```yaml
+Type: Object[]
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+### -Primary
+
+Specify the column name to use as the primary key or index. Otherwise, the first detected property will be used.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
 
 Required: False
 Position: Named

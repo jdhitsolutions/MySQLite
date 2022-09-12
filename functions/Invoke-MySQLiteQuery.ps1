@@ -18,7 +18,7 @@ Function Invoke-MySQLiteQuery {
         [string]$As = "object"
     )
     Begin {
-        Write-Verbose "[$((Get-Date).TimeOfDay)] $($myinvocation.mycommand)"
+        Write-Verbose "[$((Get-Date).TimeOfDay)] Starting $($myinvocation.mycommand)"
     } #begin
     Process {
         if ($pscmdlet.ParameterSetName -eq 'file') {
@@ -92,8 +92,13 @@ Function Invoke-MySQLiteQuery {
                         $Revised = "BEGIN TRANSACTION;$($cmd.CommandText);COMMIT;"
                         Write-Verbose "[$((Get-Date).TimeOfDay)] $Revised"
                         $cmd.CommandText = $revised
-                        [void]$cmd.ExecuteNonQuery()
-                        Break
+                        #$global:sqlcmd = $cmd
+                        try {
+                            [void]$cmd.ExecuteNonQuery()
+                        }
+                        Catch {
+                            write-warning $_.Exception.message
+                        }
                     }
                 } #Whatif
             } #switch

@@ -12,6 +12,8 @@ Function ConvertTo-MySQLiteDB {
         [Parameter(Mandatory, HelpMessage = "Enter the name of the new table. Table names are technically case-sensitive.")]
         [ValidateNotNullOrEmpty()]
         [string]$TableName,
+        [Parameter(HelpMessage = "Specify the column name to use as the primary key or index. Otherwise, the first detected property will be used.")]
+        [string]$Primary,
         [Parameter(HelpMessage = "Enter a typename for your converted objects. If you don't specify one, it will be auto-detected.")]
         [ValidatePattern("^\w+$")]
         [string]$TypeName,
@@ -78,42 +80,56 @@ Function ConvertTo-MySQLiteDB {
                 # https://www.sqlite.org/datatype3.html
                 #convert types as necessary. Table types can be Text, Int, Real or Blob
                 if ($PSCmdlet.ShouldProcess("PropertyMap", "Create Table")) {
+
                     $object.psobject.properties |
                     ForEach-Object -Begin {
                         $prop = [ordered]@{}
                     } -Process {
                         $prop.Add($_.Name, "Text")
                     }
-
                     if ($Typename) {
                         $name = "propertymap_{0}" -f ($typename.tolower())
                     }
                     else {
                         $name = "propertymap_{0}" -f ($object.psobject.typenames[0].replace(".", "_"))
                     }
+
                     Write-Verbose "[$((Get-Date).TimeOfDay)] $name"
-                    $prop | Out-String | Write-Verbose
+                    $thash | Out-String | Write-Verbose
                     $newTblParams = @{
                         Connection       = $Connection
                         KeepAlive        = $True
                         TableName        = $Name
                         ColumnProperties = $prop
                     }
-                    New-MySQLiteDBTable @newTblParams
-                }
 
-                $names = $object.psobject.properties.name -join ","
+                    #create propertymap table
+                    New-MySQLiteDBTable @newTblParams
+                    Write-Verbose "[$((Get-Date).TimeOfDay)] PropertyMap table created"
+                } #WhatIf propertyMap table
+
+                #$names = $object.psobject.properties.name -join ","
+                $list = [System.Collections.Generic.list[string]]::new()
+                foreach ($n in $Object.psobject.properties.name) {
+                    if ($n -match "^\S+\-\S+$") {
+                        # write-host "REPLACE DASHED $n" -ForegroundColor RED
+                        $n = "[{0}]" -f $matches[0]
+                    }
+                    #  Write-host "ADDING $n" -ForegroundColor CYAN
+                    $list.add($n)
+                }
+                $names = $list -join ","
                 $values = $object.psobject.properties.TypeNameofValue -join "','"
                 $iqParams.query = "Insert Into $Name ($names) values ('$values')"
-                if ($PSCmdlet.ShouldProcess($query, "Run query")) {
+                if ($PSCmdlet.ShouldProcess($query, "Run query: Insert Into $Name")) {
                     Invoke-MySQLiteQuery @iqParams
                 }
-
-                Write-Verbose "[$((Get-Date).TimeOfDay)]  Creating property hashtable"
+                Write-Verbose "[$((Get-Date).TimeOfDay)] Creating object hashtable"
                 #get the property names and types
                 $properties = $object.psobject.properties
                 $thash = [ordered]@{}
                 Foreach ($prop in $properties) {
+                    Write-Verbose "[$((Get-Date).TimeOfDay)] Detecting property type for $($prop.name) [$($prop.TypeNameOfValue)]"
                     Switch -Regex ($prop.TypeNameofValue) {
                         "Int32$" { $sqltype = "Int" }
                         "Int64$" { $sqltype = "Real" }
@@ -125,17 +141,28 @@ Function ConvertTo-MySQLiteDB {
                             $sqltype = "Blob"
                         }
                     } #switch
-                    $thash.Add($prop.Name, $sqltype)
+
+                    #handle names with dashes
+                    if ($prop.name -match "^\S+\-\S+$") {
+                        $n = $n = "[{0}]" -f $matches[0]
+                    }
+                    else {
+                        $n = $prop.name
+                    }
+                    $thash.Add($n, $sqltype)
                 } #foreach prop
 
                 if ($pscmdlet.ShouldProcess($tablename, "Create table")) {
                     Write-Verbose "[$((Get-Date).TimeOfDay)] Creating table $Tablename"
+                    if ($PSBoundParameters.ContainsKey("Primary")) {
+                        $newTblParams.Add("Primary", $Primary)
+                    }
                     $newTblParams.ColumnProperties = $thash
                     $newtblParams.tablename = $Tablename
-                    New-MySQLiteDBTable @newtblParams
+                    New-MySQLiteDBTable @newTblParams
                 }
 
-                Write-Verbose "[$((Get-Date).TimeOfDay)] Inserting the first object into the table"
+                Write-Verbose "[$((Get-Date).TimeOfDay)] Inserting the first object into the table $tablename"
                 #insert the first object into the new table
                 $iqParams.query = buildquery -InputObject $object -Tablename $TableName
 

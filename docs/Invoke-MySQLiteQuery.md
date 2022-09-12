@@ -40,8 +40,7 @@ See https://sqlite.org/lang.html and http://www.sqlitetutorial.net/ for addition
 ```powershell
 PS C:\> $data = Get-Process | Select-object ID,Name,Workingset,VirtualMemorySize,@{Name="Date";Expression={Get-Date}}
 PS C:\> $data | foreach-object -begin { $cx = Open-MySQLiteDB c:\work\test.db} -process { Invoke-MySQLiteQuery -connection $cx -keepalive -query "Insert into proc Values ('$($_.ID)','$($_.Name)','$($_.Workingset)','$($_.VirtualMemorySize)','$($_.Date)') "} -end { Close-MySQLiteDB $cx}
-PS C:\> Invoke-MySQLiteQuery -Path c:\work\test.db -Query "Select * from proc Order by Workingset Desc Limit 5" | format
--table
+PS C:\> Invoke-MySQLiteQuery -Path c:\work\test.db -Query "Select * from proc Order by Workingset Desc Limit 5" | format-table
 
    ID Name               Workingset VirtualMemorySize Date
    -- ----               ---------- ----------------- ----
