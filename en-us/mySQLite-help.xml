@@ -249,6 +249,10 @@ sqlservr 6624 778153984 00:00:58.0468750</dev:code>
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://bit.ly/3xoAZ8g</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
         <maml:linkText>ConvertFrom-MySQLiteDB</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>

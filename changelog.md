@@ -1,5 +1,20 @@
 # Changelog for MySQLite
 
+## 0.10.1
+
++ Add missing online help links.
++ Help updates.
+
+## 0.10.0
+
++ Updated `New-MySQLiteDBTable` to allow user to specify which column to use as the index. This also required an update to `ConvertTo-MySQLiteDB`. This should fix [Issue #13](https://github.com/jdhitsolutions/MySQLite/issues/13)
++ Revised private function `buildquery` to enclose property names with dashes inside square brackets. Instead of using `msDS-User-Account-Control-Computed` in a SQL query, it will be entered as `[msDS-User-Account-Control-Computed]`. Dashes are not allowed as column headings. This should fix [Issue #14](https://github.com/jdhitsolutions/MySQLite/issues/14)
++ Also updated queries to escape quotes when property values.
++ Updated `ConvertFrom-MySQLiteDB` to better handle importing serialized data.[Issue #15](https://github.com/jdhitsolutions/MySQLite/issues/15)
++ Added a public function, `Convert-MySQLiteByteArray` to convert blob bytes array back to the original object.
++ Changed `Write-Host` commands to `Write-Verbose` in `Import-MySQLiteDB`.
++ Help updates.
+
 ## 0.9.2
 
 + Fixed typo `Get-MySQLiteDB` that was causing an error getting the database file creation time.
