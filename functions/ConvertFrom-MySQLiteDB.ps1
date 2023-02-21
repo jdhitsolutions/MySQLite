@@ -1,50 +1,50 @@
 Function ConvertFrom-MySQLiteDB {
     [cmdletbinding(DefaultParameterSetName = "table")]
     [alias('ConvertFrom-DB')]
-    [outputtype("Object")]
+    [OutputType("Object")]
     Param(
         [Parameter(
             Position = 0,
             Mandatory,
             HelpMessage = "Enter the path to the SQLite database file.",
             ValueFromPipelineByPropertyName
-            )]
+        )]
         [ValidateNotNullOrEmpty()]
         [alias("database", "fullname")]
         [string]$Path,
         [Parameter(
             Mandatory,
             HelpMessage = "Enter the name of the table with data to import"
-            )]
+        )]
         [ValidateNotNullOrEmpty()]
         [string]$TableName,
         [Parameter(
             Mandatory,
             HelpMessage = "Enter the name of the property map table",
             ParameterSetName = "table"
-            )]
+        )]
         [ValidateNotNullOrEmpty()]
         [string]$PropertyTable,
         [Parameter(
             Mandatory,
             HelpMessage = "Enter an optional hashtable of property names and types.",
             ParameterSetName = "hash"
-            )]
+        )]
         [hashtable]$PropertyMap,
         [Parameter(
             HelpMessage = "Enter a typename to insert",
             ParameterSetName = "hash"
-            )]
+        )]
         [Parameter(ParameterSetName = "table")]
         [string]$TypeName,
         [Parameter(
             HelpMessage = "Write raw objects to the pipeline.",
             ParameterSetName = "raw"
-            )]
+        )]
         [switch]$RawObject
     )
     Begin {
-        Write-Verbose "[$((Get-Date).TimeOfDay)] $($myinvocation.mycommand)"
+        Write-Verbose "[$((Get-Date).TimeOfDay)] $($MyInvocation.MyCommand)"
     } #begin
 
     Process {
@@ -57,11 +57,11 @@ Function ConvertFrom-MySQLiteDB {
             Throw "Failed to find database file $($file.path)"
         }
         #verify table exists
-        Write-Verbose "[$((Get-Date).TimeOfDay)] Verify table $tablename"
+        Write-Verbose "[$((Get-Date).TimeOfDay)] Verify table $TableName"
         $tables = Get-MySQLiteTable -Connection $connection -KeepAlive
-        if ($tables.name -contains $tablename) {
-            $query = "Select * from $tablename"
-            Write-Verbose "[$((Get-Date).TimeOfDay)] Found $Tablename"
+        if ($tables.name -contains $TableName) {
+            $query = "Select * from $TableName"
+            Write-Verbose "[$((Get-Date).TimeOfDay)] Found $TableName"
             Try {
                 [array]$raw = Invoke-MySQLiteQuery -Connection $connection -Query $query -As object -KeepAlive -ErrorAction stop
             }
@@ -81,7 +81,7 @@ Function ConvertFrom-MySQLiteDB {
 
                 if nothing found then write a default custom object
             #>
-            switch ($pscmdlet.ParameterSetName) {
+            switch ($PSCmdlet.ParameterSetName) {
                 "hash" {
                     Write-Verbose "[$((Get-Date).TimeOfDay)] User specified property map"
                     $map = $PropertyMap
@@ -114,14 +114,14 @@ Function ConvertFrom-MySQLiteDB {
                     $tmpHash = [ordered]@{}
 
                     foreach ($key in $map.keys) {
-                        Write-Verbose "[$((Get-Date).TimeOfDay)] Adding key $key [$($item.$key.gettype().name)]"
+                        Write-Verbose "[$((Get-Date).TimeOfDay)] Adding key $key [$($item.$key.GetType().name)]"
                         Write-Verbose "[$((Get-Date).TimeOfDay)] Using type $($map[$key])"
                         $name = $key
                         if ($null -eq $item.$key) {
                             Write-Verbose "[$((Get-Date).TimeOfDay)] $name is null"
                             $value = $null
                         }
-                        elseif ($item.$key.gettype().name -eq 'Byte[]') {
+                        elseif ($item.$key.GetType().name -eq 'Byte[]') {
                             #if value of the raw object is byte[], assume it is an exported clixml file
                             #the imported cliXML should have the correct type information
                             $value = frombytes $item.$key
@@ -137,21 +137,20 @@ Function ConvertFrom-MySQLiteDB {
                     #9/12/2022 Insert the typename directly - JDH
                     if ($oTypename) {
                         Write-Verbose "[$((Get-Date).TimeOfDay)] Adding typename $oTypename"
-                        $no.psobject.TypeNames.Insert(0,$oTypename)
+                        $no.PSObject.TypeNames.Insert(0,$oTypename)
                     }
                     $no
                 } #foreach item
             } #if $map
         } #if table found
         else {
-            Write-Warning "Failed to find a table called $Tablename $($file.path)"
+            Write-Warning "Failed to find a table called $TableName $($file.path)"
         }
     } #process
 
     End {
         Write-Verbose "[$((Get-Date).TimeOfDay)] Closing database connection"
         closedb -connection $connection
-        Write-Verbose "[$((Get-Date).TimeOfDay)] Ending $($myinvocation.mycommand)"
+        Write-Verbose "[$((Get-Date).TimeOfDay)] Ending $($MyInvocation.MyCommand)"
     } #end
-
 }

@@ -14,7 +14,7 @@ Create a new SQLite database file
 ## SYNTAX
 
 ```yaml
-New-MySQLiteDB [-Path] <String> [-Force] [-Comment <String>] [-Passthru] [-WhatIf] [-Confirm] [<CommonParameters>]
+New-MySQLiteDB [-Path] <String> [-Force] [-Comment <String>] [-PassThru] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -34,7 +34,7 @@ Create a new database file in C:\Work.
 ### Example 2
 
 ```powershell
-PS C:\> New-MySQLiteDB c:\work\test2.db -Comment "This is for scripting stuff" -passthru -force | Invoke-MySQLiteQuery -query "Select * from metadata"
+PS C:\> New-MySQLiteDB c:\work\test2.db -Comment "This is for scripting stuff" -PassThru -force | Invoke-MySQLiteQuery -query "Select * from metadata"
 
 Author          Created               Computername Comment
 ------          -------               ------------ -------
@@ -91,7 +91,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Passthru
+### -PassThru
 
 ```yaml
 Type: SwitchParameter
@@ -107,7 +107,7 @@ Accept wildcard characters: False
 
 ### -Path
 
-Enter the path to the SQLite database file you want to create.
+The path to the SQLite database file. The file name must have one of the following extensions: .db | .db3 | .s3db | .sl3 | .sqlite | .sqlite3
 
 ```yaml
 Type: String

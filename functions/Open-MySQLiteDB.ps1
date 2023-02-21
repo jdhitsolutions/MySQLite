@@ -4,27 +4,26 @@ Function Open-MySQLiteDB {
     [OutputType("System.Data.SQLite.SQLiteConnection")]
 
     Param(
-        [Parameter(Mandatory)]
+        [Parameter(Position=0,mMandatory)]
         [alias("database")]
+        [ValidatePattern("\.((sqlite(3)?)|(db(3)?)|(sl3)|(s3db))$")]
         [string]$Path
     )
     Begin {
-        Write-Verbose "[$((Get-Date).TimeOfDay)] $($myinvocation.mycommand)"
+        Write-Verbose "[$((Get-Date).TimeOfDay)] $($MyInvocation.MyCommand)"
     } #begin
 
     Process {
         $db = resolvedb $Path
         if ($db.exists) {
-            if ($pscmdlet.shouldprocess($db.path)) {
+            if ($PSCmdlet.ShouldProcess($db.path)) {
                 Write-Verbose "[$((Get-Date).TimeOfDay)] Opening $Path"
                 opendb $db.path
             }
         }
-
     } #process
 
     End {
-        Write-Verbose "[$((Get-Date).TimeOfDay)] Ending $($myinvocation.mycommand)"
+        Write-Verbose "[$((Get-Date).TimeOfDay)] Ending $($MyInvocation.MyCommand)"
     } #end
-
 }

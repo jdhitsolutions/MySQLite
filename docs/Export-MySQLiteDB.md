@@ -14,7 +14,7 @@ Export a SQLite database file
 ## SYNTAX
 
 ```yaml
-Export-MySQLiteDB [-Path] <String> [-Destination] <String> [-Passthru] [-WhatIf] [-Confirm] [<CommonParameters>]
+Export-MySQLiteDB [-Path] <String> [-Destination] <String> [-PassThru] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -63,7 +63,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Passthru
+### -PassThru
 
 ```yaml
 Type: SwitchParameter
@@ -79,7 +79,7 @@ Accept wildcard characters: False
 
 ### -Path
 
-The path to the SQLite database file. It must have a .db extension.
+The path to the SQLite database file. The file name must have one of the following extensions: .db | .db3 | .s3db | .sl3 | .sqlite | .sqlite3
 
 ```yaml
 Type: String

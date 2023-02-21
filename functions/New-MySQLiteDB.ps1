@@ -1,21 +1,26 @@
 Function New-MySQLiteDB {
     [cmdletbinding(SupportsShouldProcess)]
     [alias("New-DB", "ndb")]
-    [outputtype("None", "System.IO.Fileinfo")]
+    [OutputType("None", "System.IO.FileInfo")]
     Param(
-        [Parameter(Position = 0, Mandatory, HelpMessage = "Enter the path to the SQLite database file.")]
+        [Parameter(
+            Position = 0,
+            Mandatory,
+            HelpMessage = "Enter the path to the SQLite database file."
+        )]
         [ValidateNotNullOrEmpty()]
+        [ValidatePattern("\.((sqlite(3)?)|(db(3)?)|(sl3)|(s3db))$")]
         [alias("database")]
         [string]$Path,
         [switch]$Force,
         [Parameter(HelpMessage = "Enter a comment to be inserted into the database's metadata table")]
         [string]$Comment,
         #write the database file to the pipeline
-        [switch]$Passthru
+        [switch]$PassThru
     )
 
     Begin {
-        Write-Verbose "[$((Get-Date).TimeOfDay)] $($myinvocation.mycommand)"
+        Write-Verbose "[$((Get-Date).TimeOfDay)] $($MyInvocation.MyCommand)"
 
         $db = resolvedb $Path
 
@@ -29,7 +34,7 @@ Function New-MySQLiteDB {
                 Remove-Item -Path $db.path
             }
 
-            if ($pscmdlet.ShouldProcess($Path, "Open Database")) {
+            if ($PSCmdlet.ShouldProcess($Path, "Open Database")) {
                 $connection = opendb $db.path
             }
 
@@ -37,7 +42,7 @@ Function New-MySQLiteDB {
             $meta = @{
                 Author   = "$([System.Environment]::UserDomainName)\$([System.Environment]::userName)"
                 Created  = (Get-Date).ToString() #(Get-Date -format "yyyy-MM-dd hh:mm:ss.sss")
-                Computer = [system.Environment]::machinename
+                Computer = [system.Environment]::MachineName
                 Comment  = $Comment
             }
         }
@@ -45,11 +50,11 @@ Function New-MySQLiteDB {
     Process {
         Write-Verbose "[$((Get-Date).TimeOfDay)] $($db.Path)"
         Write-Verbose "[$((Get-Date).TimeOfDay)] Adding Metadata table"
-        if ($connection.state -eq 'Open' -OR $PSBoundparameters.ContainsKey("WhatIf")) {
+        if ($connection.state -eq 'Open' -OR $PSBoundParameters.ContainsKey("WhatIf")) {
 
             [string]$query = "CREATE TABLE Metadata (Author TEXT,Created TEXT,Computername TEXT,Comment TEXT);"
 
-            if ($pscmdlet.ShouldProcess($query)) {
+            if ($PSCmdlet.ShouldProcess($query)) {
                 $cmd = $connection.CreateCommand()
                 $cmd.CommandText = $query
                 [void]$cmd.ExecuteNonQuery()
@@ -58,7 +63,7 @@ Function New-MySQLiteDB {
             $query = "Insert Into Metadata (Author,Created,Computername,Comment) Values ('$($meta.author)','$($meta.created)','$($meta.computer)','$($meta.comment)')"
 
             Write-Verbose "[$((Get-Date).TimeOfDay)] Execute non-query: $query"
-            if ($pscmdlet.ShouldProcess($query)) {
+            if ($PSCmdlet.ShouldProcess($query)) {
                 $cmd.CommandText = $query
                 [void]$cmd.ExecuteNonQuery()
             }
@@ -73,11 +78,9 @@ Function New-MySQLiteDB {
             $connection.close()
             $connection.Dispose()
         }
-        if ($Passthru -AND (Test-Path $db.path)) {
+        if ($PassThru -AND (Test-Path $db.path)) {
             Get-Item -Path $db.path
         }
-        Write-Verbose "[$((Get-Date).TimeOfDay)] Ending $($myinvocation.mycommand)"
-
+        Write-Verbose "[$((Get-Date).TimeOfDay)] Ending $($MyInvocation.MyCommand)"
     } #end
-
 }

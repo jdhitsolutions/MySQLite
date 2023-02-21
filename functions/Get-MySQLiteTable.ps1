@@ -1,28 +1,40 @@
 Function Get-MySQLiteTable {
     [cmdletbinding(DefaultParameterSetName = "file")]
     [Alias("gtb", "Get-DBTable")]
-    [outputtype("PSCustomObject")]
-
+    [OutputType("PSCustomObject")]
     Param(
-        [Parameter(Position = 0, Mandatory, HelpMessage = "Enter the path to the SQLite database file.", ValueFromPipelineByPropertyName, ParameterSetName = "file")]
+        [Parameter(
+            Position = 0,
+            Mandatory,
+            HelpMessage = "Enter the path to the SQLite database file.",
+            ValueFromPipelineByPropertyName, ParameterSetName = "file"
+        )]
         [ValidateNotNullOrEmpty()]
         [alias("database", "fullname")]
         [string]$Path,
-        [Parameter(Position = 0, ValueFromPipeline, HelpMessage = "Specify an existing open database connection.", ParameterSetName = "connection")]
+        [Parameter(
+            Position = 0,
+            ValueFromPipeline,
+            HelpMessage = "Specify an existing open database connection.",
+            ParameterSetName = "connection"
+        )]
         [System.Data.SQLite.SQLiteConnection]$Connection,
-        [Parameter(HelpMessage = "Do not close the connection.", ParameterSetName = "connection")]
+        [Parameter(
+            HelpMessage = "Do not close the connection.",
+            ParameterSetName = "connection"
+        )]
         [switch]$KeepAlive,
         [switch]$Detail
     )
     Begin {
-        Write-Verbose "[$((Get-Date).TimeOfDay)] $($myinvocation.mycommand)"
+        Write-Verbose "[$((Get-Date).TimeOfDay)] $($MyInvocation.MyCommand)"
     } #begin
 
     Process {
         $iqParams = @{
             query = "Select Name from sqlite_master where type='table'"
         }
-        if ($pscmdlet.ParameterSetName -eq 'file') {
+        if ($PSCmdlet.ParameterSetName -eq 'file') {
             $db = resolvedb -Path $path
             Write-Verbose "[$((Get-Date).TimeOfDay)] Using path $($db.Path)"
             if ($db.exists) {
@@ -42,17 +54,17 @@ Function Get-MySQLiteTable {
             $source = $connection.ConnectionString.split("=", 2)[1].split(";")[0]
 
         }
-        $tablenames = Invoke-MySQLiteQuery @iqParams
-        if ($tablenames) {
+        $TableNames = Invoke-MySQLiteQuery @iqParams
+        if ($TableNames) {
 
             if ($Detail) {
                 Write-Verbose "[$((Get-Date).TimeOfDay)] Getting table details"
-                foreach ($item in $Tablenames.name) {
+                foreach ($item in $TableNames.name) {
                     $iqParams.query = "PRAGMA table_info($item)"
                     Write-Verbose "[$((Get-Date).TimeOfDay)] $($iqparams.query)"
                     $details = Invoke-MySQLiteQuery @iqParams
                     foreach ($tbl in $details) {
-                        [pscustomobject]@{
+                        [PSCustomObject]@{
                             PSTypename  = "MySQLiteTableDetail"
                             Source      = $Source
                             Table       = $item
@@ -64,9 +76,9 @@ Function Get-MySQLiteTable {
                 } #foreach item
             }
             else {
-                [pscustomobject]@{
+                [PSCustomObject]@{
                     Source = $source
-                    Name   = $Tablenames.name
+                    Name   = $TableNames.name
                 }
             }
         }
@@ -80,7 +92,6 @@ Function Get-MySQLiteTable {
             closedb -connection $connection
         }
 
-        Write-Verbose "[$((Get-Date).TimeOfDay)] Ending $($myinvocation.mycommand)"
+        Write-Verbose "[$((Get-Date).TimeOfDay)] Ending $($MyInvocation.MyCommand)"
     } #end
-
 }

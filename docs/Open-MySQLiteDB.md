@@ -19,7 +19,7 @@ Open-MySQLiteDB [-Path] <String> [-WhatIf] [-Confirm] [<CommonParameters>]
 
 ## DESCRIPTION
 
-If you are creating your own solutions using the MySQLite module, you might need to open and close the database file. If you use Invoke-MySQLite to insert or update data, that command will handle opening and closing the file.
+If you are creating your own solutions using the MySQLite module, you might need to open and close the database file. Note that if you use Invoke-MySQLite to insert or update data, that command will handle opening and closing the file.
 
 ## EXAMPLES
 
@@ -80,7 +80,7 @@ Accept wildcard characters: False
 
 ### -Path
 
-The path to the SQLite database file.
+The path to the SQLite database file. The file name must have one of the following extensions: .db | .db3 | .s3db | .sl3 | .sqlite | .sqlite3
 
 ```yaml
 Type: String

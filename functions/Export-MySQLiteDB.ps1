@@ -8,7 +8,7 @@ Function Export-MySQLiteDB {
             Position = 0,
             HelpMessage = "The path to the SQLite database file"
         )]
-        [ValidatePattern("\.db$")]
+        [ValidatePattern("\.((sqlite(3)?)|(db(3)?)|(sl3)|(s3db))$")]
         [ValidateScript({ Test-Path $_ })]
         [string]$Path,
 
@@ -21,11 +21,11 @@ Function Export-MySQLiteDB {
         [ValidateScript({ Split-Path $_ -Parent | Test-Path })]
         [string]$Destination,
 
-        [switch]$Passthru
+        [switch]$PassThru
     )
     Begin {
-        Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Starting $($myinvocation.mycommand)"
-        Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Opening a connection to $Path"
+        Write-Verbose "[$((Get-Date).TimeOfDay) BEGIN  ] Starting $($MyInvocation.MyCommand)"
+        Write-Verbose "[$((Get-Date).TimeOfDay) BEGIN  ] Opening a connection to $Path"
         Try {
             #always open the database
             $conn = Open-MySQLiteDB -Path $path -ErrorAction Stop -WhatIf:$False
@@ -39,12 +39,12 @@ Function Export-MySQLiteDB {
         if ($conn.state -eq 'open') {
             #initialize a hashtable
             $hash = @{}
-            Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Getting tables"
+            Write-Verbose "[$((Get-Date).TimeOfDay) PROCESS] Getting tables"
             $tables = (Get-MySQLiteTable -Connection $conn -KeepAlive -ErrorAction Stop).Name
-            Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Exporting $Path"
+            Write-Verbose "[$((Get-Date).TimeOfDay) PROCESS] Exporting $Path"
             foreach ($table in $tables) {
                 $query = "Select * from $table"
-                Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] $query"
+                Write-Verbose "[$((Get-Date).TimeOfDay) PROCESS] $query"
                 Try {
                     $data = Invoke-MySQLiteQuery -Query $query -Connection $conn -KeepAlive -ErrorAction Stop
                     $hash.add($table, $data)
@@ -55,21 +55,21 @@ Function Export-MySQLiteDB {
                     Throw $_
                 }
             }
-            Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Saving to $Destination"
+            Write-Verbose "[$((Get-Date).TimeOfDay) PROCESS] Saving to $Destination"
             if ($PSCmdlet.ShouldProcess($Destination, "Export database $path")) {
                 $hash | ConvertTo-Json -Depth 100 | Set-Content -Path $destination -Encoding utf8
-                if ($passthru) {
+                if ($PassThru) {
                     Get-Item -Path $Destination
                 }
-            } #whatif
+            } #whatIf
         }
     } #process
 
     End {
         if ($conn.state -eq 'open') {
-            Write-Verbose "[$((Get-Date).TimeofDay) END    ] Closing database connection."
+            Write-Verbose "[$((Get-Date).TimeOfDay) END    ] Closing database connection."
         }
-        Write-Verbose "[$((Get-Date).TimeofDay) END    ] Ending $($myinvocation.mycommand)"
+        Write-Verbose "[$((Get-Date).TimeOfDay) END    ] Ending $($MyInvocation.MyCommand)"
     } #end
 
 } #close Export-MySQLiteDB
