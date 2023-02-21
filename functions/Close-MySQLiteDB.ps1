@@ -4,20 +4,24 @@ Function Close-MySQLiteDB {
     [OutputType("None", "System.Data.SQLite.SQLiteConnection")]
 
     Param(
-        [Parameter(Mandatory, HelpMessage = "Enter a connection object", ValueFromPipeline)]
+        [Parameter(
+            Mandatory,
+            HelpMessage = "Enter a connection object",
+        ValueFromPipeline
+        )]
+        [ValidateNotNullOrEmpty()]
         [System.Data.SQLite.SQLiteConnection]$Connection,
-        [switch]$Passthru
+        [switch]$PassThru
     )
     Begin {
-        Write-Verbose "[$((Get-Date).TimeOfDay)] $($myinvocation.mycommand)"
-
+        Write-Verbose "[$((Get-Date).TimeOfDay)] $($MyInvocation.MyCommand)"
     } #begin
 
     Process {
         Write-Verbose "[$((Get-Date).TimeOfDay)] Closing source $($connection.DataSource)"
-        if ($pscmdlet.ShouldProcess($Connection.DataSource)) {
+        if ($PSCmdlet.ShouldProcess($Connection.DataSource)) {
             $connection.close()
-            if ($passthru) {
+            if ($PassThru) {
                 $connection
             }
 
@@ -27,7 +31,6 @@ Function Close-MySQLiteDB {
     } #process
 
     End {
-        Write-Verbose "[$((Get-Date).TimeOfDay)] ending $($myinvocation.mycommand)"
+        Write-Verbose "[$((Get-Date).TimeOfDay)] ending $($MyInvocation.MyCommand)"
     } #end
-
 }

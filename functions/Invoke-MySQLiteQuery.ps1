@@ -1,27 +1,45 @@
 Function Invoke-MySQLiteQuery {
     [cmdletbinding(SupportsShouldProcess, DefaultParameterSetName = "file")]
     [alias("iq")]
-    [outputtype("None", "PSCustomObject", "System.Data.Datatable", "Hashtable")]
+    [OutputType("None", "PSCustomObject", "System.Data.Datatable", "Hashtable")]
     Param(
-        [Parameter(Position = 1, Mandatory, HelpMessage = "Enter the path to the SQLite database file.", ParameterSetName = "file", ValueFromPipelineByPropertyName)]
+        [Parameter(
+            Position = 1,
+            Mandatory,
+            HelpMessage = "Enter the path to the SQLite database file.",
+            ParameterSetName = "file",
+            ValueFromPipelineByPropertyName
+        )]
         [Alias("fullname", "database")]
         [ValidateNotNullOrEmpty()]
         [string]$Path,
-        [Parameter(Position = 1, ValueFromPipeline, HelpMessage = "Specify an existing open database connection.", ParameterSetName = "connection")]
+        [Parameter(
+            Position = 1,
+            ValueFromPipeline,
+            HelpMessage = "Specify an existing open database connection.",
+            ParameterSetName = "connection"
+        )]
         [System.Data.SQLite.SQLiteConnection]$Connection,
-        [Parameter(Position = 0, Mandatory, HelpMessage = "Enter a SQL query string")]
+        [Parameter(
+            Position = 0,
+            Mandatory,
+            HelpMessage = "Enter a SQL query string"
+        )]
         [string]$Query,
-        [Parameter(HelpMessage = "Keep the connection alive.", ParameterSetName = "connection")]
+        [Parameter(
+            HelpMessage = "Keep the connection alive.",
+            ParameterSetName = "connection"
+        )]
         [switch]$KeepAlive,
         [Parameter(HelpMessage = "Write the results of a Select query in the specified format")]
         [ValidateSet("Object", "Datatable", "Hashtable")]
         [string]$As = "object"
     )
     Begin {
-        Write-Verbose "[$((Get-Date).TimeOfDay)] Starting $($myinvocation.mycommand)"
+        Write-Verbose "[$((Get-Date).TimeOfDay)] Starting $($MyInvocation.MyCommand)"
     } #begin
     Process {
-        if ($pscmdlet.ParameterSetName -eq 'file') {
+        if ($PSCmdlet.ParameterSetName -eq 'file') {
             Write-Verbose "[$((Get-Date).TimeOfDay)] Using file $path"
             $file = resolvedb -path $path
 
@@ -33,7 +51,7 @@ Function Invoke-MySQLiteQuery {
             }
         }
         else {
-            Write-Verbose "[$((Get-Date).TimeOfDay)] Using connecton $($connection.ConnectionString)"
+            Write-Verbose "[$((Get-Date).TimeOfDay)] Using connection $($connection.ConnectionString)"
             Write-Verbose "[$((Get-Date).TimeOfDay)] KeepAlive is $KeepAlive"
         }
 
@@ -56,24 +74,23 @@ Function Invoke-MySQLiteQuery {
                     }
                     else {
                         Write-Verbose "[$((Get-Date).TimeOfDay)] ExecuteReader"
-                        $reader = $cmd.executereader()
+                        $reader = $cmd.ExecuteReader()
                         #convert datarows to a custom object
                         while ($reader.read()) {
 
                             $h = [ordered]@{}
                             for ($i = 0; $i -lt $reader.FieldCount; $i++) {
-                                $col = $reader.getname($i)
+                                $col = $reader.GetName($i)
 
-                                $h.add($col, $reader.getvalue($i))
+                                $h.add($col, $reader.GetValue($i))
                             } #for
 
                             if ($as -eq "hashtable") {
                                 $h
                             }
                             else {
-                                New-Object -TypeName psobject -Property $h
+                                New-Object -TypeName PSObject -Property $h
                             }
-
                         } #while
 
                         $reader.close()
@@ -86,7 +103,7 @@ Function Invoke-MySQLiteQuery {
                     Break
                 }
                 Default {
-                    if ($pscmdlet.ShouldProcess($query)) {
+                    if ($PSCmdlet.ShouldProcess($query)) {
                         Write-Verbose "[$((Get-Date).TimeOfDay)] ExecuteNonQuery"
                         #modify query to use Transactions
                         $Revised = "BEGIN TRANSACTION;$($cmd.CommandText);COMMIT;"
@@ -100,16 +117,16 @@ Function Invoke-MySQLiteQuery {
                             write-warning $_.Exception.message
                         }
                     }
-                } #Whatif
+                } #WhatIf
             } #switch
         }
     } #process
     End {
         #if the connection was passed as a parameter, do not close it. The generating command is responsible for managing the connection.
-        if ( (($connection.state -eq 'Open') -AND ($pscmdlet.ParameterSetName -eq 'file')) -OR (($connection.state -eq 'Open') -AND (-Not $KeepAlive)) ) {
+        if ( (($connection.state -eq 'Open') -AND ($PSCmdlet.ParameterSetName -eq 'file')) -OR (($connection.state -eq 'Open') -AND (-Not $KeepAlive)) ) {
             Write-Verbose "[$((Get-Date).TimeOfDay)] Closing database connection"
             closedb -connection $connection -cmd $cmd
         }
-        Write-Verbose "[$((Get-Date).TimeOfDay)] Ending $($myinvocation.mycommand)"
+        Write-Verbose "[$((Get-Date).TimeOfDay)] Ending $($MyInvocation.MyCommand)"
     } #end
 }

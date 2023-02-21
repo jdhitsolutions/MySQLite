@@ -19,7 +19,7 @@ Convert-MySQLiteByteArray [-BlobProperty] <Byte[]> [<CommonParameters>]
 
 ## DESCRIPTION
 
-Nested object properites are stored as blobs. When you specify such a property using ConvertTo-MySQLiteDB, it is exported using Export-Clixml. The content of the resulting text file is converted to a byte array which is stored in the database table. ConvertFrom-MySQLiteDB should automatically convert it back to a deserialized version of the original object. You can use this stand-alone function to handle the conversion yourself.
+Nested object properties are stored as blobs. When you specify such a property using ConvertTo-MySQLiteDB, it is exported using Export-Clixml. The content of the resulting text file is converted to a byte array which is stored in the database table. ConvertFrom-MySQLiteDB should automatically convert it back to a deserialized version of the original object. You can use this stand-alone function to handle the conversion yourself.
 
 ## EXAMPLES
 

@@ -1,5 +1,29 @@
 # Changelog for MySQLite
 
+## 0.11.0
+
+### Added
+
+- Added private functions `Convert-ToXml` and `Convert-FromXML` to use `[System.Management.Automation.PSSerializer]` instead of temp files. Thanks to @SeSeKenny for the suggestion and code. [Issue #16](https://github.com/jdhitsolutions/MySQLite/issues/16))
+- Added sample databases.
+
+### Changed
+
+- Modified private build query function to use the new private serialization functions.
+- Modify parameter validation checks on the database file to include all file name extensions as defined for [SQLite in in Wikipedia](https://en.wikipedia.org/wiki/SQLite). This addresses ([Issue #17](https://github.com/jdhitsolutions/MySQLite/issues/17))
+
+  - .sqlite
+  - .sqlite3
+  - .db
+  - .db3
+  - .s3db
+  - .sl3
+
+- Upgrade `System.Data.SQLite.dll` to version 1.0.117.0.
+- General code clean up.
+- Updated `README.md`.
+- Help updates.
+- 
 ## 0.10.1
 
 + Add missing online help links.

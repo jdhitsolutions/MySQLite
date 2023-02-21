@@ -14,7 +14,7 @@ Import a SQLite database backup
 ## SYNTAX
 
 ```yaml
-Import-MySQLiteDB [-Path] <String> [-Destination] <String> [-Force] [-Passthru] [-WhatIf] [-Confirm] [<CommonParameters>]
+Import-MySQLiteDB [-Path] <String> [-Destination] <String> [-Force] [-PassThru] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -80,7 +80,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Passthru
+### -PassThru
 
 ```yaml
 Type: SwitchParameter

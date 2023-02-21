@@ -6,11 +6,11 @@ A set of PowerShell functions for working with SQLite database files. The goal o
 
 ## Background
 
-I started work on this module years ago and had it almost complete except for managing the assembly to provide the .NET interface. After letting the project remain idle, I happened across a [similar module by Tobias Weltner](https://github.com/TobiasPSP/ReallySimpleDatabase). He had a brilliant technique to manage the .NET assembly which I freely "borrowed." With this missing piece, I dusted off my module, polished it, and published to the PowerShell Gallery.
+I started work on this module years ago and had it almost complete except for managing the assembly to provide the .NET interface. After letting the project remain idle, I happened across a [similar module by Tobias Weltner](https://github.com/TobiasPSP/ReallySimpleDatabase). He had a brilliant technique to manage the .NET assembly which I freely "borrowed." With this missing piece, I dusted off my module, polished it, and published it to the PowerShell Gallery.
 
 ## Installation
 
-This module should work on 64-bit versions of Windows PowerShell and PowerShell 7 running on a Windows platform. __The module is not supported on non-Windows platforms.__
+This module should work on 64-bit versions of Windows PowerShell 5.1 and PowerShell 7 running on a Windows platform. __The module is not supported on non-Windows platforms.__
 
 You can install this module from the PowerShell Gallery.
 
@@ -33,14 +33,14 @@ Install-Module -name MySQLite -repository PSGallery
 
 ## Converting PowerShell Output
 
-The primary benefit of this module is storing results of a PowerShell expression or script into a SQLite database file and later retrieving it back into PowerShell as the original objects, or as close as possible.
+The primary benefit of this module is storing the results of a PowerShell expression or script into a SQLite database file and later retrieving it back into PowerShell as the original objects, or as close as possible.
 
 For example, you might have code like this that creates a dataset.
 
 ```powershell
 $computers= "win10","dom1","srv1","srv2","thinkx1-jh"
 
-$data = Get-CimInstance win32_operatingsystem -ComputerName $computers |
+$data = Get-CimInstance Win32_OperatingSystem -ComputerName $computers |
 Select-Object @{Name="Computername";Expression={$_.CSName}},
 @{Name="OS";Expression = {$_.caption}},InstallDate,Version,
 @{Name="IsServer";Expression={ If ($_.caption -match "server") {$True} else {$False}}}
@@ -157,26 +157,31 @@ IsServer     : False
 You also use `Invoke-MySQLiteQuery`.
 
 ```powershell
-PS C:\> Invoke-MySQLiteQuery -path D:\temp\sales2.db -Query "Select name,sid,samaccountname,members from grp"
+PS C:\> Invoke-MySQLiteQuery -path D:\temp\sales2.db -Query "Select name,sid,SamAccountName,members from grp"
 
 Name  SID                  SamAccountName Members
 ----  ---                  -------------- -------
 Sales {60, 79, 98, 106...} Sales          {60, 79, 98, 106...}
 ```
 
-Nested objects will be stored as byte arrays representing a stored clixml file. You can restore these properties on a granular basis using `Convert-MySQLiteByteArray`.
+Nested objects will be stored as byte arrays. You can restore these properties on a granular basis using `Convert-MySQLiteByteArray`.
 
 ```powershell
-PS C:\> Invoke-MySQLiteQuery -path D:\temp\sales2.db -Query "Select name,sid,samaccountname,members from grp" | Select Name,SamAccountname,@{N="SID";E={Convert-MySQLiteByteArray $_.sid}},@{Nane="Members";Expression={Convert-MySQLiteByteArray $_.Members}}
+PS C:\> Invoke-MySQLiteQuery -path D:\temp\sales2.db -Query "Select name,sid,samaccountname,members from grp" | Select-Object Name,SamAccountName,
+@{Name="SID";Expression={Convert-MySQLiteByteArray $_.sid}},@{Name="Members";Expression={Convert-MySQLiteByteArray $_.Members}}
 
 Name  SamAccountName SID                                          Members
 ----  -------------- ---                                          -------
 Sales Sales          S-1-5-21-3554402041-35902484-4286231435-1147 {CN=SamanthaS,OU=Sales,DC=Company,DC=Pri, CN=Sonya...
 ```
 
-> :warning: Storing objects in a database requires serializing nested objects. This is accomplished by converting objects to cliXML and storing that information as an array of bytes in the database. To convert back, the data must be converted to the original clixml string, saved to a temporary file, and then re-imported with `Import-Clixml`. This process is not guaranteed to be 100% error free. The converted object property should be the deserialized version of the original property.
+> :warning: Storing objects in a database requires serializing nested objects. This is accomplished by converting objects to cliXML and storing that information as an array of bytes in the database. To convert back, the data must be converted to the original clixml string, deserialized, and then re-imported. This process is not guaranteed to be 100% error free. The converted object property should be the deserialized version of the original property.
 
 The remaining commands can be used to create SQLite files on a more granular basis.
+
+## Sample Databases
+
+I have provided several sample database files in the Samples folder.
 
 ## Learn More
 

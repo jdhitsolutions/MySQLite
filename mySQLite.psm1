@@ -14,12 +14,14 @@ Add-Type -MemberDefinition $code -Namespace Internal -Name Helper
 $Path = "$PSScriptRoot\assembly\SQLite.Interop.dll"
 [void]([Internal.Helper]::LoadLibrary($Path))
 
-
 # next, load the .NET assembly. Since the Interop DLL is already
 # pre-loaded, all is good:
 Add-Type -Path "$PSScriptRoot\assembly\System.Data.SQLite.dll"
 
-Get-ChildItem -Path $psscriptroot\functions\*.ps1 |
+Get-ChildItem -Path $PSScriptRoot\functions\*.ps1 |
 ForEach-Object {
-    . $_.fullname
+    . $_.FullName
 }
+
+#define a regex pattern to match database file extensions
+#[regex]$rxExtension = "\.((sqlite(3)?)|(db(3)?)|(sl3)|(s3db))$"

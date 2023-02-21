@@ -25,16 +25,16 @@ Function Import-MySQLiteDB {
         [Parameter(HelpMessage = "Overwrite the destination file if it exists.")]
         [switch]$Force,
 
-        [switch]$Passthru
+        [switch]$PassThru
     )
     Begin {
-        Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Starting $($myinvocation.mycommand)"
+        Write-Verbose "[$((Get-Date).TimeOfDay) BEGIN  ] Starting $($MyInvocation.MyCommand)"
 
     } #begin
 
     Process {
-        Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] $Importing database data from $Path "
-        if ($pscmdlet.ShouldProcess($Destination, "Creating database file")) {
+        Write-Verbose "[$((Get-Date).TimeOfDay) PROCESS] $Importing database data from $Path "
+        if ($PSCmdlet.ShouldProcess($Destination, "Creating database file")) {
             Try {
                 New-MySQLiteDB -Path $destination -Force:$Force -ErrorAction Stop
                 $conn = Open-MySQLiteDB -Path $destination -ErrorAction Stop
@@ -47,11 +47,11 @@ Function Import-MySQLiteDB {
 
             $data = Get-Content -Path $Path -Encoding UTF8 | ConvertFrom-Json
 
-            $data.psobject.properties | ForEach-Object {
+            $data.PSObject.properties | ForEach-Object {
                 $table = $_.name
                 Write-Verbose "defining $table"
                 Write-Verbose "processing $($_.value.count) items"
-                $props = $_.value[0].psobject.properties.name
+                $props = $_.value[0].PSObject.properties.name
                 New-MySQLiteDBTable -Connection $conn -TableName $_.name -ColumnNames $props -Force -KeepAlive
                 $_.value | ForEach-Object {
                     $q = buildquery -InputObject $_ -TableName $table
@@ -59,7 +59,7 @@ Function Import-MySQLiteDB {
                     Invoke-MySQLiteQuery -Query $q -Connection $conn -KeepAlive
                 } #foreach value
             } #foreach data object property
-            if ($passthru) {
+            if ($PassThru) {
                 Get-Item -path $Destination
             }
         } #if state is open
@@ -71,11 +71,10 @@ Function Import-MySQLiteDB {
 
     End {
         if ($conn.state -eq 'Open') {
-            Write-Verbose "[$((Get-Date).TimeofDay) END    ] Closing database connection"
+            Write-Verbose "[$((Get-Date).TimeOfDay) END    ] Closing database connection"
             Close-MySQLiteDB -Connection $conn
         }
-        Write-Verbose "[$((Get-Date).TimeofDay) END    ] Ending $($myinvocation.mycommand)"
-
+        Write-Verbose "[$((Get-Date).TimeOfDay) END    ] Ending $($MyInvocation.MyCommand)"
     } #end
 
 } #close Import-MySQLiteDB

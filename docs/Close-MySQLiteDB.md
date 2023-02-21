@@ -14,7 +14,7 @@ Close a SQLite database file.
 ## SYNTAX
 
 ```yaml
-Close-MySQLiteDB [-Connection] <SQLiteConnection> [-Passthru] [-WhatIf] [-Confirm] [<CommonParameters>]
+Close-MySQLiteDB [-Connection] <SQLiteConnection> [-PassThru] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -66,7 +66,7 @@ Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
-### -Passthru
+### -PassThru
 
 ```yaml
 Type: SwitchParameter

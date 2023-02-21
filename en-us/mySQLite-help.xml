@@ -39,7 +39,7 @@
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Passthru</maml:name>
+          <maml:name>PassThru</maml:name>
           <maml:description>
             <maml:para></maml:para>
           </maml:description>
@@ -88,7 +88,7 @@
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>Passthru</maml:name>
+        <maml:name>PassThru</maml:name>
         <maml:description>
           <maml:para></maml:para>
         </maml:description>
@@ -176,7 +176,7 @@ PS C:\&gt; Close-mySQLiteDB $connection</dev:code>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Nested object properites are stored as blobs. When you specify such a property using ConvertTo-MySQLiteDB, it is exported using Export-Clixml. The content of the resulting text file is converted to a byte array which is stored in the database table. ConvertFrom-MySQLiteDB should automatically convert it back to a deserialized version of the original object. You can use this stand-alone function to handle the conversion yourself.</maml:para>
+      <maml:para>Nested object properties are stored as blobs. When you specify such a property using ConvertTo-MySQLiteDB, it is exported using Export-Clixml. The content of the resulting text file is converted to a byte array which is stored in the database table. ConvertFrom-MySQLiteDB should automatically convert it back to a deserialized version of the original object. You can use this stand-alone function to handle the conversion yourself.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -890,7 +890,7 @@ PS C:\&gt; $data | ConvertTo-MySQLiteDB -Path c:\work\Inventory.db -TableName OS
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
           <maml:name>Path</maml:name>
           <maml:description>
-            <maml:para>The path to the SQLite database file. It must have a .db extension.</maml:para>
+            <maml:para>The path to the SQLite database file. The file name must have one of the following extensions: .db | .db3 | .s3db | .sl3 | .sqlite | .sqlite3</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -923,7 +923,7 @@ PS C:\&gt; $data | ConvertTo-MySQLiteDB -Path c:\work\Inventory.db -TableName OS
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Passthru</maml:name>
+          <maml:name>PassThru</maml:name>
           <maml:description>
             <maml:para></maml:para>
           </maml:description>
@@ -972,7 +972,7 @@ PS C:\&gt; $data | ConvertTo-MySQLiteDB -Path c:\work\Inventory.db -TableName OS
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>Passthru</maml:name>
+        <maml:name>PassThru</maml:name>
         <maml:description>
           <maml:para></maml:para>
         </maml:description>
@@ -986,7 +986,7 @@ PS C:\&gt; $data | ConvertTo-MySQLiteDB -Path c:\work\Inventory.db -TableName OS
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
         <maml:name>Path</maml:name>
         <maml:description>
-          <maml:para>The path to the SQLite database file. It must have a .db extension.</maml:para>
+          <maml:para>The path to the SQLite database file. The file name must have one of the following extensions: .db | .db3 | .s3db | .sl3 | .sqlite | .sqlite3</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -1492,7 +1492,7 @@ ColumnIndex ColumnName ColumnType
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Passthru</maml:name>
+          <maml:name>PassThru</maml:name>
           <maml:description>
             <maml:para></maml:para>
           </maml:description>
@@ -1553,7 +1553,7 @@ ColumnIndex ColumnName ColumnType
         <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>Passthru</maml:name>
+        <maml:name>PassThru</maml:name>
         <maml:description>
           <maml:para></maml:para>
         </maml:description>
@@ -1945,9 +1945,9 @@ ColumnIndex ColumnName ColumnType
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
         <dev:code>PS C:\&gt; $data = Get-Process | Select-object ID,Name,Workingset,VirtualMemorySize,@{Name="Date";Expression={Get-Date}}
 PS C:\&gt; $data | foreach-object -begin { $cx = Open-MySQLiteDB c:\work\test.db} -process { Invoke-MySQLiteQuery -connection $cx -keepalive -query "Insert into proc Values ('$($_.ID)','$($_.Name)','$($_.Workingset)','$($_.VirtualMemorySize)','$($_.Date)') "} -end { Close-MySQLiteDB $cx}
-PS C:\&gt; Invoke-MySQLiteQuery -Path c:\work\test.db -Query "Select * from proc Order by Workingset Desc Limit 5" | format-table
+PS C:\&gt; Invoke-MySQLiteQuery -Path c:\work\test.db -Query "Select * from proc Order by WorkingSet Desc Limit 5" | format-table
 
-   ID Name               Workingset VirtualMemorySize Date
+   ID Name               WorkingSet VirtualMemorySize Date
    -- ----               ---------- ----------------- ----
  3112 Memory Compression 1340776448        1484521472 03/13/2022 14:52:14
  5684 powershell         1198268416       -2013696000 03/13/2022 14:52:14
@@ -1996,7 +1996,7 @@ BOVINE320\Jeff 3/8/2022 2:59:05 PM BOVINE320    for Hyper-V monitoring</dev:code
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="database">
           <maml:name>Path</maml:name>
           <maml:description>
-            <maml:para>Enter the path to the SQLite database file you want to create.</maml:para>
+            <maml:para>The path to the SQLite database file. The file name must have one of the following extensions: .db | .db3 | .s3db | .sl3 | .sqlite | .sqlite3</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -2040,7 +2040,7 @@ BOVINE320\Jeff 3/8/2022 2:59:05 PM BOVINE320    for Hyper-V monitoring</dev:code
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Passthru</maml:name>
+          <maml:name>PassThru</maml:name>
           <maml:description>
             <maml:para></maml:para>
           </maml:description>
@@ -2101,7 +2101,7 @@ BOVINE320\Jeff 3/8/2022 2:59:05 PM BOVINE320    for Hyper-V monitoring</dev:code
         <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>Passthru</maml:name>
+        <maml:name>PassThru</maml:name>
         <maml:description>
           <maml:para></maml:para>
         </maml:description>
@@ -2115,7 +2115,7 @@ BOVINE320\Jeff 3/8/2022 2:59:05 PM BOVINE320    for Hyper-V monitoring</dev:code
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="database">
         <maml:name>Path</maml:name>
         <maml:description>
-          <maml:para>Enter the path to the SQLite database file you want to create.</maml:para>
+          <maml:para>The path to the SQLite database file. The file name must have one of the following extensions: .db | .db3 | .s3db | .sl3 | .sqlite | .sqlite3</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -2180,7 +2180,7 @@ BOVINE320\Jeff 3/8/2022 2:59:05 PM BOVINE320    for Hyper-V monitoring</dev:code
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; New-MySQLiteDB c:\work\test2.db -Comment "This is for scripting stuff" -passthru -force | Invoke-MySQLiteQuery -query "Select * from metadata"
+        <dev:code>PS C:\&gt; New-MySQLiteDB c:\work\test2.db -Comment "This is for scripting stuff" -PassThru -force | Invoke-MySQLiteQuery -query "Select * from metadata"
 
 Author          Created               Computername Comment
 ------          -------               ------------ -------
@@ -2778,7 +2778,7 @@ cid name              type
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>If you are creating your own solutions using the MySQLite module, you might need to open and close the database file. If you use Invoke-MySQLite to insert or update data, that command will handle opening and closing the file.</maml:para>
+      <maml:para>If you are creating your own solutions using the MySQLite module, you might need to open and close the database file. Note that if you use Invoke-MySQLite to insert or update data, that command will handle opening and closing the file.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -2786,7 +2786,7 @@ cid name              type
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="database">
           <maml:name>Path</maml:name>
           <maml:description>
-            <maml:para>The path to the SQLite database file.</maml:para>
+            <maml:para>The path to the SQLite database file. The file name must have one of the following extensions: .db | .db3 | .s3db | .sl3 | .sqlite | .sqlite3</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -2835,7 +2835,7 @@ cid name              type
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="database">
         <maml:name>Path</maml:name>
         <maml:description>
-          <maml:para>The path to the SQLite database file.</maml:para>
+          <maml:para>The path to the SQLite database file. The file name must have one of the following extensions: .db | .db3 | .s3db | .sl3 | .sqlite | .sqlite3</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
