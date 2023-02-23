@@ -1,5 +1,11 @@
 # Changelog for MySQLite
 
+## 0.11.2
+
+### Changed
+
+- Fixed typo in `Open-MySQLiteDB`. [Issue #18](https://github.com/jdhitsolutions/MySQLite/issues/18)
+
 ## 0.11.1
 
 This release is identical in files to v0.11.0 published on the PowerShell Gallery. This release corrects a problem pushing the 0.11.0 release to GitHub.

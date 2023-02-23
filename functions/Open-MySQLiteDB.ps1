@@ -4,7 +4,7 @@ Function Open-MySQLiteDB {
     [OutputType("System.Data.SQLite.SQLiteConnection")]
 
     Param(
-        [Parameter(Position=0,mMandatory)]
+        [Parameter(Position=0,Mandatory)]
         [alias("database")]
         [ValidatePattern("\.((sqlite(3)?)|(db(3)?)|(sl3)|(s3db))$")]
         [string]$Path
