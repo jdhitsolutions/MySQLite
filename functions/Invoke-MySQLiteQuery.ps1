@@ -37,6 +37,23 @@ Function Invoke-MySQLiteQuery {
     )
     Begin {
         Write-Verbose "[$((Get-Date).TimeOfDay)] Starting $($MyInvocation.MyCommand)"
+        $exceptionDelegate = {
+            param([System.Management.Automation.ErrorRecord]$errRecord)
+            # if inner exception is System.Data.SQLite.SQLiteException (0x800007BF): SQL logic, help user by telling them what the error is
+            if ($errRecord.Exception.InnerException -is [System.Data.SQLite.SQLiteException]) {
+                $errTxt = $errRecord.Exception.InnerException.Message -split "`n"
+                Write-Warning $errTxt[0]
+                $syntaxErr = $errTxt[1] | Select-String -Pattern '(?<=")[^"]+(?=")'
+                $syntaxErr = $syntaxErr.Matches.Value
+                # highlight offending token
+                $query -replace ([regex]::Escape($syntaxErr)), "`e[7m`$0`e[0;93m" | Write-Warning
+                # generate a pointer caret to the offending token
+                ' ' * $query.IndexOf($syntaxErr) + '^' | Write-Warning
+            }
+            else {
+                Write-Warning $_.Exception.Message
+            }
+        }
     } #begin
     Process {
         if ($PSCmdlet.ParameterSetName -eq 'file') {
@@ -74,7 +91,13 @@ Function Invoke-MySQLiteQuery {
                     }
                     else {
                         Write-Verbose "[$((Get-Date).TimeOfDay)] ExecuteReader"
-                        $reader = $cmd.ExecuteReader()
+                        try {
+                            $reader = $cmd.ExecuteReader()
+                        }
+                        catch [System.Management.Automation.MethodInvocationException] {
+                            $exceptionDelegate.Invoke($_)
+                            return
+                        }
                         #convert datarows to a custom object
                         while ($reader.read()) {
 
@@ -113,8 +136,11 @@ Function Invoke-MySQLiteQuery {
                         try {
                             [void]$cmd.ExecuteNonQuery()
                         }
-                        Catch {
-                            write-warning $_.Exception.message
+                        catch [System.Management.Automation.MethodInvocationException] {
+                            $exceptionDelegate.Invoke($_)
+                        }
+                        catch {
+                            Write-Warning $_.Exception.message
                         }
                     }
                 } #WhatIf
