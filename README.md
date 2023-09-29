@@ -32,6 +32,7 @@ Install-Module -name MySQLite -repository PSGallery
 - [New-MySQLiteDBTable](docs/New-MySQLiteDBTable.md)
 - [Export-MySQLiteDB](docs/Export-MySQLiteDB.md)
 - [Import-MySQLiteDB](docs/Import-MySQLiteDB.md)
+- [Get-SQLiteVersion](docs/Get-SQLiteVersion.md)
 
 ## Converting PowerShell Output
 
