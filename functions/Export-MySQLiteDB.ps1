@@ -1,5 +1,3 @@
-
-
 Function Export-MySQLiteDB {
     [cmdletbinding(SupportsShouldProcess)]
     Param(

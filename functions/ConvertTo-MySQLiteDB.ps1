@@ -4,7 +4,7 @@ Function ConvertTo-MySQLiteDB {
     [OutputType("None")]
     Param(
         [Parameter(Mandatory, ValueFromPipeline, HelpMessage = "What object do you want to create")]
-        [object[]]$Inputobject,
+        [object[]]$InputObject,
         [Parameter(Position = 0, Mandatory, HelpMessage = "Enter the path to the SQLite database file.")]
         [ValidateNotNullOrEmpty()]
         [alias("database")]
@@ -66,11 +66,11 @@ Function ConvertTo-MySQLiteDB {
             Query      = $null
         }
 
-        foreach ($object in $Inputobject) {
+        foreach ($object in $InputObject) {
 
             if ($TableExists) {
                 Write-Verbose "[$((Get-Date).TimeOfDay)] Adding object to the table"
-                $iqParams.query = buildquery -InputObject $object -Tablename $TableName
+                $iqParams.query = buildquery -InputObject $object -TableName $TableName
                 if ($PSCmdlet.ShouldProcess("object", "Add to table $TableName")) {
                     Invoke-MySQLiteQuery @iqParams
                 }
@@ -88,15 +88,15 @@ Function ConvertTo-MySQLiteDB {
                         $prop.Add($_.Name, "Text")
                     }
                     if ($Typename) {
-                        $name = "propertymap_{0}" -f ($typename.tolower())
+                        $name = "propertymap_{0}" -f ($typename.ToLower())
                     }
                     else {
-                        $name = "propertymap_{0}" -f ($object.PSObject.typenames[0].replace(".", "_"))
+                        $name = "propertymap_{0}" -f ($object.PSObject.TypeNames[0].replace(".", "_"))
                     }
 
                     Write-Verbose "[$((Get-Date).TimeOfDay)] $name"
-                    $thash | Out-String | Write-Verbose
-                    $newTblParams = @{
+                    $tHash | Out-String | Write-Verbose
+                    $NewTblParams = @{
                         Connection       = $Connection
                         KeepAlive        = $True
                         TableName        = $Name
@@ -104,7 +104,7 @@ Function ConvertTo-MySQLiteDB {
                     }
 
                     #create propertymap table
-                    New-MySQLiteDBTable @newTblParams
+                    New-MySQLiteDBTable @NewTblParams
                     Write-Verbose "[$((Get-Date).TimeOfDay)] PropertyMap table created"
                 } #WhatIf propertyMap table
 
@@ -119,7 +119,7 @@ Function ConvertTo-MySQLiteDB {
                     $list.add($n)
                 }
                 $names = $list -join ","
-                $values = $object.PSObject.properties.TypeNameofValue -join "','"
+                $values = $object.PSObject.properties.TypeNameOfValue -join "','"
                 $iqParams.query = "Insert Into $Name ($names) values ('$values')"
                 if ($PSCmdlet.ShouldProcess($query, "Run query: Insert Into $Name")) {
                     Invoke-MySQLiteQuery @iqParams
@@ -127,18 +127,18 @@ Function ConvertTo-MySQLiteDB {
                 Write-Verbose "[$((Get-Date).TimeOfDay)] Creating object hashtable"
                 #get the property names and types
                 $properties = $object.PSObject.properties
-                $thash = [ordered]@{}
+                $tHash = [ordered]@{}
                 Foreach ($prop in $properties) {
                     Write-Verbose "[$((Get-Date).TimeOfDay)] Detecting property type for $($prop.name) [$($prop.TypeNameOfValue)]"
-                    Switch -Regex ($prop.TypeNameofValue) {
-                        "Int32$" { $sqltype = "Int" }
-                        "Int64$" { $sqltype = "Real" }
-                        "^System.Double$" { $sqltype = "Real" }
-                        "^System.DateTime" { $sqltype = "Text" }
-                        "^System.String$" { $sqltype = "Text" }
-                        "^System.Boolean$" { $sqltype = "Int" }
+                    Switch -Regex ($prop.TypeNameOfValue) {
+                        "Int32$" { $SqlType = "Int" }
+                        "Int64$" { $SqlType = "Real" }
+                        "^System.Double$" { $SqlType = "Real" }
+                        "^System.DateTime" { $SqlType = "Text" }
+                        "^System.String$" { $SqlType = "Text" }
+                        "^System.Boolean$" { $SqlType = "Int" }
                         default {
-                            $sqltype = "Blob"
+                            $SqlType = "Blob"
                         }
                     } #switch
 
@@ -149,22 +149,22 @@ Function ConvertTo-MySQLiteDB {
                     else {
                         $n = $prop.name
                     }
-                    $thash.Add($n, $sqltype)
+                    $tHash.Add($n, $SqlType)
                 } #foreach prop
 
                 if ($PSCmdlet.ShouldProcess($TableName, "Create table")) {
                     Write-Verbose "[$((Get-Date).TimeOfDay)] Creating table $TableName"
                     if ($PSBoundParameters.ContainsKey("Primary")) {
-                        $newTblParams.Add("Primary", $Primary)
+                        $NewTblParams.Add("Primary", $Primary)
                     }
-                    $newTblParams.ColumnProperties = $thash
-                    $newtblParams.tablename = $TableName
-                    New-MySQLiteDBTable @newTblParams
+                    $NewTblParams.ColumnProperties = $tHash
+                    $NewTblParams.TableName = $TableName
+                    New-MySQLiteDBTable @NewTblParams
                 }
 
                 Write-Verbose "[$((Get-Date).TimeOfDay)] Inserting the first object into the table $TableName"
                 #insert the first object into the new table
-                $iqParams.query = buildquery -InputObject $object -Tablename $TableName
+                $iqParams.query = buildquery -InputObject $object -TableName $TableName
 
                 if ($PSCmdlet.ShouldProcess("object", "Insert first object")) {
                     Invoke-MySQLiteQuery @iqParams

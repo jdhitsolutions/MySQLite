@@ -12,6 +12,8 @@ I started work on this module years ago and had it almost complete except for ma
 
 This module should work on 64-bit versions of Windows PowerShell 5.1 and PowerShell 7 running on a Windows platform. __The module is not supported on non-Windows platforms.__
 
+> :raised_hand: I would love to be able to support non-Windows platforms on PowerShell 7. Please see [Issue #21](https://github.com/jdhitsolutions/mysqlite/issues/21)
+
 You can install this module from the PowerShell Gallery.
 
 ```powershell
@@ -20,16 +22,16 @@ Install-Module -name MySQLite -repository PSGallery
 
 ## Commands
 
-+ [ConvertTo-MySQLiteDB](docs/ConvertTo-MySQLiteDB.md)
-+ [ConvertFrom-MySQLiteDB](docs/ConvertFrom-MySQLiteDB.md)
-+ [Convert-MySQLiteByteArray](docs/Convert-MySQLiteByteArray.md)
-+ [Get-MySQLiteDB](docs/Get-MySQLiteDB.md)
-+ [Get-MySQLiteTable](docs/Get-MySQLiteTable.md)
-+ [Invoke-MySQLiteQuery](docs/Invoke-MySQLiteQuery.md)
-+ [New-MySQLiteDB](docs/New-MySQLiteDB.md)
-+ [New-MySQLiteDBTable](docs/New-MySQLiteDBTable.md)
-+ [Export-MySQLiteDB](docs/Export-MySQLiteDB.md)
-+ [Import-MySQLiteDB](docs/Import-MySQLiteDB.md)
+- [ConvertTo-MySQLiteDB](docs/ConvertTo-MySQLiteDB.md)
+- [ConvertFrom-MySQLiteDB](docs/ConvertFrom-MySQLiteDB.md)
+- [Convert-MySQLiteByteArray](docs/Convert-MySQLiteByteArray.md)
+- [Get-MySQLiteDB](docs/Get-MySQLiteDB.md)
+- [Get-MySQLiteTable](docs/Get-MySQLiteTable.md)
+- [Invoke-MySQLiteQuery](docs/Invoke-MySQLiteQuery.md)
+- [New-MySQLiteDB](docs/New-MySQLiteDB.md)
+- [New-MySQLiteDBTable](docs/New-MySQLiteDBTable.md)
+- [Export-MySQLiteDB](docs/Export-MySQLiteDB.md)
+- [Import-MySQLiteDB](docs/Import-MySQLiteDB.md)
 
 ## Converting PowerShell Output
 
@@ -55,11 +57,20 @@ $data | ConvertTo-MySQLiteDB -Path c:\work\Inventory.db -TableName OS -TypeName 
 Run [Get-MySqLiteDB](docs/Get-MySQLiteDB.md) to view the database file.
 
 ```powershell
-PS C:\>  Get-MySQLiteDB -Path C:\work\Inventory.db
+PS C:\>  Get-MySQLiteDB -Path C:\work\Inventory.db | Format-List
 
-Path                 FileName     Size  Modified              Tables
-----                 --------     ----  --------              ------
-C:\work\Inventory.db Inventory.db 24576 7/20/2022 12:20:49 PM {Metadata, propertymap_myos, OS}
+DatabaseName  : main
+Tables        : {Metadata, propertymap_myos, OS}
+PageSize      : 4096
+PageCount     : 6
+Encoding      : UTF-8
+FileName      : Inventory.db
+Path          : C:\work\Inventory.db
+Size          : 24576
+Created       : 1/14/2021 1:26:24 PM
+Modified      : 2/21/2023 3:31:27 PM
+Age           : 219.19:08:29.4914134
+SQLiteVersion : 3.42.0
 ```
 
 Or drill down to get table details.

@@ -2174,7 +2174,7 @@
             <param name="databaseName">
             The name of the database containing the blob object.
             </param>
-            <param name="tableName">
+            <param name="TableName">
             The name of the table containing the blob object.
             </param>
             <param name="columnName">
@@ -3995,7 +3995,7 @@
             Whether or not the connection is enlisted in a distrubuted transaction
             </summary>
         </member>
-        <member name="F:System.Data.SQLite.SQLiteConnection._typeNames">
+        <member name="F:System.Data.SQLite.SQLiteConnection._TypeNames">
             <summary>
             The per-connection mappings between type names and <see cref="T:System.Data.DbType" />
             values.  These mappings override the corresponding global mappings.
@@ -20936,7 +20936,7 @@
             data (i.e. it will need updating in order to be identical to the
             one within the database associated with this session instance).
             </param>
-            <param name="tableName">
+            <param name="TableName">
             The name of the table.
             </param>
         </member>
@@ -21985,7 +21985,7 @@
             data (i.e. it will need updating in order to be identical to the
             one within the database associated with this session instance).
             </param>
-            <param name="tableName">
+            <param name="TableName">
             The name of the table.
             </param>
         </member>
@@ -22748,7 +22748,7 @@
             appropriate native API.
             </summary>
         </member>
-        <member name="F:System.Data.SQLite.SQLiteChangeSetMetadataItem.tableName">
+        <member name="F:System.Data.SQLite.SQLiteChangeSetMetadataItem.TableName">
             <summary>
             Backing field for the <see cref="P:System.Data.SQLite.SQLiteChangeSetMetadataItem.TableName" /> property. This value
             will be null if this field has not yet been populated via the

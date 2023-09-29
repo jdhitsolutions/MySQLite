@@ -29,6 +29,7 @@ Function Convert-MySQLiteByteArray {
 } #close Convert-MySQLiteByteArray
 
 <#
+Old Code
 Function Convert-MySQLiteByteArray {
     [cmdletbinding()]
     [OutputType("Object")]

@@ -1,5 +1,17 @@
 # Changelog for MySQLite
 
+## 0.12.0
+
+### Added
+
+- Added command [`Get-SQLiteVersion`](docs\Get-SQLiteVersion.md)
+
+### Changed
+
+- [Pull request #20](https://github.com/jdhitsolutions/MySQLite/pull/20) for better handling of SQL query errors. Thanks [mavaddat](https://github.com/mavaddat).
+- Updated SQLite assemblies.
+- Updated `README.md.`
+
 ## 0.11.2
 
 ### Changed
@@ -33,7 +45,7 @@ This release is identical in files to v0.11.0 published on the PowerShell Galler
 - General code clean up.
 - Updated `README.md`.
 - Help updates.
-- 
+-
 ## 0.10.1
 
 + Add missing online help links.

@@ -60,7 +60,7 @@ Function Get-MySQLiteDB {
                 Created       = $creation
                 Modified      = $LastWrite
                 Age           = (Get-Date) - $LastWrite
-                SQLiteVersion = $connection.serverversion
+                SQLiteVersion = $connection.ServerVersion
             }
         }
         else {
