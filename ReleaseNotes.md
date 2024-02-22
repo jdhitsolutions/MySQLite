@@ -14,4 +14,5 @@
 
 - Added modules to support Linux. [Issue #21](https://github.com/jdhitsolutions/mySQLite/issues/21) Thanks to [jhoneill](https://github.com/jhoneill),[rhubarb-geek-nz](https://github.com/rhubarb-geek-nz), and [jhochwald](https://github.com/jhochwald)
 
-[0.13.0]: https://github.com/jdhitsolutions/MySQLite/compare/vv0.12.0..v0.13.0
+[0.13.0]: https://github.com/jdhitsolutions/MySQLite/compare/v0.12.0..v0.13.0
+

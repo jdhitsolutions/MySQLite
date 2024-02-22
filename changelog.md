@@ -160,7 +160,7 @@ This release is identical in files to v0.11.0 published on the PowerShell Galler
 - restructured module layout
 
 [Unreleased]: https://github.com/jdhitsolutions/MySQLite/compare/v0.13.0..HEAD
-[0.13.0]: https://github.com/jdhitsolutions/MySQLite/compare/vv0.12.0..v0.13.0
+[0.13.0]: https://github.com/jdhitsolutions/MySQLite/compare/v0.12.0..v0.13.0
 [v0.12.0]: https://github.com/jdhitsolutions/MySQLite/compare/v0.11.2..v0.12.0
 [v0.11.2]: https://github.com/jdhitsolutions/MySQLite/compare/v0.11.1..v0.11.2
 [v0.11.1]: https://github.com/jdhitsolutions/MySQLite/compare/v0.11.0..v0.11.1
