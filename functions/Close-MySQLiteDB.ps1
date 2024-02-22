@@ -7,7 +7,7 @@ Function Close-MySQLiteDB {
         [Parameter(
             Mandatory,
             HelpMessage = "Enter a connection object",
-        ValueFromPipeline
+            ValueFromPipeline
         )]
         [ValidateNotNullOrEmpty()]
         [System.Data.SQLite.SQLiteConnection]$Connection,
@@ -27,7 +27,6 @@ Function Close-MySQLiteDB {
 
             $connection.Dispose()
         }
-
     } #process
 
     End {

@@ -268,7 +268,7 @@ sqlservr 6624 778153984 00:00:58.0468750</dev:code>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>This command is intended primarily to dump or convert a table from a SQLite database file into PowerShell. It is assumed you create the table using ConvertTo-MySQLiteDB but this should work for most tables. To get the best results you will want to specify a mapping table of keys and datatypes. If you used ConvertTo-MySQLiteDB, it will create a corresponding property map table that you can use. Otherwise, you can use a hashtable. If you want to let SQLite do its best, you can use the -RawObject parameter.</maml:para>
+      <maml:para>This command is intended primarily to dump or convert a table from a SQLite database file into PowerShell. It is assumed you create the table using ConvertTo-MySQLiteDB but this should work for most tables. To get the best results you will want to specify a mapping table of keys and data types. If you used ConvertTo-MySQLiteDB, it will create a corresponding property map table that you can use. Otherwise, you can use a hashtable. If you want to let SQLite do its best, you can use the -RawObject parameter.</maml:para>
       <maml:para>NOTE: Storing objects in a database requires serializing nested objects. This is accomplished by converting objects to cliXML and storing that information as an array of bytes in the database. To convert back, the data must be converted to the original clixml string, saved to a temporary file, and then re-imported with `Import-Clixml`. This process is not guaranteed to be 100% error free. The converted object property should be the deserialized version of the original property.</maml:para>
     </maml:description>
     <command:syntax>
@@ -528,13 +528,13 @@ sqlservr 6624 778153984 00:00:58.0468750</dev:code>
 
 Computername : SRV2
 OS           : Microsoft Windows Server 2016 Standard Evaluation
-InstallDate  : 10/26/2020 6:56:32 PM
+InstallDate  : 10/26/2023 6:56:32 PM
 Version      : 10.0.14393
 IsServer     : True
 
 Computername : SRV1
 OS           : Microsoft Windows Server 2016 Standard Evaluation
-InstallDate  : 10/26/2020 6:56:33 PM
+InstallDate  : 10/26/2023 6:56:33 PM
 Version      : 10.0.14393
 IsServer     : True
 ...</dev:code>
@@ -547,7 +547,6 @@ IsServer     : True
         <dev:code>PS C:\&gt; ConvertFrom-MySQLiteDB -Path C:\work\test.db -TableName proc -PropertyMap @{Name="string";Date="datetime";id="int";virtualmemorysize = "int";workingset="int"} | Get-Member
 
 
-
    TypeName: System.Management.Automation.PSCustomObject
 
 Name              MemberType   Definition
@@ -556,7 +555,7 @@ Equals            Method       bool Equals(System.Object obj)
 GetHashCode       Method       int GetHashCode()
 GetType           Method       type GetType()
 ToString          Method       string ToString()
-Date              NoteProperty datetime Date=3/13/2020 2:52:14 PM
+Date              NoteProperty datetime Date=3/13/2023 2:52:14 PM
 id                NoteProperty int id=17276
 Name              NoteProperty string Name=ApplicationFrameHost
 virtualmemorysize NoteProperty int virtualmemorysize=295845888
@@ -681,7 +680,7 @@ workingset        NoteProperty int workingset=11640832</dev:code>
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none">
-          <maml:name>Inputobject</maml:name>
+          <maml:name>InputObject</maml:name>
           <maml:description>
             <maml:para>What object do you want to create? Typically this will be the result of a PowerShell expression or command. It is recommended that you be selective.</maml:para>
           </maml:description>
@@ -792,7 +791,7 @@ workingset        NoteProperty int workingset=11640832</dev:code>
         <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none">
-        <maml:name>Inputobject</maml:name>
+        <maml:name>InputObject</maml:name>
         <maml:description>
           <maml:para>What object do you want to create? Typically this will be the result of a PowerShell expression or command. It is recommended that you be selective.</maml:para>
         </maml:description>
@@ -844,18 +843,18 @@ workingset        NoteProperty int workingset=11640832</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; $data = Get-CimInstance win32_operatingsystem -ComputerName $computers | Select-Object @{Name="Computername";Expression={$_.CSName}},@{Name="OS";Expression = {$_.caption}},InstallDate,Version,@{Name="IsServer";Expression={ If ($_.caption -match "server") {$True} else {$False}}}
+        <dev:code>PS C:\&gt; $data = Get-CimInstance win32_OperatingSystem -ComputerName $computers | Select-Object @{Name="Computername";Expression={$_.CSName}},@{Name="OS";Expression = {$_.caption}},InstallDate,Version,@{Name="IsServer";Expression={ If ($_.caption -match "server") {$True} else {$False}}}
 PS C:\&gt; $data | ConvertTo-MySQLiteDB -Path c:\work\Inventory.db -TableName OS -TypeName myOS -force</dev:code>
         <dev:remarks>
           <maml:para>Convert the results of a PowerShell expression into a SQLite database file using a table called OS and a custom type name of myOS. This process will also create a table called propertymap_myOS with mappings for property names and the original type.</maml:para>
           <maml:para>The first property name will be used as the first table column and the primary index so the values from your command need to be unique.</maml:para>
-          <maml:para>The database can be queried using Invoke-MYSQLiteQuery or dumped out using ConvertFrom-MySQLiteDB.</maml:para>
+          <maml:para>The database can be queried using Invoke-MySQLiteQuery or dumped out using ConvertFrom-MySQLiteDB.</maml:para>
           <maml:para>NOTE: Storing objects in a database requires serializing nested objects. This is accomplished by converting objects to cliXML and storing that information as an array of bytes in the database. To convert back, the data must be converted to the original clixml string, saved to a temporary file, and then re-imported with `Import-Clixml`. This process is not guaranteed to be 100% error free. The converted object property should be the deserialized version of the original property.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
-        <dev:code>PS C:\&gt;  Get-Process  | Where-Object {$_.name -notmatch "^(system|idle)$"} | Select * | ConvertTo-MySQLiteDB -Path d:\temp\allproc.db -TableName Process -TypeName myProcess -Primary ID</dev:code>
+        <dev:code>PS C:\&gt; Get-Process  | Where-Object {$_.name --NotMatch "^(system|idle)$"} | Select-Object * | ConvertTo-MySQLiteDB -Path d:\temp\allproc.db -TableName Process -TypeName myProcess -Primary ID</dev:code>
         <dev:remarks>
           <maml:para>Create a database from local process information. This example is specifying the primary key. You need to have one unique property to use as the primary key for the database. If you see a constraint error, you most likely need to set a primary key.</maml:para>
         </dev:remarks>
@@ -1478,9 +1477,11 @@ ColumnIndex ColumnName ColumnType
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
         <dev:code>PS C:\&gt; Get-SQLiteVersion
 
-Version   RunTimeVersion PSVersion Location
--------   -------------- --------- --------
-1.0.118.0 v2.0.50727     7.3.7     C:\scripts\mySQLite\assembly\net20\System.Da…</dev:code>
+Version        : 1.0.118.0
+RunTimeVersion : v2.0.50727
+PSVersion      : 7.4.1
+OS             : Microsoft Windows 10.0.22631
+Location       : C:\scripts\mySQLite\assembly\net20\System.Data.SQLite.dll</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -2001,17 +2002,17 @@ Version   RunTimeVersion PSVersion Location
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; $data = Get-Process | Select-object ID,Name,Workingset,VirtualMemorySize,@{Name="Date";Expression={Get-Date}}
-PS C:\&gt; $data | foreach-object -begin { $cx = Open-MySQLiteDB c:\work\test.db} -process { Invoke-MySQLiteQuery -connection $cx -keepalive -query "Insert into proc Values ('$($_.ID)','$($_.Name)','$($_.Workingset)','$($_.VirtualMemorySize)','$($_.Date)') "} -end { Close-MySQLiteDB $cx}
+        <dev:code>PS C:\&gt; $data = Get-Process | Select-object ID,Name,WorkingSet,VirtualMemorySize,@{Name="Date";Expression={Get-Date}}
+PS C:\&gt; $data | foreach-object -begin { $cx = Open-MySQLiteDB c:\work\test.db} -process { Invoke-MySQLiteQuery -connection $cx -KeepAlive -query "Insert into proc Values ('$($_.ID)','$($_.Name)','$($_.WorkingSet)','$($_.VirtualMemorySize)','$($_.Date)') "} -end { Close-MySQLiteDB $cx}
 PS C:\&gt; Invoke-MySQLiteQuery -Path c:\work\test.db -Query "Select * from proc Order by WorkingSet Desc Limit 5" | format-table
 
    ID Name               WorkingSet VirtualMemorySize Date
    -- ----               ---------- ----------------- ----
- 3112 Memory Compression 1340776448        1484521472 03/13/2022 14:52:14
- 5684 powershell         1198268416       -2013696000 03/13/2022 14:52:14
-12232 firefox             370966528       -1868365824 03/13/2022 14:52:14
-15536 thunderbird         347189248        1131708416 03/13/2022 14:52:14
-15788 Code                323653632        1997750272 03/13/2022 14:52:14</dev:code>
+ 3112 Memory Compression 1340776448        1484521472 03/13/2023 14:52:14
+ 5684 powershell         1198268416       -2013696000 03/13/2023 14:52:14
+12232 firefox             370966528       -1868365824 03/13/2023 14:52:14
+15536 thunderbird         347189248        1131708416 03/13/2023 14:52:14
+15788 Code                323653632        1997750272 03/13/2023 14:52:14</dev:code>
         <dev:remarks>
           <maml:para>The first command creates a data set. The second command inserts into a table in the SQLite database file. The last command queries for data in the proc table sorting on the WorkingSet property in descending order. Note that you could have retrieved all data from the table and piped to Where-Object to perform the filtering, but that would not be as efficient.</maml:para>
         </dev:remarks>
@@ -2023,7 +2024,7 @@ PS C:\&gt; Invoke-MySQLiteQuery c:\work\vm2.db -Query "select * from Metadata"
 
 Author         Created             Computername Comment
 ------         -------             ------------ -------
-BOVINE320\Jeff 3/8/2022 2:59:05 PM BOVINE320    for Hyper-V monitoring</dev:code>
+BOVINE320\Jeff 3/8/2023 2:59:05 PM BOVINE320    for Hyper-V monitoring</dev:code>
         <dev:remarks>
           <maml:para>Update a table column and then query the results</maml:para>
         </dev:remarks>
@@ -2047,6 +2048,7 @@ BOVINE320\Jeff 3/8/2022 2:59:05 PM BOVINE320    for Hyper-V monitoring</dev:code
     </command:details>
     <maml:description>
       <maml:para>This command will create a new SQLite database file. It won't create any tables other than a Metadata table with information about who created the database and when. You can use the -Comment parameter to include a description or additional information into the Metadata table.</maml:para>
+      <maml:para>When you create a new database with this command, PowerShell will retain a lock on the file for a few minutes until the garbage collector releases it. If you need to work with the new database immediately outside of PowerShell, you will need to wait a few minutes, or manually invoke garbage collection by running [System.GC]::Collect().</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -2216,7 +2218,7 @@ BOVINE320\Jeff 3/8/2022 2:59:05 PM BOVINE320    for Hyper-V monitoring</dev:code
       </command:returnValue>
       <command:returnValue>
         <dev:type>
-          <maml:name>System.IO.Fileinfo</maml:name>
+          <maml:name>System.IO.FileInfo</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -2794,7 +2796,7 @@ THINKX1-JH\Jeff 7/20/2022 12:34:39 PM THINKX1-JH   This is for scripting stuff</
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; $h = [ordered]@{ID="Int";Name="Text";Workingset="Int";VirtualMemorySize="Int";Date="text"}
+        <dev:code>PS C:\&gt; $h = [ordered]@{ID="Int";Name="Text";WorkingSet="Int";VirtualMemorySize="Int";Date="text"}
 PS C:\&gt; New-MySQLiteDBTable -Path c:\work\test.db -TableName Proc -ColumnProperties $h
 PS C:\&gt; Invoke-MySQLiteQuery c:\work\test.db -query "Pragma table_info(proc)" | Select-Object Cid,Name,Type
 
@@ -2802,7 +2804,7 @@ cid name              type
 --- ----              ----
   0 ID                Int
   1 Name              Text
-  2 Workingset        Int
+  2 WorkingSet        Int
   3 VirtualMemorySize Int
   4 Date              text</dev:code>
         <dev:remarks>

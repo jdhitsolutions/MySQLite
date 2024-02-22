@@ -21,11 +21,13 @@ New-MySQLiteDB [-Path] <String> [-Force] [-Comment <String>] [-PassThru] [-WhatI
 
 This command will create a new SQLite database file. It won't create any tables other than a Metadata table with information about who created the database and when. You can use the -Comment parameter to include a description or additional information into the Metadata table.
 
+When you create a new database with this command, PowerShell will retain a lock on the file for a few minutes until the garbage collector releases it. If you need to work with the new database immediately outside of PowerShell, you will need to wait a few minutes, or manually invoke garbage collection by running [System.GC]::Collect().
+
 ## EXAMPLES
 
 ### Example 1
 
-```powershell
+```shell
 PS C:\> New-MySQLiteDB c:\work\test.db
 ```
 
@@ -33,7 +35,7 @@ Create a new database file in C:\Work.
 
 ### Example 2
 
-```powershell
+```shell
 PS C:\> New-MySQLiteDB c:\work\test2.db -Comment "This is for scripting stuff" -PassThru -force | Invoke-MySQLiteQuery -query "Select * from metadata"
 
 Author          Created               Computername Comment
@@ -150,7 +152,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ### None
 
-### System.IO.Fileinfo
+### System.IO.FileInfo
 
 ## NOTES
 

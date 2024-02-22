@@ -37,31 +37,31 @@ See https://sqlite.org/lang.html and http://www.sqlitetutorial.net/ for addition
 
 ### Example 1
 
-```powershell
-PS C:\> $data = Get-Process | Select-object ID,Name,Workingset,VirtualMemorySize,@{Name="Date";Expression={Get-Date}}
-PS C:\> $data | foreach-object -begin { $cx = Open-MySQLiteDB c:\work\test.db} -process { Invoke-MySQLiteQuery -connection $cx -keepalive -query "Insert into proc Values ('$($_.ID)','$($_.Name)','$($_.Workingset)','$($_.VirtualMemorySize)','$($_.Date)') "} -end { Close-MySQLiteDB $cx}
+```shell
+PS C:\> $data = Get-Process | Select-object ID,Name,WorkingSet,VirtualMemorySize,@{Name="Date";Expression={Get-Date}}
+PS C:\> $data | foreach-object -begin { $cx = Open-MySQLiteDB c:\work\test.db} -process { Invoke-MySQLiteQuery -connection $cx -KeepAlive -query "Insert into proc Values ('$($_.ID)','$($_.Name)','$($_.WorkingSet)','$($_.VirtualMemorySize)','$($_.Date)') "} -end { Close-MySQLiteDB $cx}
 PS C:\> Invoke-MySQLiteQuery -Path c:\work\test.db -Query "Select * from proc Order by WorkingSet Desc Limit 5" | format-table
 
    ID Name               WorkingSet VirtualMemorySize Date
    -- ----               ---------- ----------------- ----
- 3112 Memory Compression 1340776448        1484521472 03/13/2022 14:52:14
- 5684 powershell         1198268416       -2013696000 03/13/2022 14:52:14
-12232 firefox             370966528       -1868365824 03/13/2022 14:52:14
-15536 thunderbird         347189248        1131708416 03/13/2022 14:52:14
-15788 Code                323653632        1997750272 03/13/2022 14:52:14
+ 3112 Memory Compression 1340776448        1484521472 03/13/2023 14:52:14
+ 5684 powershell         1198268416       -2013696000 03/13/2023 14:52:14
+12232 firefox             370966528       -1868365824 03/13/2023 14:52:14
+15536 thunderbird         347189248        1131708416 03/13/2023 14:52:14
+15788 Code                323653632        1997750272 03/13/2023 14:52:14
 ```
 
 The first command creates a data set. The second command inserts into a table in the SQLite database file. The last command queries for data in the proc table sorting on the WorkingSet property in descending order. Note that you could have retrieved all data from the table and piped to Where-Object to perform the filtering, but that would not be as efficient.
 
 ### Example 2
 
-```powershell
+```shell
 PS C:\> Invoke-MySQLiteQuery c:\work\vm2.db -Query "update metadata set Comment = 'for Hyper-V monitoring'"
 PS C:\> Invoke-MySQLiteQuery c:\work\vm2.db -Query "select * from Metadata"
 
 Author         Created             Computername Comment
 ------         -------             ------------ -------
-BOVINE320\Jeff 3/8/2022 2:59:05 PM BOVINE320    for Hyper-V monitoring
+BOVINE320\Jeff 3/8/2023 2:59:05 PM BOVINE320    for Hyper-V monitoring
 ```
 
 Update a table column and then query the results

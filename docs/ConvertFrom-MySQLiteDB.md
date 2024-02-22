@@ -33,7 +33,7 @@ ConvertFrom-MySQLiteDB [-Path] <String> -TableName <String> [-RawObject] [<Commo
 
 ## DESCRIPTION
 
-This command is intended primarily to dump or convert a table from a SQLite database file into PowerShell. It is assumed you create the table using ConvertTo-MySQLiteDB but this should work for most tables. To get the best results you will want to specify a mapping table of keys and datatypes. If you used ConvertTo-MySQLiteDB, it will create a corresponding property map table that you can use. Otherwise, you can use a hashtable. If you want to let SQLite do its best, you can use the -RawObject parameter.
+This command is intended primarily to dump or convert a table from a SQLite database file into PowerShell. It is assumed you create the table using ConvertTo-MySQLiteDB but this should work for most tables. To get the best results you will want to specify a mapping table of keys and data types. If you used ConvertTo-MySQLiteDB, it will create a corresponding property map table that you can use. Otherwise, you can use a hashtable. If you want to let SQLite do its best, you can use the -RawObject parameter.
 
 NOTE: Storing objects in a database requires serializing nested objects. This is accomplished by converting objects to cliXML and storing that information as an array of bytes in the database. To convert back, the data must be converted to the original clixml string, saved to a temporary file, and then re-imported with `Import-Clixml`. This process is not guaranteed to be 100% error free. The converted object property should be the deserialized version of the original property.
 
@@ -41,19 +41,19 @@ NOTE: Storing objects in a database requires serializing nested objects. This is
 
 ### Example 1
 
-```powershell
+```shell
 PS C:\> ConvertFrom-MySQLiteDB -Path C:\work\Inventory.db -TableName OS -PropertyTable propertymap_myos
 
 
 Computername : SRV2
 OS           : Microsoft Windows Server 2016 Standard Evaluation
-InstallDate  : 10/26/2020 6:56:32 PM
+InstallDate  : 10/26/2023 6:56:32 PM
 Version      : 10.0.14393
 IsServer     : True
 
 Computername : SRV1
 OS           : Microsoft Windows Server 2016 Standard Evaluation
-InstallDate  : 10/26/2020 6:56:33 PM
+InstallDate  : 10/26/2023 6:56:33 PM
 Version      : 10.0.14393
 IsServer     : True
 ...
@@ -63,9 +63,8 @@ Dump a table created using ConvertTo-MySQLiteDB. The resulting objects will have
 
 ### Example 2
 
-```powershell
+```shell
 PS C:\> ConvertFrom-MySQLiteDB -Path C:\work\test.db -TableName proc -PropertyMap @{Name="string";Date="datetime";id="int";virtualmemorysize = "int";workingset="int"} | Get-Member
-
 
 
    TypeName: System.Management.Automation.PSCustomObject
@@ -76,7 +75,7 @@ Equals            Method       bool Equals(System.Object obj)
 GetHashCode       Method       int GetHashCode()
 GetType           Method       type GetType()
 ToString          Method       string ToString()
-Date              NoteProperty datetime Date=3/13/2020 2:52:14 PM
+Date              NoteProperty datetime Date=3/13/2023 2:52:14 PM
 id                NoteProperty int id=17276
 Name              NoteProperty string Name=ApplicationFrameHost
 virtualmemorysize NoteProperty int virtualmemorysize=295845888

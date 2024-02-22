@@ -25,7 +25,7 @@ Use this command to retrieve information about a SQLite database file.
 
 ### Example 1
 
-```powershell
+```shell
 PS C:\> Get-MySQLiteDB -Path C:\work\test.db
 
 Path            FileName Size  Modified             Tables
@@ -37,7 +37,7 @@ Get information for a single database.
 
 ### Example 2
 
-```powershell
+```shell
 PS C:\> dir c:\work\*.db | Get-MySQLiteDB | Sort-Object Size -Descending
 
 Path                   FileName       Size   Modified              Tables
@@ -55,7 +55,7 @@ Get information for multiple database files sorted by size.
 
 ### Example 3
 
-```powershell
+```shell
 PS C:\> Get-MySQLiteDB c:\work\vm2.db | Select-object -Property *
 
 

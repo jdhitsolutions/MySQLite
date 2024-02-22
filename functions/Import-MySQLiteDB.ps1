@@ -1,5 +1,3 @@
-
-
 Function Import-MySQLiteDB {
     [cmdletbinding(SupportsShouldProcess)]
     Param(
@@ -10,7 +8,6 @@ Function Import-MySQLiteDB {
         )]
         [ValidatePattern("\.json$")]
         [ValidateScript({ Test-Path $_ })]
-
         [string]$Path,
 
         [Parameter(

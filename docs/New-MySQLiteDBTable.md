@@ -49,7 +49,7 @@ Normally you will specify a path but in scripted projects, you may have an exist
 
 ### Example 1
 
-```powershell
+```shell
 PS C:\> New-MySQLiteDBTable -Path c:\work\test.db -TableName Data -ColumnNames "Name","Date","Size"
 ```
 
@@ -57,8 +57,8 @@ This adds a new table to the database file c:\work\test.db called Data. The tabl
 
 ### Example 2
 
-```powershell
-PS C:\> $h = [ordered]@{ID="Int";Name="Text";Workingset="Int";VirtualMemorySize="Int";Date="text"}
+```shell
+PS C:\> $h = [ordered]@{ID="Int";Name="Text";WorkingSet="Int";VirtualMemorySize="Int";Date="text"}
 PS C:\> New-MySQLiteDBTable -Path c:\work\test.db -TableName Proc -ColumnProperties $h
 PS C:\> Invoke-MySQLiteQuery c:\work\test.db -query "Pragma table_info(proc)" | Select-Object Cid,Name,Type
 
@@ -66,7 +66,7 @@ cid name              type
 --- ----              ----
   0 ID                Int
   1 Name              Text
-  2 Workingset        Int
+  2 WorkingSet        Int
   3 VirtualMemorySize Int
   4 Date              text
 ```

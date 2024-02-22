@@ -56,7 +56,6 @@ Function ConvertTo-MySQLiteDB {
                 Throw $_
             }
         }
-
     } #begin
 
     Process {

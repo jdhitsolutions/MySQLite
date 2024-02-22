@@ -33,7 +33,7 @@ Use this command to discover table names and layout in a SQLite database file.
 
 ### Example 1
 
-```powershell
+```shell
 PS C:\> Get-MySQLiteTable -Path c:\work\vm2.db
 
 Source         Name
@@ -45,7 +45,7 @@ Basic information about available tables.
 
 ### Example 2
 
-```powershell
+```shell
 PS C:\> Get-MySQLiteTable -Path c:\work\vm2.db -Detail
 
    Database C:\work\vm2.db Table:Metadata

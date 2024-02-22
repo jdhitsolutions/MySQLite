@@ -64,7 +64,7 @@ Function Invoke-MySQLiteQuery {
                 $connection = opendb -Path $file.path
             }
             else {
-                Write-Warning "Cannot find the database file: $($file.path)."
+                Write-Warning "Cannot find the database file:ch $($file.path)."
             }
         }
         else {

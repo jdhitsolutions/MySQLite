@@ -25,7 +25,7 @@ If you exported a SQLite database to a JSON file using Export-MySQLiteDB, you ca
 
 ### Example 1
 
-```powershell
+```shell
 PS C:\> Import-MySQLiteDB -path c:\work\inventory.json-destination d:\temp\inventory.db.
 ```
 

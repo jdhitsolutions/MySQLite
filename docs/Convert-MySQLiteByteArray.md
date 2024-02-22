@@ -25,7 +25,7 @@ Nested object properties are stored as blobs. When you specify such a property u
 
 ### Example 1
 
-```powershell
+```shell
 PS C:\> Invoke-MySQLiteQuery -path D:\temp\myproc.db -Query "Select name,id,ws,totalprocessortime from process where id=6624" | Select-Object name,id,ws,@{Name="TotalCPU";Expression = {Convert-MySQLiteByteArray $_.totalprocessortime}}
 
 Name       ID        WS TotalCPU

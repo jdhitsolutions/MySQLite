@@ -25,7 +25,7 @@ This command is provided as backup mechanism for a SQLite database file. The fun
 
 ### Example 1
 
-```powershell
+```shell
 PS C:\> Export-MySQLiteDB -path c:\work\inventory.db -destination d:\inventory.json
 ```
 

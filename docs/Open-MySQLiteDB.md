@@ -25,7 +25,7 @@ If you are creating your own solutions using the MySQLite module, you might need
 
 ### Example 1
 
-```powershell
+```shell
 PS C:\> $connection = Open-MySQLiteDB -Path C:\work\test2.db
 PS C:\> $connection
 
