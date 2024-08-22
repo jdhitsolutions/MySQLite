@@ -3,7 +3,7 @@
 @{
 
     RootModule             = 'mySQLite.psm1'
-    ModuleVersion          = '0.13.0'
+    ModuleVersion          = '0.14.0'
     CompatiblePSEditions   = @("Desktop","Core")
     GUID                   = '49ac2120-f30e-4244-ac8b-4d18fa9ae9aa'
     Author                 = 'Jeff Hicks'
@@ -54,7 +54,20 @@
             LicenseUri = 'https://github.com/jdhitsolutions/MySQLite/blob/master/License.txt'
             ProjectUri = 'https://github.com/jdhitsolutions/MySQLite'
             # IconUri = ''
-            # ReleaseNotes = ''
+            ReleaseNotes = @"
+## v0.14.0 - 2024-08-22 09:48:22
+
+### Changed
+
+- Updated `Import-MySqliteDB` to use an existing database. The new parameter is called `UseExisting` with an alias of `Append`. _This may be a breaking change_.
+- Updated functions with additional verbose output to capture PowerShell version and culture.
+- Help updates
+- Updated `README.md`
+
+### Fixed
+
+- Modified helper functions to store DateTime values as `yyyy-MM-dd HH:mm:ss` which should better handle culture-related problems. [Issue #23](https://github.com/jdhitsolutions/mySQLite/issues/23) _This may be a breaking change_.
+"@
         }
     }
 

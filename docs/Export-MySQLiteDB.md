@@ -19,29 +19,29 @@ Export-MySQLiteDB [-Path] <String> [-Destination] <String> [-PassThru] [-WhatIf]
 
 ## DESCRIPTION
 
-This command is provided as backup mechanism for a SQLite database file. The function will export all tables and data to a JSON file. Use Import-MySQLiteDB to restore the database using the JSON file.
+This command is provided as a backup mechanism for a SQLite database file. The function will export all tables and data to a JSON file. Use Import-MySQLiteDB to restore the database using the JSON file.
 
 ## EXAMPLES
 
 ### Example 1
 
-```shell
+```powershell
 PS C:\> Export-MySQLiteDB -path c:\work\inventory.db -destination d:\inventory.json
 ```
 
 ## PARAMETERS
 
-### -Confirm
+### -Path
 
-Prompts you for confirmation before running the cmdlet.
+The path to the SQLite database file. The file name must have one of the following extensions: .db | .db3 | .s3db | .sl3 | .sqlite | .sqlite3
 
 ```yaml
-Type: SwitchParameter
+Type: String
 Parameter Sets: (All)
-Aliases: cf
+Aliases:
 
-Required: False
-Position: Named
+Required: True
+Position: 0
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -77,22 +77,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Path
-
-The path to the SQLite database file. The file name must have one of the following extensions: .db | .db3 | .s3db | .sl3 | .sqlite | .sqlite3
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: 0
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -WhatIf
 
 Shows what would happen if the cmdlet runs.
@@ -102,6 +86,22 @@ The cmdlet is not run.
 Type: SwitchParameter
 Parameter Sets: (All)
 Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
 
 Required: False
 Position: Named

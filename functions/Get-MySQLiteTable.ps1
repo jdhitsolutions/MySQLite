@@ -28,6 +28,8 @@ Function Get-MySQLiteTable {
     )
     Begin {
         Write-Verbose "[$((Get-Date).TimeOfDay)] $($MyInvocation.MyCommand)"
+        Write-Verbose "[$((Get-Date).TimeOfDay)] Running under PowerShell version $($PSVersionTable.PSVersion)"
+        Write-Verbose "[$((Get-Date).TimeOfDay)] Detected culture $(Get-Culture)"
     } #begin
 
     Process {

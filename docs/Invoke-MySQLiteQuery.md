@@ -37,7 +37,7 @@ See https://sqlite.org/lang.html and http://www.sqlitetutorial.net/ for addition
 
 ### Example 1
 
-```shell
+```powershell
 PS C:\> $data = Get-Process | Select-object ID,Name,WorkingSet,VirtualMemorySize,@{Name="Date";Expression={Get-Date}}
 PS C:\> $data | foreach-object -begin { $cx = Open-MySQLiteDB c:\work\test.db} -process { Invoke-MySQLiteQuery -connection $cx -KeepAlive -query "Insert into proc Values ('$($_.ID)','$($_.Name)','$($_.WorkingSet)','$($_.VirtualMemorySize)','$($_.Date)') "} -end { Close-MySQLiteDB $cx}
 PS C:\> Invoke-MySQLiteQuery -Path c:\work\test.db -Query "Select * from proc Order by WorkingSet Desc Limit 5" | format-table
@@ -55,7 +55,7 @@ The first command creates a data set. The second command inserts into a table in
 
 ### Example 2
 
-```shell
+```powershell
 PS C:\> Invoke-MySQLiteQuery c:\work\vm2.db -Query "update metadata set Comment = 'for Hyper-V monitoring'"
 PS C:\> Invoke-MySQLiteQuery c:\work\vm2.db -Query "select * from Metadata"
 

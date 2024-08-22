@@ -41,7 +41,7 @@ NOTE: Storing objects in a database requires serializing nested objects. This is
 
 ### Example 1
 
-```shell
+```powershell
 PS C:\> ConvertFrom-MySQLiteDB -Path C:\work\Inventory.db -TableName OS -PropertyTable propertymap_myos
 
 
@@ -63,7 +63,7 @@ Dump a table created using ConvertTo-MySQLiteDB. The resulting objects will have
 
 ### Example 2
 
-```shell
+```powershell
 PS C:\> ConvertFrom-MySQLiteDB -Path C:\work\test.db -TableName proc -PropertyMap @{Name="string";Date="datetime";id="int";virtualmemorysize = "int";workingset="int"} | Get-Member
 
 

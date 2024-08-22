@@ -24,6 +24,8 @@ Function Export-MySQLiteDB {
     Begin {
         Write-Verbose "[$((Get-Date).TimeOfDay) BEGIN  ] Starting $($MyInvocation.MyCommand)"
         Write-Verbose "[$((Get-Date).TimeOfDay) BEGIN  ] Opening a connection to $Path"
+        Write-Verbose "[$((Get-Date).TimeOfDay) BEGIN  ] Running under PowerShell version $($PSVersionTable.PSVersion)"
+        Write-Verbose "[$((Get-Date).TimeOfDay) BEGIN  ] Detected culture $(Get-Culture)"
         Try {
             #always open the database
             $conn = Open-MySQLiteDB -Path $path -ErrorAction Stop -WhatIf:$False

@@ -22,6 +22,8 @@ Function ConvertTo-MySQLiteDB {
     )
     Begin {
         Write-Verbose "[$((Get-Date).TimeOfDay)] $($MyInvocation.MyCommand)"
+        Write-Verbose "[$((Get-Date).TimeOfDay)] Running under PowerShell version $($PSVersionTable.PSVersion)"
+        Write-Verbose "[$((Get-Date).TimeOfDay)] Detected culture $(Get-Culture)"
         $file = resolvedb -Path $path
         if ($Append) {
             if ($file.exists) {
@@ -79,7 +81,6 @@ Function ConvertTo-MySQLiteDB {
                 # https://www.sqlite.org/datatype3.html
                 #convert types as necessary. Table types can be Text, Int, Real or Blob
                 if ($PSCmdlet.ShouldProcess("PropertyMap", "Create Table")) {
-
                     $object.PSObject.properties |
                     ForEach-Object -Begin {
                         $prop = [ordered]@{}

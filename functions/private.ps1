@@ -71,10 +71,14 @@ Function buildquery {
         $InputObject.PSObject.Properties | ForEach-Object -Begin {
             $arr = [System.Collections.Generic.list[string]]::new()
         } -Process {
-            if ($_.TypeNameOfValue -match "String|Int\d{2}|Double|DateTime|Long") {
+            if ($_.TypeNameOfValue -match "String|Int\d{2}|Double|Long") {
                 #9/12/2022 need to escape values that might have single quote
                 $v = $_.Value -replace "'","''"
                 $arr.Add(@(, $v))
+            }
+            elseif ($_.TypeNameOfValue -match "DateTime") {
+                #turn DateTime into a string
+                $arr.Add(@(, $_.value.ToString("yyyy-MM-dd HH:mm:ss")))
             }
             elseif ($_.TypeNameOfValue -match "Boolean") {
                 #turn Boolean into an INT

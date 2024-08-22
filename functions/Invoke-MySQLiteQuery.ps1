@@ -37,6 +37,8 @@ Function Invoke-MySQLiteQuery {
     )
     Begin {
         Write-Verbose "[$((Get-Date).TimeOfDay)] Starting $($MyInvocation.MyCommand)"
+        Write-Verbose "[$((Get-Date).TimeOfDay)] Running under PowerShell version $($PSVersionTable.PSVersion)"
+        Write-Verbose "[$((Get-Date).TimeOfDay)] Detected culture $(Get-Culture)"
         $exceptionDelegate = {
             param([System.Management.Automation.ErrorRecord]$errRecord)
             # if inner exception is System.Data.SQLite.SQLiteException (0x800007BF): SQL logic, help user by telling them what the error is
@@ -64,7 +66,7 @@ Function Invoke-MySQLiteQuery {
                 $connection = opendb -Path $file.path
             }
             else {
-                Write-Warning "Cannot find the database file:ch $($file.path)."
+                Write-Warning "Cannot find the database file: $($file.path)."
             }
         }
         else {

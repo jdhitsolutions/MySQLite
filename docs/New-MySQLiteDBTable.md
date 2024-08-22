@@ -9,16 +9,18 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
+Create a new table in a SQLite database file.
+
 ## SYNTAX
 
 ### filetyped (Default)
 
 ```yaml
-New-MySQLiteDBTable -Path <String> -TableName <String> [-ColumnProperties <OrderedDictionary>] [-Primary <String>] [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
+New-MySQLiteDBTable -Path <String> -TableName <String> [-ColumnProperties <OrderedDictionary>]
+ [-Primary <String>] [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### filenamed
-
 ```yaml
 New-MySQLiteDBTable [-Path <String>] -TableName <String> [-ColumnNames <String[]>] [-Primary <String>] [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
@@ -26,15 +28,13 @@ New-MySQLiteDBTable [-Path <String>] -TableName <String> [-ColumnNames <String[]
 ### cnxnamed
 
 ```yaml
-New-MySQLiteDBTable [-Connection <SQLiteConnection>] -TableName <String> [-ColumnNames <String[]>] [-Primary <String>] [-Force] [-KeepAlive] [-WhatIf] [-Confirm] [<CommonParameters>]
+New-MySQLiteDBTable -TableName <String>  [-ColumnNames <String[]>] [-Primary <String>] [-Connection <SQLiteConnection>] [-Force] [-KeepAlive] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### cnxtyped
 
 ```yaml
-New-MySQLiteDBTable [-Connection <SQLiteConnection>] -TableName <String>
- [-ColumnProperties <OrderedDictionary>] [-Primary <String>] [-Force] [-KeepAlive] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+New-MySQLiteDBTable -TableName <String> [-ColumnProperties <OrderedDictionary>] [-Primary <String>] [-Connection <SQLiteConnection>] [-Force] [-KeepAlive] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -49,7 +49,7 @@ Normally you will specify a path but in scripted projects, you may have an exist
 
 ### Example 1
 
-```shell
+```powershell
 PS C:\> New-MySQLiteDBTable -Path c:\work\test.db -TableName Data -ColumnNames "Name","Date","Size"
 ```
 
@@ -57,7 +57,7 @@ This adds a new table to the database file c:\work\test.db called Data. The tabl
 
 ### Example 2
 
-```shell
+```powershell
 PS C:\> $h = [ordered]@{ID="Int";Name="Text";WorkingSet="Int";VirtualMemorySize="Int";Date="text"}
 PS C:\> New-MySQLiteDBTable -Path c:\work\test.db -TableName Proc -ColumnProperties $h
 PS C:\> Invoke-MySQLiteQuery c:\work\test.db -query "Pragma table_info(proc)" | Select-Object Cid,Name,Type
@@ -77,7 +77,41 @@ Note that SQLite has a limited number of supported types. See https://www.sqlite
 
 ## PARAMETERS
 
+### -Path
+
+Enter the path to the SQLite database file.
+
+```yaml
+Type: String
+Parameter Sets: filetyped,filenamed
+Aliases: fullname, database
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -Connection
+
+Specify an existing open database connection.
+
+```yaml
+Type: SQLiteConnection
+Parameter Sets: cnxnamed, cnxtyped
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -ColumnNames
+
+Enter an array of column names.
 
 ```yaml
 Type: String[]
@@ -107,27 +141,29 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Confirm
+### -TableName
 
-Prompts you for confirmation before running the cmdlet.
+Enter the name of the new table. Table names are technically case-sensitive.
 
 ```yaml
-Type: SwitchParameter
+Type: String
 Parameter Sets: (All)
-Aliases: cf
+Aliases:
 
-Required: False
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Connection
+### -Primary
+
+Specify the column name to use as the primary key or index. Otherwise, the first detected property will be used.
 
 ```yaml
-Type: SQLiteConnection
-Parameter Sets: cnxnamed, cnxtyped
+Type: String
+Parameter Sets: (All)
 Aliases:
 
 Required: False
@@ -169,50 +205,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Path
-
-Enter the path to the SQLite database file.
-
-```yaml
-Type: String
-Parameter Sets: filetyped
-Aliases: fullname, database
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-```yaml
-Type: String
-Parameter Sets: filenamed
-Aliases: fullname, database
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -TableName
-
-Enter the name of the new table. Table names are technically case-sensitive.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -WhatIf
 
 Shows what would happen if the cmdlet runs. The cmdlet is not run.
@@ -229,14 +221,14 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Primary
+### -Confirm
 
-Specify the column name to use as the primary key or index. Otherwise, the first detected property will be used.
+Prompts you for confirmation before running the cmdlet.
 
 ```yaml
-Type: String
+Type: SwitchParameter
 Parameter Sets: (All)
-Aliases:
+Aliases: cf
 
 Required: False
 Position: Named
@@ -246,7 +238,6 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS

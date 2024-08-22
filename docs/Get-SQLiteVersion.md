@@ -25,14 +25,14 @@ This is a simple command to get version information for the System.Data.SQLite a
 
 ### Example 1
 
-```shell
+```powershell
 PS C:\> Get-SQLiteVersion
 
 Version        : 1.0.118.0
 RunTimeVersion : v2.0.50727
-PSVersion      : 7.4.1
-OS             : Microsoft Windows 10.0.22631
-Location       : C:\scripts\mySQLite\assembly\net20\System.Data.SQLite.dll
+PSVersion      : 7.4.5
+OS             : Microsoft Windows 10.0.26100
+Location       : C:\Users\Jeff\Documents\PowerShell\Modules\mySQLite\0.13.0\assembly\net20\System.Data.SQLite.dll
 ```
 
 ## PARAMETERS

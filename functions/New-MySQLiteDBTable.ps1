@@ -1,5 +1,5 @@
 
-# add an autoincrement key https://www.sqlite.org/autoinc.html
+# add an auto-increment key https://www.sqlite.org/autoinc.html
 Function New-MySQLiteDBTable {
     [cmdletbinding(SupportsShouldProcess, DefaultParameterSetName = "filetyped")]
     [alias("New-DBTable", "ndbt")]
@@ -64,6 +64,8 @@ Function New-MySQLiteDBTable {
 
     Begin {
         Write-Verbose "[$((Get-Date).TimeOfDay)] $($MyInvocation.MyCommand)"
+        Write-Verbose "[$((Get-Date).TimeOfDay)] Running under PowerShell version $($PSVersionTable.PSVersion)"
+        Write-Verbose "[$((Get-Date).TimeOfDay)] Detected culture $(Get-Culture)"
     } #begin
     Process {
         if ($Path) {

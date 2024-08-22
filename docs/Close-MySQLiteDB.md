@@ -19,13 +19,13 @@ Close-MySQLiteDB [-Connection] <SQLiteConnection> [-PassThru] [-WhatIf] [-Confir
 
 ## DESCRIPTION
 
-If you are creating your own solutions using the MySQLite module, you might need to open and close the database file. If you use Invoke-MySQLite to insert or update data, that command will handle opening and closing the file.
+If you are creating solutions using the MySQLite module, you might need to open and close the database file. If you use Invoke-MySQLite to insert or update data, that command will handle opening and closing the file.
 
 ## EXAMPLES
 
 ### Example 1
 
-```shell
+```powershell
 PS C:\> $connection = Open-MySQLiteDB -Path C:\work\test2.db
 PS C:\> Close-mySQLiteDB $connection
 ```
@@ -33,22 +33,6 @@ PS C:\> Close-mySQLiteDB $connection
 After opening the connection and making any changes, you should close the connection.
 
 ## PARAMETERS
-
-### -Confirm
-
-Prompts you for confirmation before running the cmdlet.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: cf
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
 
 ### -Connection
 
@@ -89,6 +73,22 @@ The cmdlet is not run.
 Type: SwitchParameter
 Parameter Sets: (All)
 Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
 
 Required: False
 Position: Named

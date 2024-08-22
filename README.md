@@ -16,7 +16,7 @@ This module should work on 64-bit versions of Windows PowerShell 5.1 and PowerSh
 
 You can install this module from the PowerShell Gallery.
 
-```shell
+```powershell
 Install-Module -name MySQLite -repository PSGallery
 ```
 
@@ -40,7 +40,7 @@ The primary benefit of this module is storing the results of a PowerShell expres
 
 For example, you might have code like this that creates a dataset.
 
-```shell
+```powershell
 $computers= "win10","dom1","srv1","srv2","thinkx1-jh"
 
 $data = Get-CimInstance Win32_OperatingSystem -ComputerName $computers |
@@ -51,13 +51,13 @@ Select-Object @{Name="Computername";Expression={$_.CSName}},
 
 Using `ConvertTo-MySQLiteDB` you can easily dump this into a database file.
 
-```shell
+```powershell
 $data | ConvertTo-MySQLiteDB -Path c:\work\Inventory.db -TableName OS -TypeName myOS -force
 ```
 
 Run [Get-MySqLiteDB](docs/Get-MySQLiteDB.md) to view the database file.
 
-```shell
+```powershell
 PS C:\>  Get-MySQLiteDB -Path C:\work\Inventory.db | Format-List
 
 DatabaseName  : main
@@ -76,7 +76,7 @@ SQLiteVersion : 3.42.0
 
 Or drill down to get table details.
 
-```shell
+```powershell
 PS C:\> Get-MySQLiteTable -Path C:\work\Inventory.db -Detail
 
    Database: C:\work\Inventory.db Table:Metadata
@@ -111,7 +111,7 @@ ColumnIndex ColumnName   ColumnType
 
 As you can see, the database file will include a table called `propertymap_myOS` which contains a mapping of properties to types.
 
-```shell
+```powershell
 PS C:\> Invoke-MySQLiteQuery -Path C:\work\Inventory.db -query "Select * from propertymap_myos" -as Hashtable
 
 Name                           Value
@@ -125,7 +125,7 @@ IsServer                       System.Boolean
 
 You can then query the data.
 
-```shell
+```powershell
 PS C:\> Invoke-MySQLiteQuery "Select * from os where IsServer = 1" -path C:\work\Inventory.db
 
 Computername : DOM1
@@ -149,7 +149,7 @@ IsServer     : 1
 
 Or dump it back out to PowerShell in its original format.
 
-```shell
+```powershell
 PS C:\> ConvertFrom-MySQLiteDB -Path C:\work\Inventory.db -TableName OS -PropertyTable propertymap_myos
 
 Computername : DOM1
@@ -168,7 +168,7 @@ IsServer     : False
 
 You also use `Invoke-MySQLiteQuery`.
 
-```shell
+```powershell
 PS C:\> Invoke-MySQLiteQuery -path D:\temp\sales2.db -Query "Select name,sid,SamAccountName,members from grp"
 
 Name  SID                  SamAccountName Members
@@ -178,7 +178,7 @@ Sales {60, 79, 98, 106...} Sales          {60, 79, 98, 106...}
 
 Nested objects will be stored as byte arrays. You can restore these properties on a granular basis using `Convert-MySQLiteByteArray`.
 
-```shell
+```powershell
 PS C:\> Invoke-MySQLiteQuery -path D:\temp\sales2.db -Query "Select name,sid,samaccountname,members from grp" | Select-Object Name,SamAccountName,
 @{Name="SID";Expression={Convert-MySQLiteByteArray $_.sid}},@{Name="Members";Expression={Convert-MySQLiteByteArray $_.Members}}
 
@@ -190,6 +190,25 @@ Sales Sales          S-1-5-21-3554402041-35902484-4286231435-1147 {CN=SamanthaS,
 > :warning: Storing objects in a database requires serializing nested objects. This is accomplished by converting objects to cliXML and storing that information as an array of bytes in the database. To convert back, the data must be converted to the original clixml string, deserialized, and then re-imported. This process is not guaranteed to be 100% error free. The converted object property should be the deserialized version of the original property.
 
 The remaining commands can be used to create SQLite files on a more granular basis.
+
+## Malformed Queries
+
+SQLite can be unforgiving when it comes to queries that might involve odd characters, especially quotes. The module commands will not attempt to validate your queries or syntax. It is up to you to handle that process. Here's an example.
+
+A command like this will fail.
+
+```powershell
+$Name= "Carol'sPC"
+Invoke-MySQLiteQuery -Path C:\temp\inventory.db -Query "Insert Into OS (Computername,OS,InstallDate,Version,IsServer) values ('$Name','Microsoft Windows 11 Pro','$(Get-Date)','11.0.0','0')"
+```
+
+SQLite doesn't like the single quote in the computer name. You need to escape it.
+
+```powershell
+$Name=  $name.Replace("'","''")
+```
+
+Now the query will work as expected. It is assumed that you know the data you want to work with and know how to handle potential issues.
 
 ## Creating a New Database
 
@@ -207,7 +226,7 @@ When you create a new database with this command, PowerShell will retain a lock 
 
 Once created you can view the database.
 
-```shell
+```powershell
 PS C:\> Get-MySQLiteDB -Path c:\work\data.db
 
 Path            FileName Size Modified             Tables
@@ -217,7 +236,7 @@ C:\work\data.db data.db  8192 2/22/2024 9:41:50 AM Metadata
 
 You can add tables to the database.
 
-```shell
+```powershell
 PS C:\> New-MySQLiteDBTable -Path C:\work\data.db -TableName ComputerNames -ColumnNames "Name","Date","Version"
 PS C:\> Invoke-MySQLiteQuery c:\work\data.db -query "Pragma table_info(ComputerNames)" | Select cid,name
 
@@ -249,7 +268,7 @@ ColumnIndex ColumnName ColumnType
 
 And then add data to the table.
 
-```shell
+```powershell
 PS C:\> $q = "Insert into ComputerNames Values ('$env:computername','$(Get-Date)','$($PSVersionTable.OS)')"
 PS C:\> Invoke-MySQLiteQuery -Path c:\work\data.db -Query $q
 PS C:\> Invoke-MySQLiteQuery -Path c:\work\data.db -Query "Select * from ComputerNames"
@@ -266,3 +285,7 @@ I have provided several sample database files in the Samples folder.
 ## Learn More
 
 If you want to learn more about SQLite databases, take a look at <https://www.sqlite.org/index.html> and <http://www.sqlitetutorial.net/>.
+
+## Related Modules
+
+If you would like to see how this module can be used in other tools, take a look at my [PSWorkItem](https://github.com/jdhitsolutions/PSWorkItem) and [PSReminderLite](https://github.com/jdhitsolutions/PSReminderLite) modules. If you have written something that incorporates this module, I'd love to hear about it. Post a desciption and link the [Discussions section of this repository](https://github.com/jdhitsolutions/MySQLite/discussions).

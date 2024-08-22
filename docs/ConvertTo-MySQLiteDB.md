@@ -33,7 +33,7 @@ For best results, you should select only the properties you need as some propert
 
 ### Example 1
 
-```shell
+```powershell
 PS C:\> $data = Get-CimInstance win32_OperatingSystem -ComputerName $computers | Select-Object @{Name="Computername";Expression={$_.CSName}},@{Name="OS";Expression = {$_.caption}},InstallDate,Version,@{Name="IsServer";Expression={ If ($_.caption -match "server") {$True} else {$False}}}
 PS C:\> $data | ConvertTo-MySQLiteDB -Path c:\work\Inventory.db -TableName OS -TypeName myOS -force
 ```
@@ -48,7 +48,7 @@ NOTE: Storing objects in a database requires serializing nested objects. This is
 
 ### Example 2
 
-```shell
+```powershell
 PS C:\> Get-Process  | Where-Object {$_.name --NotMatch "^(system|idle)$"} | Select-Object * | ConvertTo-MySQLiteDB -Path d:\temp\allproc.db -TableName Process -TypeName myProcess -Primary ID
 ```
 
@@ -136,38 +136,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -WhatIf
-
-Shows what would happen if the cmdlet runs. The cmdlet is not run.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: wi
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Confirm
-
-Prompts you for confirmation before running the cmdlet.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: cf
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -InputObject
 
 What object do you want to create? Typically this will be the result of a PowerShell expression or command. It is recommended that you be selective.
@@ -192,6 +160,38 @@ Specify the column name to use as the primary key or index. Otherwise, the first
 Type: String
 Parameter Sets: (All)
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WhatIf
+
+Shows what would happen if the cmdlet runs. The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
 
 Required: False
 Position: Named

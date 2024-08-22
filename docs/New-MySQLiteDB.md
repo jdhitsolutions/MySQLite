@@ -27,7 +27,7 @@ When you create a new database with this command, PowerShell will retain a lock 
 
 ### Example 1
 
-```shell
+```powershell
 PS C:\> New-MySQLiteDB c:\work\test.db
 ```
 
@@ -35,7 +35,7 @@ Create a new database file in C:\Work.
 
 ### Example 2
 
-```shell
+```powershell
 PS C:\> New-MySQLiteDB c:\work\test2.db -Comment "This is for scripting stuff" -PassThru -force | Invoke-MySQLiteQuery -query "Select * from metadata"
 
 Author          Created               Computername Comment
@@ -47,6 +47,22 @@ Create a new database file in C:\Work and add a comment. Overwrite the file if i
 
 ## PARAMETERS
 
+### -Path
+
+The path to the SQLite database file. The file name must have one of the following extensions: .db | .db3 | .s3db | .sl3 | .sqlite | .sqlite3
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: database
+
+Required: True
+Position: 0
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Comment
 
 Enter a comment to be inserted into the database's metadata table.
@@ -55,22 +71,6 @@ Enter a comment to be inserted into the database's metadata table.
 Type: String
 Parameter Sets: (All)
 Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Confirm
-
-Prompts you for confirmation before running the cmdlet.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: cf
 
 Required: False
 Position: Named
@@ -107,22 +107,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Path
-
-The path to the SQLite database file. The file name must have one of the following extensions: .db | .db3 | .s3db | .sl3 | .sqlite | .sqlite3
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases: database
-
-Required: True
-Position: 0
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -WhatIf
 
 Shows what would happen if the cmdlet runs.
@@ -132,6 +116,22 @@ The cmdlet is not run.
 Type: SwitchParameter
 Parameter Sets: (All)
 Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
 
 Required: False
 Position: Named
