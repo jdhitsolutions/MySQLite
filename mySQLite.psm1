@@ -7,14 +7,26 @@ if ($PSEdition -eq 'Desktop' ) {
     Add-Type -Path "$PSScriptRoot\assembly\net46\System.Data.SQLite.dll"
 }
 elseif ($IsWindows) {
-    Add-Type -Path "$PSScriptRoot\assembly\net20\System.Data.SQLite.dll"
+    $OSArch = (Get-CimInstance -ClassName Win32_OperatingSystem).OSArchitecture
+    if ($OSArch -match 'ARM') {
+        #Write-Host "Loading $PSScriptRoot\assembly\arm64\System.Data.SQLite.dll"
+        Add-Type -Path "$PSScriptRoot\assembly\arm64\System.Data.SQLite.dll"
+    }
+    else {
+        Add-Type -Path "$PSScriptRoot\assembly\net20\System.Data.SQLite.dll"
+    }
 }
-elseif ($IsLinux) {
+elseif ($IsLinux -AND $((uname -m) -match "aarch64|arm")) {-pa
+    Write-Warning "This module is not supported on ARM64 Linux yet."
+    return
+}
+elseif ($isLinux) {
     Add-Type -Path "$PSScriptRoot\assembly\linux-x64\System.Data.SQLite.dll"
 }
 Else {
-    #this should never get called
+    #This should never get called
     Write-Warning 'This is an unsupported platform.'
+    return
 }
 
 Get-ChildItem -Path $PSScriptRoot\functions\*.ps1 |

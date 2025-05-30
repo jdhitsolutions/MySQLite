@@ -1,7 +1,7 @@
 ---
 external help file: mySQLite-help.xml
 Module Name: mySQLite
-online version: https://bit.ly/3cZCXER
+online version: https://jdhitsolutions.com/yourls/b1e4cd
 schema: 2.0.0
 ---
 
@@ -13,13 +13,15 @@ Import a SQLite database backup
 
 ## SYNTAX
 
-```
+```yaml
 Import-MySQLiteDB [-Path] <String> [-Destination] <String> [-Force] [-UseExisting] [-PassThru] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
 If you exported a SQLite database to a JSON file using Export-MySQLiteDB, you can use this file to import the data and recreate the file. If you want to restore an existing file, it is recommended that you restore the file in a different location, verify the new database, and then copy over the existing file.
+
+If you exported a database prior to version 1.0.0, you will need to re-export it to use this function. The export process has changed to create a different JSON file format
 
 ## EXAMPLES
 
@@ -81,7 +83,7 @@ Accept wildcard characters: False
 
 ### -UseExisting
 
-Use an existing database file.
+Use an existing database file. If you append to an existing database, the metadata and propertymap tables will not be updated.
 
 ```yaml
 Type: SwitchParameter
@@ -142,8 +144,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
@@ -158,7 +160,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell-resources/
+Learn more about PowerShell: https://jdhitsolutions.com/yourls/newsletter
 
 ## RELATED LINKS
 

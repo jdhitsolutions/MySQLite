@@ -21,9 +21,12 @@ Function ConvertTo-MySQLiteDB {
         [switch]$Force
     )
     Begin {
-        Write-Verbose "[$((Get-Date).TimeOfDay)] $($MyInvocation.MyCommand)"
-        Write-Verbose "[$((Get-Date).TimeOfDay)] Running under PowerShell version $($PSVersionTable.PSVersion)"
-        Write-Verbose "[$((Get-Date).TimeOfDay)] Detected culture $(Get-Culture)"
+        Write-Verbose "[$((Get-Date).TimeOfDay) BEGIN  ] Starting $($MyInvocation.MyCommand)"
+        if ($MyInvocation.CommandOrigin -eq 'Runspace') {
+            #Hide this metadata when the command is called from another command
+            Write-Verbose "[$((Get-Date).TimeOfDay) BEGIN  ] Running under PowerShell version $($PSVersionTable.PSVersion)"
+            Write-Verbose "[$((Get-Date).TimeOfDay) BEGIN  ] Detected culture $(Get-Culture)"
+        }
         $file = resolvedb -Path $path
         if ($Append) {
             if ($file.exists) {
@@ -50,7 +53,7 @@ Function ConvertTo-MySQLiteDB {
                         #bail out
                         return
                     }
-                    Write-Verbose "[$((Get-Date).TimeOfDay)] Opening database $($db.fullname)"
+                    Write-Verbose "[$((Get-Date).TimeOfDay) BEGIN  ] Opening database $($db.fullname)"
                     $connection = opendb $db.fullname
                 }
             }
@@ -70,7 +73,7 @@ Function ConvertTo-MySQLiteDB {
         foreach ($object in $InputObject) {
 
             if ($TableExists) {
-                Write-Verbose "[$((Get-Date).TimeOfDay)] Adding object to the table"
+                Write-Verbose "[$((Get-Date).TimeOfDay) PROCESS] Adding object to the table"
                 $iqParams.query = buildquery -InputObject $object -TableName $TableName
                 if ($PSCmdlet.ShouldProcess("object", "Add to table $TableName")) {
                     Invoke-MySQLiteQuery @iqParams
@@ -94,7 +97,7 @@ Function ConvertTo-MySQLiteDB {
                         $name = "propertymap_{0}" -f ($object.PSObject.TypeNames[0].replace(".", "_"))
                     }
 
-                    Write-Verbose "[$((Get-Date).TimeOfDay)] $name"
+                    Write-Verbose "[$((Get-Date).TimeOfDay) PROCESS] $name"
                     $tHash | Out-String | Write-Verbose
                     $NewTblParams = @{
                         Connection       = $Connection
@@ -105,7 +108,7 @@ Function ConvertTo-MySQLiteDB {
 
                     #create propertymap table
                     New-MySQLiteDBTable @NewTblParams
-                    Write-Verbose "[$((Get-Date).TimeOfDay)] PropertyMap table created"
+                    Write-Verbose "[$((Get-Date).TimeOfDay) PROCESS] PropertyMap table created"
                 } #WhatIf propertyMap table
 
                 #$names = $object.PSObject.properties.name -join ","
@@ -124,12 +127,12 @@ Function ConvertTo-MySQLiteDB {
                 if ($PSCmdlet.ShouldProcess($query, "Run query: Insert Into $Name")) {
                     Invoke-MySQLiteQuery @iqParams
                 }
-                Write-Verbose "[$((Get-Date).TimeOfDay)] Creating object hashtable"
+                Write-Verbose "[$((Get-Date).TimeOfDay) PROCESS] Creating object hashtable"
                 #get the property names and types
                 $properties = $object.PSObject.properties
                 $tHash = [ordered]@{}
                 Foreach ($prop in $properties) {
-                    Write-Verbose "[$((Get-Date).TimeOfDay)] Detecting property type for $($prop.name) [$($prop.TypeNameOfValue)]"
+                    Write-Verbose "[$((Get-Date).TimeOfDay) PROCESS] Detecting property type for $($prop.name) [$($prop.TypeNameOfValue)]"
                     Switch -Regex ($prop.TypeNameOfValue) {
                         "Int32$" { $SqlType = "Int" }
                         "Int64$" { $SqlType = "Real" }
@@ -153,7 +156,7 @@ Function ConvertTo-MySQLiteDB {
                 } #foreach prop
 
                 if ($PSCmdlet.ShouldProcess($TableName, "Create table")) {
-                    Write-Verbose "[$((Get-Date).TimeOfDay)] Creating table $TableName"
+                    Write-Verbose "[$((Get-Date).TimeOfDay) PROCESS] Creating table $TableName"
                     if ($PSBoundParameters.ContainsKey("Primary")) {
                         $NewTblParams.Add("Primary", $Primary)
                     }
@@ -162,7 +165,7 @@ Function ConvertTo-MySQLiteDB {
                     New-MySQLiteDBTable @NewTblParams
                 }
 
-                Write-Verbose "[$((Get-Date).TimeOfDay)] Inserting the first object into the table $TableName"
+                Write-Verbose "[$((Get-Date).TimeOfDay) PROCESS] Inserting the first object into the table $TableName"
                 #insert the first object into the new table
                 $iqParams.query = buildquery -InputObject $object -TableName $TableName
 
@@ -178,7 +181,7 @@ Function ConvertTo-MySQLiteDB {
         if ($connection.State -eq "open") {
             closedb -connection $connection
         }
-        Write-Verbose "[$((Get-Date).TimeOfDay)] Ending $($MyInvocation.MyCommand)"
+        Write-Verbose "[$((Get-Date).TimeOfDay) END    ] Ending $($MyInvocation.MyCommand)"
     } #end
 
 }

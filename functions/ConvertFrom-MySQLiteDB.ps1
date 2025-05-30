@@ -44,13 +44,16 @@ Function ConvertFrom-MySQLiteDB {
         [switch]$RawObject
     )
     Begin {
-        Write-Verbose "[$((Get-Date).TimeOfDay)] $($MyInvocation.MyCommand)"
-        Write-Verbose "[$((Get-Date).TimeOfDay)] Running under PowerShell version $($PSVersionTable.PSVersion)"
-        Write-Verbose "[$((Get-Date).TimeOfDay)] Detected culture $(Get-Culture)"
+        Write-Verbose "[$((Get-Date).TimeOfDay) BEGIN  ] Starting $($MyInvocation.MyCommand)"
+        if ($MyInvocation.CommandOrigin -eq 'Runspace') {
+            #Hide this metadata when the command is called from another command
+            Write-Verbose "[$((Get-Date).TimeOfDay) BEGIN  ] Running under PowerShell version $($PSVersionTable.PSVersion)"
+            Write-Verbose "[$((Get-Date).TimeOfDay) BEGIN  ] Detected culture $(Get-Culture)"
+        }
     } #begin
 
     Process {
-        Write-Verbose "[$((Get-Date).TimeOfDay)] Using path $Path "
+        Write-Verbose "[$((Get-Date).TimeOfDay) PROCESS] Using path $Path "
         $file = resolvedb -Path $path
         if ($file.exists) {
             $connection = opendb -Path $file.path
@@ -59,11 +62,11 @@ Function ConvertFrom-MySQLiteDB {
             Throw "Failed to find database file $($file.path)"
         }
         #verify table exists
-        Write-Verbose "[$((Get-Date).TimeOfDay)] Verify table $TableName"
+        Write-Verbose "[$((Get-Date).TimeOfDay) PROCESS] Verify table $TableName"
         $tables = Get-MySQLiteTable -Connection $connection -KeepAlive
         if ($tables.name -contains $TableName) {
             $query = "Select * from $TableName"
-            Write-Verbose "[$((Get-Date).TimeOfDay)] Found $TableName"
+            Write-Verbose "[$((Get-Date).TimeOfDay) PROCESS] Found $TableName"
             Try {
                 [array]$raw = Invoke-MySQLiteQuery -Connection $connection -Query $query -As object -KeepAlive -ErrorAction stop
             }
@@ -74,7 +77,7 @@ Function ConvertFrom-MySQLiteDB {
                 #bail out
                 return
             }
-            Write-Verbose "[$((Get-Date).TimeOfDay)] Found $($raw.count) item(s)"
+            Write-Verbose "[$((Get-Date).TimeOfDay) PROCESS] Found $($raw.count) item(s)"
 
             <#
                 find a mapping table using this priority list
@@ -85,14 +88,14 @@ Function ConvertFrom-MySQLiteDB {
             #>
             switch ($PSCmdlet.ParameterSetName) {
                 "hash" {
-                    Write-Verbose "[$((Get-Date).TimeOfDay)] User specified property map"
+                    Write-Verbose "[$((Get-Date).TimeOfDay) PROCESS] User specified property map"
                     $map = $PropertyMap
                     If ($TypeName) {
                         $oTypename = $TypeName
                     }
                 }
                 "table" {
-                    Write-Verbose "[$((Get-Date).TimeOfDay)] Using property table $PropertyTable"
+                    Write-Verbose "[$((Get-Date).TimeOfDay) PROCESS] Using property table $PropertyTable"
                     $map = Invoke-MySQLiteQuery -Connection $connection -Query "Select * from $PropertyTable" -KeepAlive -As Hashtable
                     if ($typename) {
                         $oTypename = $TypeName
@@ -103,7 +106,7 @@ Function ConvertFrom-MySQLiteDB {
                     }
                 }
                 "raw" {
-                    Write-Verbose "[$((Get-Date).TimeOfDay)] Writing raw objects to the pipeline"
+                    Write-Verbose "[$((Get-Date).TimeOfDay) PROCESS] Writing raw objects to the pipeline"
                     $raw
                 }
             }
@@ -117,11 +120,11 @@ Function ConvertFrom-MySQLiteDB {
                     $tmpHash = [ordered]@{}
 
                     foreach ($key in $map.keys) {
-                        Write-Verbose "[$((Get-Date).TimeOfDay)] Adding key $key [$($item.$key.GetType().name)]"
-                        Write-Verbose "[$((Get-Date).TimeOfDay)] Using type $($map[$key])"
+                        Write-Verbose "[$((Get-Date).TimeOfDay) PROCESS] Adding key $key [$($item.$key.GetType().name)]"
+                        Write-Verbose "[$((Get-Date).TimeOfDay)PROCESS] Using type $($map[$key])"
                         $name = $key
                         if ($null -eq $item.$key) {
-                            Write-Verbose "[$((Get-Date).TimeOfDay)] $name is null"
+                            Write-Verbose "[$((Get-Date).TimeOfDay) PROCESS] $name is null"
                             $value = $null
                         }
                         elseif ($item.$key.GetType().name -eq 'Byte[]') {
@@ -139,7 +142,7 @@ Function ConvertFrom-MySQLiteDB {
                     $no = New-Object -TypeName PSObject -Property $tmpHash
                     #9/12/2022 Insert the typename directly - JDH
                     if ($oTypename) {
-                        Write-Verbose "[$((Get-Date).TimeOfDay)] Adding typename $oTypename"
+                        Write-Verbose "[$((Get-Date).TimeOfDay) PROCESS] Adding typename $oTypename"
                         $no.PSObject.TypeNames.Insert(0,$oTypename)
                     }
                     $no
@@ -152,8 +155,8 @@ Function ConvertFrom-MySQLiteDB {
     } #process
 
     End {
-        Write-Verbose "[$((Get-Date).TimeOfDay)] Closing database connection"
+        Write-Verbose "[$((Get-Date).TimeOfDay) END    ] Closing database connection"
         closedb -connection $connection
-        Write-Verbose "[$((Get-Date).TimeOfDay)] Ending $($MyInvocation.MyCommand)"
+        Write-Verbose "[$((Get-Date).TimeOfDay) END    ] Ending $($MyInvocation.MyCommand)"
     } #end
 }

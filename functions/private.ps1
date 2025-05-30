@@ -1,30 +1,27 @@
-
 #region Private functions
 Function resolvedb {
     [cmdletbinding()]
     Param([string]$Path)
 
-    Write-Verbose "[$((Get-Date).TimeOfDay)] ResolveDB Resolving $path"
+    Write-Debug "[$((Get-Date).TimeOfDay)] ResolveDB Resolving $path"
     #resolve or convert path into a full filesystem path
     $path = $ExecutionContext.SessionState.path.GetUnresolvedProviderPathFromPSPath($path)
     [PSCustomObject]@{
         Path   = $path
         Exists = Test-Path -Path $path
     }
-    Write-Verbose "[$((Get-Date).TimeOfDay)] ResolveDB Resolved to $Path"
+    Write-Debug "[$((Get-Date).TimeOfDay)] ResolveDB Resolved to $Path"
 }
 Function opendb {
     [cmdletbinding()]
     Param([string]$Path)
 
     $ConnectionString = "Data Source=$Path;Version=3"
-    Write-Verbose "[$((Get-Date).TimeOfDay)] OpenDB Using connection string: $ConnectionString"
+    Write-Debug "[$((Get-Date).TimeOfDay)] OpenDB Using connection string: $ConnectionString"
     $connection = New-Object System.Data.SQLite.SQLiteConnection -ArgumentList $ConnectionString
     $connection.Open()
     $connection
 }
-
-
 Function closedb {
     [cmdletbinding()]
     Param(
@@ -32,7 +29,7 @@ Function closedb {
         [System.Data.SQLite.SQLiteCommand]$cmd
     )
     if ($connection.state -eq 'Open') {
-        Write-Verbose "[$((Get-Date).TimeOfDay)] CloseDB Closing database connection"
+        Write-Debug "[$((Get-Date).TimeOfDay)] CloseDB Closing database connection"
         if ($cmd) {
             $cmd.Dispose()
         }
@@ -50,7 +47,7 @@ Function buildquery {
         [string]$TableName
     )
     Begin {
-        Write-Verbose "[$((Get-Date).TimeOfDay)] Starting $($MyInvocation.MyCommand)"
+        Write-Debug "[$((Get-Date).TimeOfDay)] Starting $($MyInvocation.MyCommand)"
     } #begin
 
     Process {
@@ -68,10 +65,15 @@ Function buildquery {
         $names = $list -join ","
         #$names = $InputObject.PSObject.Properties.name -join ","
 
-        $InputObject.PSObject.Properties | ForEach-Object -Begin {
+        $InputObject.PSObject.Properties |
+        ForEach-Object -Begin {
             $arr = [System.Collections.Generic.list[string]]::new()
         } -Process {
-            if ($_.TypeNameOfValue -match "String|Int\d{2}|Double|Long") {
+            # 30 May 2025 JH added check for null values
+            if (($Null -eq $_.value) -OR ($_.value.count -eq 0)) {
+                $arr.Add(@(, ""))
+            }
+            elseif ($_.TypeNameOfValue -match "String|Int\d{2}|Double|Long") {
                 #9/12/2022 need to escape values that might have single quote
                 $v = $_.Value -replace "'","''"
                 $arr.Add(@(, $v))
@@ -87,7 +89,7 @@ Function buildquery {
             else {
                 #only create an entry if there is a value
                 if ($null -ne $_.value) {
-                    Write-Verbose "[$((Get-Date).TimeOfDay)] Creating cliXML for a blob"
+                    Write-Debug "[$((Get-Date).TimeOfDay)] Creating cliXML for a blob"
                     $in = ($_.value | ConvertTo-CliXml) -replace "'","''"
                     $arr.Add(@(, "$($in)"))
                 }
@@ -109,8 +111,7 @@ Function buildquery {
     } #process
 
     End {
-        Write-Verbose "[$((Get-Date).TimeOfDay)] Ending $($MyInvocation.MyCommand)"
-
+        Write-Debug "[$((Get-Date).TimeOfDay)] Ending $($MyInvocation.MyCommand)"
     } #end
 
 } #close buildquery
@@ -123,7 +124,7 @@ Function frombytes {
     #only process if there are bytes
     # Issue #3 7/20/2022 JDH
     if ($bytes.count -gt 0) {
-        Write-Verbose "[$((Get-Date).TimeOfDay)] Converting from bytes to object"
+        Write-Debug "[$((Get-Date).TimeOfDay)] Converting from bytes to object"
         $tmpFile = [system.io.path]::GetTempFileName()
         [text.encoding]::UTF8.GetString($bytes) | Out-File -FilePath $tmpfile -Encoding utf8
         Import-Clixml -Path $tmpFile

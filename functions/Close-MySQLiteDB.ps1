@@ -14,13 +14,16 @@ Function Close-MySQLiteDB {
         [switch]$PassThru
     )
     Begin {
-        Write-Verbose "[$((Get-Date).TimeOfDay)] $($MyInvocation.MyCommand)"
-        Write-Verbose "[$((Get-Date).TimeOfDay)] Running under PowerShell version $($PSVersionTable.PSVersion)"
-        Write-Verbose "[$((Get-Date).TimeOfDay)] Detected culture $(Get-Culture)"
+        Write-Verbose "[$((Get-Date).TimeOfDay) BEGIN  ] Starting $($MyInvocation.MyCommand)"
+        if ($MyInvocation.CommandOrigin -eq 'Runspace') {
+            #Hide this metadata when the command is called from another command
+            Write-Verbose "[$((Get-Date).TimeOfDay) BEGIN  ] Running under PowerShell version $($PSVersionTable.PSVersion)"
+            Write-Verbose "[$((Get-Date).TimeOfDay) BEGIN  ] Detected culture $(Get-Culture)"
+        }
     } #begin
 
     Process {
-        Write-Verbose "[$((Get-Date).TimeOfDay)] Closing source $($connection.DataSource)"
+        Write-Verbose "[$((Get-Date).TimeOfDay) PROCESS] Closing source $($connection.DataSource)"
         if ($PSCmdlet.ShouldProcess($Connection.DataSource)) {
             $connection.close()
             if ($PassThru) {
@@ -32,6 +35,6 @@ Function Close-MySQLiteDB {
     } #process
 
     End {
-        Write-Verbose "[$((Get-Date).TimeOfDay)] ending $($MyInvocation.MyCommand)"
+        Write-Verbose "[$((Get-Date).TimeOfDay) END    ] Ending $($MyInvocation.MyCommand)"
     } #end
 }

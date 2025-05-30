@@ -63,9 +63,12 @@ Function New-MySQLiteDBTable {
     )
 
     Begin {
-        Write-Verbose "[$((Get-Date).TimeOfDay)] $($MyInvocation.MyCommand)"
-        Write-Verbose "[$((Get-Date).TimeOfDay)] Running under PowerShell version $($PSVersionTable.PSVersion)"
-        Write-Verbose "[$((Get-Date).TimeOfDay)] Detected culture $(Get-Culture)"
+        Write-Verbose "[$((Get-Date).TimeOfDay) BEGIN  ] Starting $($MyInvocation.MyCommand)"
+        if ($MyInvocation.CommandOrigin -eq 'Runspace') {
+            #Hide this metadata when the command is called from another command
+            Write-Verbose "[$((Get-Date).TimeOfDay) BEGIN  ] Running under PowerShell version $($PSVersionTable.PSVersion)"
+            Write-Verbose "[$((Get-Date).TimeOfDay) BEGIN  ] Detected culture $(Get-Culture)"
+        }
     } #begin
     Process {
         if ($Path) {
@@ -78,10 +81,10 @@ Function New-MySQLiteDBTable {
             else {
                 Write-Warning "Cannot find the database file $($db.path)."
             }
-            Write-Verbose "[$((Get-Date).TimeOfDay)] Using path $($db.Path)"
+            Write-Verbose "[$((Get-Date).TimeOfDay) PROCESS] Using path $($db.Path)"
         }
         else {
-            Write-Verbose "[$((Get-Date).TimeOfDay)] Using an existing connection"
+            Write-Verbose "[$((Get-Date).TimeOfDay) PROCESS] Using an existing connection"
         }
         if ($connection.state -eq 'Open' -OR $PSBoundParameters.ContainsKey("WhatIf")) {
 
@@ -89,8 +92,8 @@ Function New-MySQLiteDBTable {
             #test if table already exists
             if (-not $Force) {
                 $cmd.CommandText = "SELECT name FROM sqlite_master WHERE type='table' AND name='$TableName' COLLATE NOCASE;"
-                Write-Verbose "[$((Get-Date).TimeOfDay)] Using table $TableName"
-                Write-Verbose "[$((Get-Date).TimeOfDay)] $($cmd.CommandText)"
+                Write-Verbose "[$((Get-Date).TimeOfDay) PROCESS] Using table $TableName"
+                Write-Verbose "[$((Get-Date).TimeOfDay) PROCESS] $($cmd.CommandText)"
 
                 $ds = New-Object System.Data.DataSet
                 $da = New-Object System.Data.SQLite.SQLiteDataAdapter($cmd)
@@ -115,7 +118,7 @@ Function New-MySQLiteDBTable {
             }
 
             If ($TableFree ) {
-                Write-Verbose "[$((Get-Date).TimeOfDay)] Creating table $TableName"
+                Write-Verbose "[$((Get-Date).TimeOfDay) PROCESS] Creating table $TableName"
                 [string]$query = "CREATE TABLE $TableName "
 
                 if ($PSCmdlet.ParameterSetName -match 'typed') {
@@ -127,17 +130,17 @@ Function New-MySQLiteDBTable {
                         $cols = $keys | Select-Object -Skip 1
 
                     } else {
-                        Write-Verbose "[$((Get-Date).TimeOfDay)] Removing $primary from column set"
+                        Write-Verbose "[$((Get-Date).TimeOfDay) PROCESS] Removing $primary from column set"
                         $cols = $keys | Where-Object {$_ -ne $primary}
                     }
 
                     $primaryType = $ColumnProperties.item($Primary)
 
-                    Write-Verbose "[$((Get-Date).TimeOfDay)] Primary key = $primary $PrimaryType"
+                    Write-Verbose "[$((Get-Date).TimeOfDay) PROCESS] Primary key = $primary $PrimaryType"
                     $query += "($Primary $PrimaryType PRIMARY KEY"
                     foreach ($col in $cols) {
                         $colType = $ColumnProperties.item($col)
-                        Write-Verbose "[$((Get-Date).TimeOfDay)] $col $($coltype)"
+                        Write-Verbose "[$((Get-Date).TimeOfDay) PROCESS] $col $($coltype)"
                         $query += ",$col $coltype"
                     }
                     $query += ");"
@@ -149,21 +152,21 @@ Function New-MySQLiteDBTable {
 
                 $cmd = $connection.CreateCommand()
                 $cmd.CommandText = $query
-                Write-Verbose "[$((Get-Date).TimeOfDay)] $query"
+                Write-Verbose "[$((Get-Date).TimeOfDay) PROCESS] $query"
                 if ($PSCmdlet.ShouldProcess($query)) {
                     [void]$cmd.ExecuteNonQuery()
                 }
             }
         }
         else {
-            Write-Verbose "[$((Get-Date).TimeOfDay)] There is no open database connection"
+            Write-Verbose "[$((Get-Date).TimeOfDay) PROCESS] There is no open database connection"
         }
     } #process
     End {
         if ($connection.state -eq 'Open' -AND (-Not $KeepAlive)) {
-            Write-Verbose "[$((Get-Date).TimeOfDay)] Closing database connection"
+            Write-Verbose "[$((Get-Date).TimeOfDay) END    ] Closing database connection"
             closedb -connection $connection -cmd $cmd
         }
-        Write-Verbose "[$((Get-Date).TimeOfDay)] Ending $($MyInvocation.MyCommand)"
+        Write-Verbose "[$((Get-Date).TimeOfDay) END    ] Ending $($MyInvocation.MyCommand)"
     } #end
 }

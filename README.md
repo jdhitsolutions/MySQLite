@@ -1,6 +1,8 @@
 # MySQLite
 
-[![PSGallery Version](https://img.shields.io/powershellgallery/v/MySQLite.png?style=for-the-badge&label=PowerShell%20Gallery)](https://www.powershellgallery.com/packages/MySQLite/) [![PSGallery Downloads](https://img.shields.io/powershellgallery/dt/MySQLite.png?style=for-the-badge&label=Downloads)](https://www.powershellgallery.com/packages/MySQLite/)
+[![PSGallery Version](https://img.shields.io/powershellgallery/v/MySQLite.png?style=for-the-badge&label=PowerShell%20Gallery)](https://www.powershellgallery.com/packages/MySQLite/) [![PSGallery Downloads](https://img.shields.io/powershellgallery/dt/MySQLite.png?style=for-the-badge&label=Downloads)](https://www.powershellgallery.com/packages/MySQLite/) ![GitHub license](https://img.shields.io/github/license/jdhitsolutions/MySQLite?style=for-the-badge)
+
+![database server](images/db.png)
 
 A set of PowerShell functions for working with SQLite database files. The goal of the module is to integrate the use of SQLite databases into daily PowerShell work or module development where a lightweight database would be beneficial. You might use this module as a library in your PowerShell projects.
 
@@ -8,11 +10,11 @@ A set of PowerShell functions for working with SQLite database files. The goal o
 
 I started work on this module years ago and had it almost complete except for managing the assembly to provide the .NET interface. After letting the project remain idle, I happened across a [similar module by Tobias Weltner](https://github.com/TobiasPSP/ReallySimpleDatabase). He had a brilliant technique to manage the .NET assembly which I freely "borrowed." With this missing piece, I dusted off my module, polished it, and published it to the PowerShell Gallery.
 
-## Installation
+## Module Installation
 
 This module should work on 64-bit versions of Windows PowerShell 5.1 and PowerShell 7 running on Windows or Linux platforms. __The module is not supported on MacOS.__
 
-> :raised_hand: I would love to be able to support MacOS on PowerShell 7. Please see [Issue #21](https://github.com/jdhitsolutions/mysqlite/issues/21)
+> :raised_hand: I would love to be able to support MacOS on PowerShell 7. Please see [Issue #21](https://github.com/jdhitsolutions/mysqlite/issues/21). As of version 1.0.0, this module is supported on ARM versions Windows. As with MacOS, I would love to be able to support ARM versions of Linux but I don't have the infrastructure for proper development and testing. I am open to contributions to make this module work on ARM Linux.
 
 You can install this module from the PowerShell Gallery.
 
@@ -20,7 +22,11 @@ You can install this module from the PowerShell Gallery.
 Install-Module -name MySQLite -repository PSGallery
 ```
 
-## Commands
+```powershell
+Install-PSResource -name MySQLite -repository PSGallery
+```
+
+## Module Commands
 
 - [ConvertTo-MySQLiteDB](docs/ConvertTo-MySQLiteDB.md)
 - [ConvertFrom-MySQLiteDB](docs/ConvertFrom-MySQLiteDB.md)
@@ -60,18 +66,20 @@ Run [Get-MySqLiteDB](docs/Get-MySQLiteDB.md) to view the database file.
 ```powershell
 PS C:\>  Get-MySQLiteDB -Path C:\work\Inventory.db | Format-List
 
-DatabaseName  : main
-Tables        : {Metadata, propertymap_myos, OS}
-PageSize      : 4096
-PageCount     : 6
-Encoding      : UTF-8
-FileName      : Inventory.db
-Path          : C:\work\Inventory.db
-Size          : 24576
-Created       : 1/14/2021 1:26:24 PM
-Modified      : 2/21/2023 3:31:27 PM
-Age           : 219.19:08:29.4914134
-SQLiteVersion : 3.42.0
+DatabaseName    : main
+Tables          : {Metadata, propertymap_myos, OS}
+PageSize        : 4096
+PageCount       : 6
+LastInsertRowID : 0
+Encoding        : UTF-8
+FileName        : Inventory.db
+Path            : C:\work\Inventory.db
+Size            : 24576
+MemoryUsed      : 210367
+Created         : 1/14/2021 1:26:24 PM
+Modified        : 2/21/2023 3:31:27 PM
+Age             : 828.23:55:12.7271289
+SQLiteVersion   : 3.42.0
 ```
 
 Or drill down to get table details.
@@ -180,11 +188,12 @@ Nested objects will be stored as byte arrays. You can restore these properties o
 
 ```powershell
 PS C:\> Invoke-MySQLiteQuery -path D:\temp\sales2.db -Query "Select name,sid,samaccountname,members from grp" | Select-Object Name,SamAccountName,
-@{Name="SID";Expression={Convert-MySQLiteByteArray $_.sid}},@{Name="Members";Expression={Convert-MySQLiteByteArray $_.Members}}
+@{Name="SID";Expression={Convert-MySQLiteByteArray $_.sid}},
+@{Name="Members";Expression={Convert-MySQLiteByteArray $_.Members}}
 
 Name  SamAccountName SID                                          Members
 ----  -------------- ---                                          -------
-Sales Sales          S-1-5-21-3554402041-35902484-4286231435-1147 {CN=SamanthaS,OU=Sales,DC=Company,DC=Pri, CN=Sonya...
+Sales Sales          S-1-5-21-3554402041-35902484-4286231435-1147 {CN=SamanthaS,OU=Sales,DC=Compa...
 ```
 
 > :warning: Storing objects in a database requires serializing nested objects. This is accomplished by converting objects to cliXML and storing that information as an array of bytes in the database. To convert back, the data must be converted to the original clixml string, deserialized, and then re-imported. This process is not guaranteed to be 100% error free. The converted object property should be the deserialized version of the original property.
@@ -218,7 +227,7 @@ You can create a new database file with the `New-MySQLiteDB` command.
 New-MySQLiteDB -Path c:\work\data.db -Comment "work data and reporting"
 ```
 
-When you create a new database with this command, PowerShell will retain a lock on the file for a few minutes until the garbage collector releases it. If you need to work with the new database immediately ***outside*** of PowerShell, you will need to wait a few minutes, or manually invoke garbage collection by running:
+When you create a new database with this command, PowerShell will retain a lock on the file for a few minutes until the garbage collector releases it. If you need to work with the new database immediately ___outside___ of PowerShell, you will need to wait a few minutes, or manually invoke garbage collection by running:
 
 ```powershell
 [System.GC]::Collect()
@@ -280,12 +289,18 @@ PROSPERO 02/22/2024 09:59:55 Microsoft Windows 10.0.22631
 
 ## Sample Databases
 
-I have provided several sample database files in the Samples folder.
+I have provided several sample database files in the [Samples](samples) folder.
 
-## Learn More
+## Resources
 
 If you want to learn more about SQLite databases, take a look at <https://www.sqlite.org/index.html> and <http://www.sqlitetutorial.net/>.
 
+You might also be interested in the [DB Browser for SQLite](https://sqlitebrowser.org/) application.
+
+![DBBrowser for SQLite](images/dbbrowser.png)
+
+This is a free, open source tool that allows you to view and edit SQLite database files. It is available for Windows, MacOS, and Linux.
+
 ## Related Modules
 
-If you would like to see how this module can be used in other tools, take a look at my [PSWorkItem](https://github.com/jdhitsolutions/PSWorkItem) and [PSReminderLite](https://github.com/jdhitsolutions/PSReminderLite) modules. If you have written something that incorporates this module, I'd love to hear about it. Post a desciption and link the [Discussions section of this repository](https://github.com/jdhitsolutions/MySQLite/discussions).
+If you would like to see how this module can be used in other tools, take a look at my [PSWorkItem](https://github.com/jdhitsolutions/PSWorkItem) and [PSReminderLite](https://github.com/jdhitsolutions/PSReminderLite) modules. If you have written something that incorporates this module, I'd love to hear about it. Post a description and link the [Discussions section of this repository](https://github.com/jdhitsolutions/MySQLite/discussions).

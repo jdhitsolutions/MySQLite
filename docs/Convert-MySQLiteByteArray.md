@@ -1,7 +1,7 @@
 ---
 external help file: mySQLite-help.xml
 Module Name: mySQLite
-online version: https://bit.ly/3xoAZ8g
+online version: https://jdhitsolutions.com/yourls/0369c9
 schema: 2.0.0
 ---
 
@@ -26,7 +26,7 @@ Nested object properties are stored as blobs. When you specify such a property u
 ### Example 1
 
 ```powershell
-PS C:\> Invoke-MySQLiteQuery -path D:\temp\myproc.db -Query "Select name,id,ws,totalprocessortime from process where id=6624" | Select-Object name,id,ws,@{Name="TotalCPU";Expression = {Convert-MySQLiteByteArray $_.totalprocessortime}}
+PS C:\> Invoke-MySQLiteQuery -path D:\temp\myproc.db -Query "Select Name,Id,WS,TotalProcessorTime from process where id=6624" | Select-Object name,id,ws,@{Name="TotalCPU";Expression = {Convert-MySQLiteByteArray $_.TotalProcessorTime}}
 
 Name       ID        WS TotalCPU
 ----       --        -- --------
@@ -67,7 +67,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell-resources/
+Learn more about PowerShell: https://jdhitsolutions.com/yourls/newsletter
 
 ## RELATED LINKS
 

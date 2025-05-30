@@ -12,8 +12,11 @@ Function Convert-MySQLiteByteArray {
     )
     Begin {
         Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Starting $($MyInvocation.MyCommand)"
-        Write-Verbose "[$((Get-Date).TimeOfDay)] Running under PowerShell version $($PSVersionTable.PSVersion)"
-        Write-Verbose "[$((Get-Date).TimeOfDay)] Detected culture $(Get-Culture)"
+        if ($MyInvocation.CommandOrigin -eq 'Runspace') {
+            #Hide this metadata when the command is called from another command
+            Write-Verbose "[$((Get-Date).TimeOfDay) BEGIN  ] Running under PowerShell version $($PSVersionTable.PSVersion)"
+            Write-Verbose "[$((Get-Date).TimeOfDay) BEGIN  ] Detected culture $(Get-Culture)"
+        }
     } #begin
 
     Process {

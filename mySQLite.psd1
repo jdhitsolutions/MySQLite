@@ -3,16 +3,16 @@
 @{
 
     RootModule             = 'mySQLite.psm1'
-    ModuleVersion          = '0.14.0'
+    ModuleVersion          = '1.0.0'
     CompatiblePSEditions   = @("Desktop","Core")
     GUID                   = '49ac2120-f30e-4244-ac8b-4d18fa9ae9aa'
     Author                 = 'Jeff Hicks'
     CompanyName            = 'JDH Information Technology Solutions, Inc.'
-    Copyright              = '(c) 2019-2024 JDH Information Technology Solutions, Inc.'
+    Copyright              = '(c) 2019-2025 JDH Information Technology Solutions, Inc.'
     Description            = 'A set of PowerShell commands for working with SQLite database files. This is a simple alternative to installing any version of SQL Server on your desktop. Note that this module will only work on x64 versions Windows and Linux platforms.'
     PowerShellVersion      = '5.1'
     DotNetFrameworkVersion = '4.6'
-    ProcessorArchitecture  = 'AMD64'
+    #ProcessorArchitecture  = 'AMD64'
     FormatsToProcess       = @(
         'formats\mySQLiteDB.format.ps1xml',
         'formats\mySQLiteTableDetail.format.ps1xml'
@@ -55,18 +55,29 @@
             ProjectUri = 'https://github.com/jdhitsolutions/MySQLite'
             # IconUri = ''
             ReleaseNotes = @"
-## v0.14.0 - 2024-08-22 09:48:22
+# Changelog for MySQLite
+
+## v[1.0.0] - 2025-05-30 15:30:33
+
+### Added
+
+- Added assembly for ARM64 on Windows.
+- Added new sample database `ProcessData.db` to the `samples` folder.
 
 ### Changed
 
-- Updated `Import-MySqliteDB` to use an existing database. The new parameter is called `UseExisting` with an alias of `Append`. _This may be a breaking change_.
-- Updated functions with additional verbose output to capture PowerShell version and culture.
-- Help updates
-- Updated `README.md`
+- Updated `Import-MySqliteDB` and `Export-MySqliteDB` to better handle importing exported databases. __Breaking changes as the export process creates a different JSON file.__
+- Changed `Write-Verbose` commands to 'Write-Debug` in private helper functions.
+- Revised the PRAGMA query `Get-MySqliteDB` to get all database information in a single query.
+- Updated`Get-MySqliteDB` to display missing database information and extended the custom object to include a few more properties.
+- Updated verbose messaging.
+- Updated online help links.
+- Updated `README.md`.
 
 ### Fixed
 
-- Modified helper functions to store DateTime values as `yyyy-MM-dd HH:mm:ss` which should better handle culture-related problems. [Issue #23](https://github.com/jdhitsolutions/mySQLite/issues/23) _This may be a breaking change_.
+- Updated error handling in `Invoke-MySqliteQuery` to write errors instead of warnings. __This is a breaking change__. [[Issue #25](https://github.com/jdhitsolutions/mySQLite/issues/25)]
+- Updated `Get-MySqliteDB` to handle database files stored in OneDrive. [[Issue #27](https://github.com/jdhitsolutions/mySQLite/issues/27)]
 "@
         }
     }

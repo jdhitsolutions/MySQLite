@@ -1,7 +1,7 @@
 ---
 external help file: mySQLite-help.xml
 Module Name: mySQLite
-online version: https://bit.ly/3aZEwBP
+online version: https://jdhitsolutions.com/yourls/761bf7
 schema: 2.0.0
 ---
 
@@ -21,6 +21,7 @@ New-MySQLiteDBTable -Path <String> -TableName <String> [-ColumnProperties <Order
 ```
 
 ### filenamed
+
 ```yaml
 New-MySQLiteDBTable [-Path <String>] -TableName <String> [-ColumnNames <String[]>] [-Primary <String>] [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
@@ -238,6 +239,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
@@ -250,7 +252,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell-resources/
+Learn more about PowerShell: https://jdhitsolutions.com/yourls/newsletter
 
 ## RELATED LINKS
 

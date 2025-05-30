@@ -2,6 +2,28 @@
 
 ## [Unreleased]
 
+## [1.0.0] - 2025-05-30
+
+### Added
+
+- Added assembly for ARM64 on Windows.
+- Added new sample database `ProcessData.db` to the `samples` folder.
+
+### Changed
+
+- Updated `Import-MySqliteDB` and `Export-MySqliteDB` to better handle importing exported databases. __Breaking changes as the export process creates a different JSON file.__
+- Changed `Write-Verbose` commands to 'Write-Debug` in private helper functions.
+- Revised the PRAGMA query `Get-MySqliteDB` to get all database information in a single query.
+- Updated`Get-MySqliteDB` to display missing database information and extended the custom object to include a few more properties.
+- Updated verbose messaging.
+- Updated online help links.
+- Updated `README.md`.
+
+### Fixed
+
+- Updated error handling in `Invoke-MySqliteQuery` to write errors instead of warnings. __This is a breaking change__. [[Issue #25](https://github.com/jdhitsolutions/mySQLite/issues/25)]
+- Updated `Get-MySqliteDB` to handle database files stored in OneDrive. [[Issue #27](https://github.com/jdhitsolutions/mySQLite/issues/27)]
+
 ## [0.14.0] - 2024-08-22
 
 ### Changed
@@ -14,7 +36,6 @@
 ### Fixed
 
 - Modified helper functions to store DateTime values as `yyyy-MM-dd HH:mm:ss` which should better handle culture-related problems. [Issue #23](https://github.com/jdhitsolutions/mySQLite/issues/23) _This may be a breaking change_.
-
 
 ## [0.13.0] - 2024-02-22
 
@@ -75,7 +96,7 @@ This release is identical in files to v0.11.0 published on the PowerShell Galler
 - General code clean up.
 - Updated `README.md`.
 - Help updates.
--
+
 ## [v0.10.1] - 2022-09-14
 
 - Add missing online help links.
@@ -173,7 +194,8 @@ This release is identical in files to v0.11.0 published on the PowerShell Galler
 - Added `Get-MySQLiteTable`
 - restructured module layout
 
-[Unreleased]: https://github.com/jdhitsolutions/MySQLite/compare/v0.14.0..HEAD
+[Unreleased]: https://github.com/jdhitsolutions/MySQLite/compare/v1.0.0..HEAD
+[1.0.0]: https://github.com/jdhitsolutions/MySQLite/compare/v0.14.0..v1.0.0
 [0.14.0]: https://github.com/jdhitsolutions/MySQLite/compare/v0.13.0..v0.14.0
 [0.13.0]: https://github.com/jdhitsolutions/MySQLite/compare/v0.12.0..v0.13.0
 [v0.12.0]: https://github.com/jdhitsolutions/MySQLite/compare/v0.11.2..v0.12.0

@@ -1,7 +1,7 @@
 ---
 external help file: MySQLite-help.xml
 Module Name: mySQLite
-online version: https://bit.ly/3OBHDxT
+online version: https://jdhitsolutions.com/yourls/6bbc89
 schema: 2.0.0
 ---
 
@@ -64,7 +64,7 @@ Dump a table created using ConvertTo-MySQLiteDB. The resulting objects will have
 ### Example 2
 
 ```powershell
-PS C:\> ConvertFrom-MySQLiteDB -Path C:\work\test.db -TableName proc -PropertyMap @{Name="string";Date="datetime";id="int";virtualmemorysize = "int";workingset="int"} | Get-Member
+PS C:\> ConvertFrom-MySQLiteDB -Path C:\work\test.db -TableName proc -PropertyMap @{Name="string";Date="datetime";Id="int";VirtualMemorySize = "int";WorkingSet="int"} | Get-Member
 
 
    TypeName: System.Management.Automation.PSCustomObject
@@ -76,10 +76,10 @@ GetHashCode       Method       int GetHashCode()
 GetType           Method       type GetType()
 ToString          Method       string ToString()
 Date              NoteProperty datetime Date=3/13/2023 2:52:14 PM
-id                NoteProperty int id=17276
+Id                NoteProperty int id=17276
 Name              NoteProperty string Name=ApplicationFrameHost
-virtualmemorysize NoteProperty int virtualmemorysize=295845888
-workingset        NoteProperty int workingset=11640832
+VirtualMemorySize NoteProperty int VirtualMemorySize=295845888
+WorkingSet        NoteProperty int WorkingSet=11640832
 ```
 
 Convert a table using a hashtable of property assignments.
@@ -196,7 +196,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell-resources/
+Learn more about PowerShell: https://jdhitsolutions.com/yourls/newsletter
 
 ## RELATED LINKS
 

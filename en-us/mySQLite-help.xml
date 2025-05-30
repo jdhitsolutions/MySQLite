@@ -142,7 +142,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell-resources/</maml:para>
+        <maml:para>Learn more about PowerShell: https://jdhitsolutions.com/yourls/newsletter</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -158,7 +158,7 @@ PS C:\&gt; Close-mySQLiteDB $connection</dev:code>
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://bit.ly/3aRRJNd</maml:uri>
+        <maml:uri>https://jdhitsolutions.com/yourls/d5acc1</maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>Open-MySQLiteDB</maml:linkText>
@@ -231,13 +231,13 @@ PS C:\&gt; Close-mySQLiteDB $connection</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell-resources/</maml:para>
+        <maml:para>Learn more about PowerShell: https://jdhitsolutions.com/yourls/newsletter</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; Invoke-MySQLiteQuery -path D:\temp\myproc.db -Query "Select name,id,ws,totalprocessortime from process where id=6624" | Select-Object name,id,ws,@{Name="TotalCPU";Expression = {Convert-MySQLiteByteArray $_.totalprocessortime}}
+        <dev:code>PS C:\&gt; Invoke-MySQLiteQuery -path D:\temp\myproc.db -Query "Select Name,Id,WS,TotalProcessorTime from process where id=6624" | Select-Object name,id,ws,@{Name="TotalCPU";Expression = {Convert-MySQLiteByteArray $_.TotalProcessorTime}}
 
 Name       ID        WS TotalCPU
 ----       --        -- --------
@@ -250,7 +250,7 @@ sqlservr 6624 778153984 00:00:58.0468750</dev:code>
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://bit.ly/3xoAZ8g</maml:uri>
+        <maml:uri>https://jdhitsolutions.com/yourls/0369c9</maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>ConvertFrom-MySQLiteDB</maml:linkText>
@@ -517,7 +517,7 @@ sqlservr 6624 778153984 00:00:58.0468750</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell-resources/</maml:para>
+        <maml:para>Learn more about PowerShell: https://jdhitsolutions.com/yourls/newsletter</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -544,7 +544,7 @@ IsServer     : True
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; ConvertFrom-MySQLiteDB -Path C:\work\test.db -TableName proc -PropertyMap @{Name="string";Date="datetime";id="int";virtualmemorysize = "int";workingset="int"} | Get-Member
+        <dev:code>PS C:\&gt; ConvertFrom-MySQLiteDB -Path C:\work\test.db -TableName proc -PropertyMap @{Name="string";Date="datetime";Id="int";VirtualMemorySize = "int";WorkingSet="int"} | Get-Member
 
 
    TypeName: System.Management.Automation.PSCustomObject
@@ -556,10 +556,10 @@ GetHashCode       Method       int GetHashCode()
 GetType           Method       type GetType()
 ToString          Method       string ToString()
 Date              NoteProperty datetime Date=3/13/2023 2:52:14 PM
-id                NoteProperty int id=17276
+Id                NoteProperty int id=17276
 Name              NoteProperty string Name=ApplicationFrameHost
-virtualmemorysize NoteProperty int virtualmemorysize=295845888
-workingset        NoteProperty int workingset=11640832</dev:code>
+VirtualMemorySize NoteProperty int VirtualMemorySize=295845888
+WorkingSet        NoteProperty int WorkingSet=11640832</dev:code>
         <dev:remarks>
           <maml:para>Convert a table using a hashtable of property assignments.</maml:para>
         </dev:remarks>
@@ -568,7 +568,7 @@ workingset        NoteProperty int workingset=11640832</dev:code>
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://bit.ly/3OBHDxT</maml:uri>
+        <maml:uri>https://jdhitsolutions.com/yourls/6bbc89</maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>ConvertTo-MySQLiteDB</maml:linkText>
@@ -837,7 +837,7 @@ workingset        NoteProperty int workingset=11640832</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell-resources/</maml:para>
+        <maml:para>Learn more about PowerShell: https://jdhitsolutions.com/yourls/newsletter</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -854,7 +854,7 @@ PS C:\&gt; $data | ConvertTo-MySQLiteDB -Path c:\work\Inventory.db -TableName OS
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; Get-Process  | Where-Object {$_.name --NotMatch "^(system|idle)$"} | Select-Object * | ConvertTo-MySQLiteDB -Path d:\temp\allproc.db -TableName Process -TypeName myProcess -Primary ID</dev:code>
+        <dev:code>PS C:\&gt; Get-Process  | Where-Object {$_.name -NotMatch "^(system|idle)$"} | Select-Object * | ConvertTo-MySQLiteDB -Path d:\temp\allproc.db -TableName Process -TypeName myProcess -Primary ID</dev:code>
         <dev:remarks>
           <maml:para>Create a database from local process information. This example is specifying the primary key. You need to have one unique property to use as the primary key for the database. If you see a constraint error, you most likely need to set a primary key.</maml:para>
         </dev:remarks>
@@ -863,7 +863,7 @@ PS C:\&gt; $data | ConvertTo-MySQLiteDB -Path c:\work\Inventory.db -TableName OS
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://bit.ly/3cuuBoq</maml:uri>
+        <maml:uri>https://jdhitsolutions.com/yourls/52a4a6</maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>ConvertFrom-MySQLiteDB</maml:linkText>
@@ -1037,7 +1037,7 @@ PS C:\&gt; $data | ConvertTo-MySQLiteDB -Path c:\work\Inventory.db -TableName OS
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell-resources/</maml:para>
+        <maml:para>Learn more about PowerShell: https://jdhitsolutions.com/yourls/newsletter</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -1052,7 +1052,7 @@ PS C:\&gt; $data | ConvertTo-MySQLiteDB -Path c:\work\Inventory.db -TableName OS
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://bit.ly/3PQzsPD</maml:uri>
+        <maml:uri>https://jdhitsolutions.com/yourls/8c8263</maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>Import-MySQLiteDB</maml:linkText>
@@ -1129,7 +1129,7 @@ PS C:\&gt; $data | ConvertTo-MySQLiteDB -Path c:\work\Inventory.db -TableName OS
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell-resources/</maml:para>
+        <maml:para>Learn more about PowerShell: https://jdhitsolutions.com/yourls/newsletter</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -1150,12 +1150,12 @@ C:\work\test.db test.db  33792 3/13/2020 3:22:00 PM {Metadata, PropertyMap, Doma
 
 Path                   FileName       Size   Modified              Tables
 ----                   --------       ----   --------              ------
-C:\work\northwindEF.db northwindEF.db 830464 5/27/2016 1:50:13 PM  {Regions, PreviousEmployees, Employees, sqlite_se...
-C:\work\foo.db         foo.db         35840  3/13/2019 3:15:37 PM  {Metadata, PropertyMap, process, propertymap_mySe...
-C:\work\test.db        test.db        33792  3/13/2019 3:22:00 PM  {Metadata, PropertyMap, Domain, Data...}
-C:\work\vm2.db         vm2.db         14336  3/13/2019 3:57:23 PM  {Metadata, PropertyMap, virtualmachines, Switches}
-C:\work\vm.db          vm.db          10240  3/8/2019 2:40:40 PM   {Metadata, PropertyMap, virtualmachines}
-C:\work\a.db           a.db           9216   3/12/2019 7:34:18 PM  {Metadata, propertymap_myService, services}
+C:\work\northwindEF.db northwindEF.db 830464 5/27/2016 1:50:13 PM  {Regions, PreviousEmployees,...}
+C:\work\foo.db         foo.db         35840  3/13/2019 3:15:37 PM  {Metadata, PropertyMap, proc...}
+C:\work\test.db        test.db        33792  3/13/2019 3:22:00 PM  {Metadata, PropertyMap, Doma...}
+C:\work\vm2.db         vm2.db         14336  3/13/2019 3:57:23 PM  {Metadata, PropertyMap, virt...}
+C:\work\vm.db          vm.db          10240  3/8/2019 2:40:40 PM   {Metadata, PropertyMap, virt...}
+C:\work\a.db           a.db           9216   3/12/2019 7:34:18 PM  {Metadata, propertymap_mySer...}
 C:\work\test2.db       test2.db       2048   3/13/2019 12:54:59 PM Metadata</dev:code>
         <dev:remarks>
           <maml:para>Get information for multiple database files sorted by size.</maml:para>
@@ -1163,21 +1163,22 @@ C:\work\test2.db       test2.db       2048   3/13/2019 12:54:59 PM Metadata</dev
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 3 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; Get-MySQLiteDB c:\work\vm2.db | Select-object -Property *
+        <dev:code>PS C:\&gt; Get-MySQLiteDB c:\temp\ProcessData.db | Select-Object -Property *
 
-
-DatabaseName  : main
-Tables        : {Metadata, PropertyMap, virtualmachines, Switches}
-PageSize      : 1024
-PageCount     : 14
-Encoding      : UTF-8
-FileName      : vm2.db
-Path          : C:\work\vm2.db
-Size          : 14336
-Created       : 3/8/2019 2:49:43 PM
-Modified      : 3/13/2019 3:57:23 PM
-Age           : 00:12:53.1287578
-SQLiteVersion : 3.8.8.3</dev:code>
+DatabaseName    : main
+Tables          : {Metadata, propertymap_osinfo, Servers, propertymap_processinfo…}
+PageSize        : 4096
+PageCount       : 30
+LastInsertRowID : 0
+Encoding        : UTF-8
+FileName        : ProcessData.db
+Path            : C:\temp\ProcessData.db
+Size            : 122880
+MemoryUsed      : 136373
+Created         : 5/30/2025 2:51:47 PM
+Modified        : 5/30/2025 3:07:43 PM
+Age             : 00:15:54.5385932
+SQLiteVersion   : 3.42.0</dev:code>
         <dev:remarks>
           <maml:para>Get all properties of a SQLite database file.</maml:para>
         </dev:remarks>
@@ -1186,7 +1187,7 @@ SQLiteVersion : 3.8.8.3</dev:code>
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://bit.ly/3PHa8ed</maml:uri>
+        <maml:uri>https://jdhitsolutions.com/yourls/04b42a</maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>New-MySQLiteDB</maml:linkText>
@@ -1347,7 +1348,7 @@ SQLiteVersion : 3.8.8.3</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell-resources/</maml:para>
+        <maml:para>Learn more about PowerShell: https://jdhitsolutions.com/yourls/newsletter</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -1421,7 +1422,7 @@ ColumnIndex ColumnName ColumnType
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://bit.ly/3PpKHxY</maml:uri>
+        <maml:uri>https://jdhitsolutions.com/yourls/6fa23a</maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>New-MySQLiteDBTable</maml:linkText>
@@ -1487,7 +1488,12 @@ Location       : C:\Users\Jeff\Documents\PowerShell\Modules\mySQLite\0.13.0\asse
         </dev:remarks>
       </command:example>
     </command:examples>
-    <command:relatedLinks />
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://jdhitsolutions.com/yourls/a4b76d</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
@@ -1500,6 +1506,7 @@ Location       : C:\Users\Jeff\Documents\PowerShell\Modules\mySQLite\0.13.0\asse
     </command:details>
     <maml:description>
       <maml:para>If you exported a SQLite database to a JSON file using Export-MySQLiteDB, you can use this file to import the data and recreate the file. If you want to restore an existing file, it is recommended that you restore the file in a different location, verify the new database, and then copy over the existing file.</maml:para>
+      <maml:para>If you exported a database prior to version 1.0.0, you will need to re-export it to use this function. The export process has changed to create a different JSON file format</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -1542,7 +1549,7 @@ Location       : C:\Users\Jeff\Documents\PowerShell\Modules\mySQLite\0.13.0\asse
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Append">
           <maml:name>UseExisting</maml:name>
           <maml:description>
-            <maml:para>Use an existing database file.</maml:para>
+            <maml:para>Use an existing database file. If you append to an existing database, the metadata and propertymap tables will not be updated.</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -1625,7 +1632,7 @@ Location       : C:\Users\Jeff\Documents\PowerShell\Modules\mySQLite\0.13.0\asse
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Append">
         <maml:name>UseExisting</maml:name>
         <maml:description>
-          <maml:para>Use an existing database file.</maml:para>
+          <maml:para>Use an existing database file. If you append to an existing database, the metadata and propertymap tables will not be updated.</maml:para>
         </maml:description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
@@ -1701,7 +1708,7 @@ Location       : C:\Users\Jeff\Documents\PowerShell\Modules\mySQLite\0.13.0\asse
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell-resources/</maml:para>
+        <maml:para>Learn more about PowerShell: https://jdhitsolutions.com/yourls/newsletter</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -1716,7 +1723,7 @@ Location       : C:\Users\Jeff\Documents\PowerShell\Modules\mySQLite\0.13.0\asse
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://bit.ly/3cZCXER</maml:uri>
+        <maml:uri>https://jdhitsolutions.com/yourls/b1e4cd</maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>Export-MySQLiteDB</maml:linkText>
@@ -2019,7 +2026,7 @@ Location       : C:\Users\Jeff\Documents\PowerShell\Modules\mySQLite\0.13.0\asse
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell-resources/</maml:para>
+        <maml:para>Learn more about PowerShell: https://jdhitsolutions.com/yourls/newsletter</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -2056,7 +2063,7 @@ BOVINE320\Jeff 3/8/2023 2:59:05 PM BOVINE320    for Hyper-V monitoring</dev:code
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://bit.ly/3B6YcOW</maml:uri>
+        <maml:uri>https://jdhitsolutions.com/yourls/3840e6</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -2250,7 +2257,7 @@ BOVINE320\Jeff 3/8/2023 2:59:05 PM BOVINE320    for Hyper-V monitoring</dev:code
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell-resources/</maml:para>
+        <maml:para>Learn more about PowerShell: https://jdhitsolutions.com/yourls/newsletter</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -2276,7 +2283,7 @@ THINKX1-JH\Jeff 7/20/2022 12:34:39 PM THINKX1-JH   This is for scripting stuff</
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://bit.ly/3aR8NCO</maml:uri>
+        <maml:uri>https://jdhitsolutions.com/yourls/4ff560</maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>Get-MySQLiteDB</maml:linkText>
@@ -2806,7 +2813,7 @@ THINKX1-JH\Jeff 7/20/2022 12:34:39 PM THINKX1-JH   This is for scripting stuff</
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell-resources/</maml:para>
+        <maml:para>Learn more about PowerShell: https://jdhitsolutions.com/yourls/newsletter</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -2839,7 +2846,7 @@ cid name              type
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://bit.ly/3aZEwBP</maml:uri>
+        <maml:uri>https://jdhitsolutions.com/yourls/761bf7</maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>New-MySQLiteDB</maml:linkText>
@@ -2962,7 +2969,7 @@ cid name              type
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell-resources/</maml:para>
+        <maml:para>Learn more about PowerShell: https://jdhitsolutions.com/yourls/newsletter</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -3006,7 +3013,7 @@ Container         :</dev:code>
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://bit.ly/3PEe13G</maml:uri>
+        <maml:uri>https://jdhitsolutions.com/yourls/3e234e</maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>Close-MySQLiteDB</maml:linkText>

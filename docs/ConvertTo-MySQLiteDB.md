@@ -1,7 +1,7 @@
 ---
 external help file: mySQLite-help.xml
 Module Name: mySQLite
-online version: https://bit.ly/3cuuBoq
+online version: https://jdhitsolutions.com/yourls/52a4a6
 schema: 2.0.0
 ---
 
@@ -49,7 +49,7 @@ NOTE: Storing objects in a database requires serializing nested objects. This is
 ### Example 2
 
 ```powershell
-PS C:\> Get-Process  | Where-Object {$_.name --NotMatch "^(system|idle)$"} | Select-Object * | ConvertTo-MySQLiteDB -Path d:\temp\allproc.db -TableName Process -TypeName myProcess -Primary ID
+PS C:\> Get-Process  | Where-Object {$_.name -NotMatch "^(system|idle)$"} | Select-Object * | ConvertTo-MySQLiteDB -Path d:\temp\allproc.db -TableName Process -TypeName myProcess -Primary ID
 ```
 
 Create a database from local process information. This example is specifying the primary key. You need to have one unique property to use as the primary key for the database. If you see a constraint error, you most likely need to set a primary key.
@@ -214,7 +214,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell-resources/
+Learn more about PowerShell: https://jdhitsolutions.com/yourls/newsletter
 
 ## RELATED LINKS
 

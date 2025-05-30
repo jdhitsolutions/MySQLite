@@ -27,9 +27,12 @@ Function Get-MySQLiteTable {
         [switch]$Detail
     )
     Begin {
-        Write-Verbose "[$((Get-Date).TimeOfDay)] $($MyInvocation.MyCommand)"
-        Write-Verbose "[$((Get-Date).TimeOfDay)] Running under PowerShell version $($PSVersionTable.PSVersion)"
-        Write-Verbose "[$((Get-Date).TimeOfDay)] Detected culture $(Get-Culture)"
+        Write-Verbose "[$((Get-Date).TimeOfDay) BEGIN  ] Starting $($MyInvocation.MyCommand)"
+        if ($MyInvocation.CommandOrigin -eq 'Runspace') {
+            #Hide this metadata when the command is called from another command
+            Write-Verbose "[$((Get-Date).TimeOfDay) BEGIN  ] Running under PowerShell version $($PSVersionTable.PSVersion)"
+            Write-Verbose "[$((Get-Date).TimeOfDay) BEGIN  ] Detected culture $(Get-Culture)"
+        }
     } #begin
 
     Process {
@@ -38,7 +41,7 @@ Function Get-MySQLiteTable {
         }
         if ($PSCmdlet.ParameterSetName -eq 'file') {
             $db = resolvedb -Path $path
-            Write-Verbose "[$((Get-Date).TimeOfDay)] Using path $($db.Path)"
+            Write-Verbose "[$((Get-Date).TimeOfDay) PROCESS] Using path $($db.Path)"
             if ($db.exists) {
                 $iqParams.Add("Path", $db.path)
                 $source = $db.path
@@ -48,8 +51,10 @@ Function Get-MySQLiteTable {
             }
         } #if file parameter set
         else {
-            Write-Verbose "[$((Get-Date).TimeOfDay)] Using connection $($connection.ConnectionString)"
-            Write-Verbose "[$((Get-Date).TimeOfDay)] KeepAlive is $KeepAlive"
+            if ($MyInvocation.CommandOrigin -eq 'Runspace') {
+                Write-Verbose "[$((Get-Date).TimeOfDay) PROCESS] Using connection $($connection.ConnectionString)"
+                Write-Verbose "[$((Get-Date).TimeOfDay) PROCESS] KeepAlive is $KeepAlive"
+            }
             $iqParams.Add("Connection", $Connection)
             $iqParams.Add("KeepAlive", $KeepAlive)
             #parse out the path from the connection
@@ -57,13 +62,13 @@ Function Get-MySQLiteTable {
 
         }
         $TableNames = Invoke-MySQLiteQuery @iqParams
+        Write-Verbose "[$((Get-Date).TimeOfDay) PROCESS] Found $($TableNames.count) tables in $source"
         if ($TableNames) {
-
             if ($Detail) {
-                Write-Verbose "[$((Get-Date).TimeOfDay)] Getting table details"
+                Write-Verbose "[$((Get-Date).TimeOfDay) PROCESS] Getting table details"
                 foreach ($item in $TableNames.name) {
                     $iqParams.query = "PRAGMA table_info($item)"
-                    Write-Verbose "[$((Get-Date).TimeOfDay)] $($iqparams.query)"
+                    Write-Verbose "[$((Get-Date).TimeOfDay) PROCESS] $($iqparams.query)"
                     $details = Invoke-MySQLiteQuery @iqParams
                     foreach ($tbl in $details) {
                         [PSCustomObject]@{
@@ -94,6 +99,6 @@ Function Get-MySQLiteTable {
             closedb -connection $connection
         }
 
-        Write-Verbose "[$((Get-Date).TimeOfDay)] Ending $($MyInvocation.MyCommand)"
+        Write-Verbose "[$((Get-Date).TimeOfDay) END    ] Ending $($MyInvocation.MyCommand)"
     } #end
 }

@@ -20,9 +20,12 @@ Function New-MySQLiteDB {
     )
 
     Begin {
-        Write-Verbose "[$((Get-Date).TimeOfDay)] $($MyInvocation.MyCommand)"
-        Write-Verbose "[$((Get-Date).TimeOfDay)] Running under PowerShell version $($PSVersionTable.PSVersion)"
-        Write-Verbose "[$((Get-Date).TimeOfDay)] Detected culture $(Get-Culture)"
+        Write-Verbose "[$((Get-Date).TimeOfDay) BEGIN  ]Starting $($MyInvocation.MyCommand)"
+        if ($MyInvocation.CommandOrigin -eq 'Runspace') {
+            #Hide this metadata when the command is called from another command
+            Write-Verbose "[$((Get-Date).TimeOfDay) BEGIN  ] Running under PowerShell version $($PSVersionTable.PSVersion)"
+            Write-Verbose "[$((Get-Date).TimeOfDay) BEGIN  ] Detected culture $(Get-Culture)"
+        }
         $db = resolvedb $Path
 
         If (($db.exists) -AND (-not $Force)) {
@@ -31,7 +34,7 @@ Function New-MySQLiteDB {
         }
         else {
             If (($db.exists) -AND $Force) {
-                Write-Verbose "[$((Get-Date).TimeOfDay)] Removing $($db.path)"
+                Write-Verbose "[$((Get-Date).TimeOfDay) BEGIN  ] Removing $($db.path)"
                 Remove-Item -Path $db.path
             }
 
@@ -49,8 +52,8 @@ Function New-MySQLiteDB {
         }
     } #begin
     Process {
-        Write-Verbose "[$((Get-Date).TimeOfDay)] $($db.Path)"
-        Write-Verbose "[$((Get-Date).TimeOfDay)] Adding Metadata table"
+        Write-Verbose "[$((Get-Date).TimeOfDay) PROCESS] $($db.Path)"
+        Write-Verbose "[$((Get-Date).TimeOfDay) PROCESS] Adding Metadata table"
         if ($connection.state -eq 'Open' -OR $PSBoundParameters.ContainsKey("WhatIf")) {
 
             [string]$query = "CREATE TABLE Metadata (Author TEXT,Created TEXT,Computername TEXT,Comment TEXT);"
@@ -63,25 +66,25 @@ Function New-MySQLiteDB {
 
             $query = "Insert Into Metadata (Author,Created,Computername,Comment) Values ('$($meta.author)','$($meta.created)','$($meta.computer)','$($meta.comment)')"
 
-            Write-Verbose "[$((Get-Date).TimeOfDay)] Execute non-query: $query"
+            Write-Verbose "[$((Get-Date).TimeOfDay) PROCESS] Execute non-query: $query"
             if ($PSCmdlet.ShouldProcess($query)) {
                 $cmd.CommandText = $query
                 [void]$cmd.ExecuteNonQuery()
             }
         }
         else {
-            Write-Verbose "[$((Get-Date).TimeOfDay)] There is no open database connection"
+            Write-Verbose "[$((Get-Date).TimeOfDay) PROCESS] There is no open database connection"
         }
     } #process
     End {
         if ($connection.state -eq 'Open') {
-            Write-Verbose "[$((Get-Date).TimeOfDay)] Closing database connection"
+            Write-Verbose "[$((Get-Date).TimeOfDay) END    ] Closing database connection"
             $connection.close()
             $connection.Dispose()
         }
         if ($PassThru -AND (Test-Path $db.path)) {
             Get-Item -Path $db.path
         }
-        Write-Verbose "[$((Get-Date).TimeOfDay)] Ending $($MyInvocation.MyCommand)"
+        Write-Verbose "[$((Get-Date).TimeOfDay) END    ] Ending $($MyInvocation.MyCommand)"
     } #end
 }
